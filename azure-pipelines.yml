@@ -1,0 +1,49 @@
+# Node.js with Angular
+# Build a Node.js project that uses Angular.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+
+trigger:
+- main
+- develop
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- task: NodeTool@0
+  inputs:
+    versionSpec: '16.x'
+  displayName: 'Install Node.js'
+  
+- task: Npm@1
+  enabled: false
+  inputs:
+    command: 'install'
+    workingDir: '$(Build.SourcesDirectory)/frontend'
+
+- script: |
+    npm install -g @angular/cli    
+    npm install  --force 
+    ng build --configuration=production --output-hashing=all
+  displayName: 'npm install and build'
+  workingDirectory: '$(Build.SourcesDirectory)/frontend'
+  enabled: true
+
+- task: ArchiveFiles@2
+  inputs:
+    rootFolderOrFile: '$(Build.SourcesDirectory)/frontend/dist/gestao-portifolio'
+    includeRootFolder: false
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/gestao-portifolio.zip'
+    replaceExistingArchive: true
+
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact'
+  inputs:
+    PathtoPublish: '$(build.artifactstagingdirectory)'
+    ArtifactName: '$(Parameters.ArtifactName)'
+  condition: succeededOrFailed()
+  
+

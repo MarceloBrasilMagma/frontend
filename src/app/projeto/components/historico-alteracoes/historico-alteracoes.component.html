@@ -1,0 +1,14 @@
+<ng-container *ngFor="let key of logsKeys">
+  <nz-card *ngFor="let log of logs[key]" [nzBodyStyle]="{ padding: '16px' }">
+    <nz-card-meta [nzTitle]="getTitle(key)" [nzAvatar]="iconTemplate">
+    </nz-card-meta>
+    <div class="d-flex flex-column justify-content-center">
+      <p class="mb-0 mt-2">{{log.usuarioNome}}</p>
+      <p class="mb-0">{{log.campo | wordSpace }}</p>
+    </div>
+    <ng-template #iconTemplate>
+      <span nz-icon nzType="check" nzTheme="outline"></span>
+    </ng-template>
+  </nz-card >
+</ng-container>
+

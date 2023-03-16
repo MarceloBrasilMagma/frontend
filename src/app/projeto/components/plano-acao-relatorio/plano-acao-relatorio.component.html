@@ -1,0 +1,113 @@
+<!-- <div class="row">
+  <div class="col-lg-12 col-md-12">
+    <nz-card style="font-size: 1.2rem;" nzSize="small">
+      <i nz-icon nzType="check-circle" nzTheme="outline" style="margin:auto" class="avatar-green"></i>
+      <span class="ml-2 text-muted">Realizado:</span>
+      <span style="display: inline;" class="ml-2"> {{projeto?.quantidadeRealizado}}</span>
+      <div class="ml-3" style="display: inline;">
+        <nz-tag [nzColor]="'green'">
+          <span class="font-weight-semibold">{{realizadoPorcentagem}}%</span>
+        </nz-tag>
+      </div>
+    </nz-card>
+  </div>
+
+  <div style="font-size: 1.2rem;" class="col-lg-12 col-md-12">
+    <nz-card style="font-size: 1.2rem;" nzSize="small">
+      <i nz-icon nzType="clock-circle" nzTheme="outline" style="margin:auto" class="avatar-gold"></i>
+      <span class="ml-2 text-muted">Em Andamento:</span>
+      <span style="display: inline;" class="ml-2"> {{projeto?.quantidadeEmAndamento}}</span>
+      <div class="ml-3" style="display: inline;">
+        <nz-tag [nzColor]="'gold'">
+          <span class="font-weight-semibold">{{emAndamentoPorcentagem}}%</span>
+        </nz-tag>
+      </div>
+    </nz-card>
+  </div>
+
+  <div style="font-size: 1.2rem;" class="col-lg-12 col-md-12">
+    <nz-card style="font-size: 1.2rem;" nzSize="small">
+      <i nz-icon nzType="exclamation-circle" nzTheme="outline" style="margin:auto" class="avatar-red"></i>
+      <span class="ml-2 text-muted">Atrasado:</span>
+      <span style="display: inline;" class="ml-2"> {{projeto?.quantidadeAtrasado}}</span>
+      <div class="ml-3" style="display: inline;">
+        <nz-tag [nzColor]="'red'">
+          <span class="font-weight-semibold">{{atrasadoPorcentagem}}%</span>
+        </nz-tag>
+      </div>
+    </nz-card>
+  </div>
+
+  <div style="font-size: 1.2rem;" class="col-lg-12 col-md-12">
+    <nz-card style="font-size: 1.2rem;" nzSize="small">
+      <i nz-icon nzType="close-circle" nzTheme="outline" style="margin:auto" class="avatar-gray"></i>
+      <span class="ml-2 text-muted">Cancelado:</span>
+      <span style="display: inline;" class="ml-2"> {{projeto?.quantidadeCancelado}}</span>
+      <div class="ml-3" style="display: inline;">
+        <nz-tag [nzColor]="'gray'">
+          <span class="font-weight-semibold">{{canceladoPorcentagem}}%</span>
+        </nz-tag>
+      </div>
+    </nz-card>
+  </div>
+
+</div> -->
+
+<div class="row">
+  <div class="col-md-3">
+    <nz-card>
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <p class="m-b-0 text-muted">Realizado</p>
+          <h2 class="m-b-0">{{projeto?.quantidadeRealizado}}</h2>
+        </div>
+        <nz-tag class="m-r-0 m-b-0" [nzColor]="'green'">
+          <i nz-icon nzType="check-circle" theme="outline"></i>
+          <span class="font-weight-semibold m-l-5">{{realizadoPorcentagem}}%</span>
+        </nz-tag>
+      </div>
+    </nz-card>
+  </div>
+  <div class="col-md-3">
+    <nz-card>
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <p class="m-b-0 text-muted">Em Andamento</p>
+          <h2 class="m-b-0">{{projeto?.quantidadeEmAndamento}}</h2>
+        </div>
+        <nz-tag class="m-r-0 m-b-0" [nzColor]="'gold'">
+          <i nz-icon nzType="clock-circle" theme="outline"></i>
+          <span class="font-weight-semibold m-l-5">{{emAndamentoPorcentagem}}%</span>
+        </nz-tag>
+      </div>
+    </nz-card>
+  </div>
+  <div class="col-md-3">
+    <nz-card>
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <p class="m-b-0 text-muted">Atrasado</p>
+          <h2 class="m-b-0">{{projeto?.quantidadeAtrasado}}</h2>
+        </div>
+        <nz-tag class="m-r-0 m-b-0" [nzColor]="'red'">
+          <i nz-icon nzType="exclamation-circle" theme="outline"></i>
+          <span class="font-weight-semibold m-l-5">{{atrasadoPorcentagem}}%</span>
+        </nz-tag>
+      </div>
+    </nz-card>
+  </div>
+  <div class="col-md-3">
+    <nz-card>
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <p class="m-b-0 text-muted">Cancelado</p>
+          <h2 class="m-b-0">{{projeto?.quantidadeCancelado}}</h2>
+        </div>
+        <nz-tag class="m-r-0 m-b-0" [nzColor]="'gray'">
+          <i nz-icon nzType="close-circle" theme="outline"></i>
+          <span class="font-weight-semibold m-l-5">{{canceladoPorcentagem}}%</span>
+        </nz-tag>
+      </div>
+    </nz-card>
+  </div>
+</div>

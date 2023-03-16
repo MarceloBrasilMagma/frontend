@@ -1,0 +1,118 @@
+<nz-card >
+  <div class="grid lg:grid-cols-2">
+    <h2 class="mb-0">{{ questionarioId ? questionario?.titulo : 'Novo Questionário Modelo' }}</h2>
+    <div class="flex flex-col md:flex-row md:justify-end gap-2">
+      <button
+          nz-button
+          nzType="primary"
+          (click)="salvar()"
+          [nzLoading]="carregando"
+        >
+          <i nz-icon nzType="save" nzTheme="outline"></i>
+          Salvar
+        </button>
+      <button
+          nz-button
+          nzDanger
+          (click)="excluirQuestionarioModelo()"
+          *ngIf="questionarioId"
+        >
+          <i nz-icon nzType="close" nzTheme="outline"></i>
+          Excluir questionário
+        </button>
+    </div>
+  </div>
+  <nz-divider *ngIf="questionarioId"></nz-divider>
+
+  <div *ngIf="questionarioId" class="row align-items-center">
+    <div class="col-md-6 col-xs-12">
+      <div class="d-md-flex align-items-center">
+        <div class="text-center text-sm-left">
+          <p class="text-dark font-weight-bold">
+            Número: {{ questionario?.id }}
+          </p>
+          <p class="text-dark flex items-center">
+           Data de criação:
+            <i
+            class="text-primary text-dark mx-2"
+            nz-icon
+            nzType="calendar"
+            theme="outline"
+          ></i>
+          {{ questionario?.dataCriacao | date: 'shortDate' }}
+          </p>
+          <p class="text-dark">
+            Criador: {{ questionario?.usuarioCriacaoId }}
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 col-xs-12">
+      <div class="row">
+        <div class="d-md-block d-none border-left col-1"></div>
+        <div class="col">
+          <ul class="list-unstyled m-t-10">
+            <li class="row ml-0">
+              <p class="text-dark flex items-center">
+                Data de alteração:
+                <i
+                  class="text-primary text-dark mx-2"
+                  nz-icon
+                  nzType="calendar"
+                  theme="outline"
+                ></i>
+                {{ questionario?.dataAlteracao | date : 'shortDate' }}
+              </p>
+            </li>
+            <li class="row ml-0">
+              <p class="text-dark">
+                Última alteração:
+                {{ questionario?.usuarioAlteracaoId }}
+              </p>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</nz-card>
+<nz-card nzTitle="Dados do Questionário" [nzLoading]="carregando">
+    <form nz-form [formGroup]="form" nzLayout="vertical" (ngSubmit)="salvar()">
+        <div nz-row nzGutter="24">
+            <div nz-col nzXs="24" nzSm="24">
+                <nz-form-item>
+                    <nz-form-label nzRequired>
+                        Título do Questionário
+                    </nz-form-label>
+                    <nz-form-control>
+                        <input nz-input formControlName="titulo" />
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+      </form>
+</nz-card>
+<nz-card *ngIf="questionarioId" nzTitle="Grupos de Pergunta" [nzLoading]="carregando">
+    <div nz-row nzGutter="24" *ngFor="let grupo of questionario.gruposPerguntas" class="my-2">
+        <div nz-col nzSpan="21">
+            <input nz-input type="text" [(ngModel)]="grupo.titulo" (change)="salvarGrupo(grupo)" />
+        </div>
+        <div nz-col nzSpan="3">
+            <button nz-button nzShape="circle"
+                [routerLink]="['/questionarios-modelo', 'editar', questionarioId, 'grupo', grupo.id]">
+                <i nz-icon nzType="edit"></i>
+            </button>
+        </div>
+    </div>
+    <div nz-row nzGutter="24">
+        <div nz-col nzSpan="21">
+            <input nz-input type="text" [(ngModel)]="novoGrupo" 
+                placeholder="Digite para incluir um novo grupo de perguntas" />
+        </div>
+        <div nz-col nzSpan="3">
+          <button nz-button nzShape="circle" nz-col nzSpan="3" (click)="salvarNovoGrupo()">
+            <span nz-icon nzType="plus" nzTheme="outline"></span>
+          </button>
+      </div>        
+    </div>
+</nz-card>

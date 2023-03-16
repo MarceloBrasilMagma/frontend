@@ -1,0 +1,70 @@
+<nz-spin nzTip="Aguarde..." [nzSpinning]="isLoading">
+  <div nz-row style="border-bottom: 1px solid rgb(233, 233, 233);">
+    <div nz-col nzSpan="12">
+        <p class="mb-2">
+          <button *ngIf="possuiPermissaoEdicao && situacaoDeclaracaoTrabalho" (click)="abrirModalCadastrarOrcamento()" nz-button nzType="primary"
+            nzSize="small">
+            Cadastrar Orçamento
+          </button>
+        </p>
+    </div>
+    <div nz-col nzSpan="12" style="align-items: flex-end; text-align: right;" *ngIf="declaracaoTrabalho?.orcamentos.length > 0">
+      <button class="mb-3" nz-button nzType="primary" nzSize="small" nz-popconfirm nzPopconfirmTitle="Deseja exportar os orçamentos?"
+        nzOkText="Sim" nzCancelText="Não" (nzOnConfirm)="exportar()">
+        Exportar
+      </button>
+    </div>
+  </div>
+
+  <nz-table #orcamentosTable [nzData]="declaracaoTrabalho?.orcamentos" [nzFrontPagination]="false" nzSize="small">
+    <thead>
+      <tr>
+        <th>Descrição</th>
+        <th>Despesa Administrativa</th>
+        <th>Custo Assistencial</th>
+        <th>Investimento</th>
+        <th>Total</th>
+        <th>Açoes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let o of orcamentosTable.data">
+        <td>{{ o.descricao }}</td>
+        <td>{{ (o.valorDespesaAdministrativaObservacao === null ? o.valorDespesaAdministrativa :
+          o.valorDespesaAdministrativaObservacao) | currency: 'BRL' }}</td>
+        <td>{{ (o.valorCustoAssistencialObservacao === null ? o.valorCustoAssistencial :
+          o.valorCustoAssistencialObservacao) | currency: 'BRL' }}</td>
+        <td>{{ (o.valorInvestimentoObservacao === null ? o.valorInvestimento : o.valorInvestimentoObservacao) |
+          currency: 'BRL' }}</td>
+        <td>{{ o.total | currency: 'BRL' }}</td>
+        <td>
+          <button *ngIf="possuiPermissaoEdicao" (click)="editarOrcamento(o)" nz-button nzShape="circle" nzTooltipTitle="Classificar DT" nz-tooltip>
+            <i nz-icon nzType="edit" style="font-size: 18px;"></i>
+          </button>
+          <button *ngIf="possuiPermissaoExcluirOrcamento" nz-button nzShape="circle" nz-popconfirm
+            nzPopconfirmTitle="Excluir?" nzOkText="Sim" nzCancelText="Não" (nzOnConfirm)="excluirOrcamento(o)">
+            <i nz-icon nzType="delete" style="font-size: 18px;"></i>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td></td>
+        <td class="font-weight-bold">
+          {{ orcamentoSomaValoresDespesaAdministrativa | currency: 'BRL' }}
+        </td>
+        <td class="font-weight-bold">
+          {{ orcamentoSomaValoresCustoAssistencial | currency: 'BRL' }}
+        </td>
+        <td class="font-weight-bold">
+          {{ orcamentoSomaValoresInvestimento | currency: 'BRL' }}
+        </td>
+        <td class="font-weight-bold">
+          {{ orcamentoSomaTotal | currency: 'BRL' }}
+        </td>
+        <td></td>
+      </tr>
+    </tfoot>
+  </nz-table>
+</nz-spin>

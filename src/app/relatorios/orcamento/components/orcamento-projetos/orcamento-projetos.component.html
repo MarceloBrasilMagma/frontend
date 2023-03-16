@@ -1,0 +1,53 @@
+<h2>Projetos</h2>
+<nz-card *ngFor="let preProjeto of relatorio.preProjetos">
+  <div class="flex flex-col md:flex-row justify-between gap-4">
+    <div>
+      <p>#{{preProjeto.id}}</p>
+      <span class="text-xl font-bold">{{preProjeto.nome}}</span>
+    </div>
+    <div class="flex flex-col md:flex-row gap-2 md:gap-6" *ngIf="!!preProjeto.codigoCentroCusto">
+      <div>
+        <p>Revisado</p>
+        <span class="text-lg font-bold">{{obterRevisado(preProjeto.codigoCentroCusto) | currency: 'BRL'}}</span>
+      </div>
+      <div>
+        <p>Realizado</p>
+        <span class="text-lg font-bold">{{obterRealizado(preProjeto.codigoCentroCusto) | currency: 'BRL'}}</span>
+      </div>
+      <div>
+        <p>Saldo</p>
+        <span class="text-lg font-bold">{{obterSaldo(preProjeto.codigoCentroCusto) | currency: 'BRL'}}</span>
+      </div>
+    </div>
+    <div *ngIf="!preProjeto.codigoCentroCusto">
+      <p>Centro de Custo</p>
+      <span class="text-lg font-bold">Não cadastrado</span>
+    </div>
+  </div>
+</nz-card>
+<nz-card *ngFor="let plurianual of relatorio.plurianuais">
+  <div class="flex flex-col md:flex-row justify-between gap-4">
+    <div>
+      <p>#{{plurianual.id}}</p>
+      <span class="text-xl font-bold">{{plurianual.nome}}</span>
+    </div>
+    <div class="flex flex-col md:flex-row gap-2 md:gap-6" *ngIf="!!plurianual.codigoCentroCusto">
+      <div>
+        <p>Revisado</p>
+        <span class="text-lg font-bold">{{obterRevisado(plurianual.codigoCentroCusto) | currency: 'BRL'}}</span>
+      </div>
+      <div>
+        <p>Realizado</p>
+        <span class="text-lg font-bold">{{obterRealizado(plurianual.codigoCentroCusto) | currency: 'BRL'}}</span>
+      </div>
+      <div>
+        <p>Saldo</p>
+        <span class="text-lg font-bold">{{obterSaldo(plurianual.codigoCentroCusto) | currency: 'BRL'}}</span>
+      </div>
+    </div>
+    <div *ngIf="!plurianual.codigoCentroCusto">
+      <p>Centro de Custo</p>
+      <span class="text-lg font-bold">Não cadastrado</span>
+    </div>
+  </div>
+</nz-card>

@@ -1,0 +1,66 @@
+h1 {
+  font-size: 16px;
+  text-transform: uppercase;
+  color: #821618;
+}
+
+.icone-link {
+  color: #FFA750;
+  margin: 4px 3px !important;
+  padding-left: 2px !important;
+  padding-right: 2px !important;  
+}
+
+.icone-link button {
+  border: 1.5px solid #ffebd8;
+}
+
+.link-rapido {
+  color: #FFA750;
+  font-size: 28px;
+}
+
+.botao-link{
+  height: 3.5rem;
+  width: 3.5rem;
+}
+
+.botao-acoes {
+  width: 100%;
+  font-size: 16px;
+  margin-bottom: 3px;
+  text-align: left;
+  padding-left: 1px;
+
+  span {
+    margin-left: 0px;
+    width: 90%;
+  }
+
+  border: 1px dashed #821618;
+  padding: 5px;
+  color: #821618;
+}
+
+ul {
+  width: 100%;
+  font-size: 12px;
+}
+
+li {
+  font-size: 16px;
+  list-style-type: none;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  padding: 0px 0px 15px 10px;
+  color: #404040;
+
+  span {
+    margin-right: 10px;
+  }
+
+  i {
+    color: #FFA750;
+  }
+}

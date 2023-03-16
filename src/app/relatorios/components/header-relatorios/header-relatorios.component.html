@@ -1,0 +1,225 @@
+<!-- Path: Todos os paths menos Declaraçoes de Trabalho -->
+<nz-card *ngIf="headerDisplay && !carregando">
+  <div class="flex flex-row items-center justify-between mt-0">
+    <div class="flex flex-row">
+      <h2 class="mb-0 mr-4">Portfólios</h2>
+      <a
+        nz-dropdown
+        class="text-black text-lg flex items-center"
+        [nzDropdownMenu]="menu"
+      >
+        {{
+          !!portifolioId
+            ? portifolioSelecionado(portifolioId)
+            : portifolios.items[0].descricao
+        }}
+        <span nz-icon class="ml-2" nzType="down"></span>
+      </a>
+      <nz-dropdown-menu #menu="nzDropdownMenu">
+        <ul nz-menu nzSelectable>
+          <li
+            nz-menu-item
+            *ngFor="let portifolio of portifolios.items"
+            [routerLink]="['./']"
+            [queryParams]="{ id: portifolio.id }"
+          >
+            {{ portifolio.descricao }}
+          </li>
+        </ul>
+      </nz-dropdown-menu>
+    </div>
+    <div *ngIf="router.url.includes('/relatorios/orcamento')">
+      <form [formGroup]="filtroOrcamentoForm">
+        <label class="mr-2 text-lg">Período</label>
+        <nz-range-picker
+          nzFormat="dd/MM/yyyy"
+          formControlName="periodo"
+          [nzAllowClear]="false"
+        ></nz-range-picker>
+      </form>
+    </div>
+  </div>
+</nz-card>
+
+<!-- Path: Declaraçoes de Trabalho -->
+<ng-container *ngIf="headerDt">
+  <nz-card>
+    <div class="flex flex-col md:flex-row items-center md:justify-between mt-0">
+      <div>
+        <h2 class="mb-0 mr-4">Geral</h2>
+      </div>
+      <div class="flex flex-row items-center gap-3">
+        <button
+          nz-button
+          nzType="default"
+          routerLink="/declaracoes-trabalho"
+          (click)="salvarFiltro()"
+        >
+          Detalhado
+        </button>
+      </div>
+    </div>
+  </nz-card>
+
+  <nz-collapse class="mt-2 mb-2">
+    <nz-collapse-panel nzHeader="Filtros">
+      <form nz-form [formGroup]="filtrosForm">
+        <div nz-row nzGutter="24">
+          <div nz-col nzXs="24" nzSm="8">
+            <nz-form-item nz-col nzSm="24">
+              <nz-form-label>Número da DT</nz-form-label>
+              <nz-form-control>
+                <input
+                  nz-input
+                  formControlName="id"
+                  placeholder="Ex.: 1043"
+                  type="number"
+                />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzXs="24" nzSm="8">
+            <nz-form-item nz-col nzSm="24">
+              <nz-form-label>Projeto</nz-form-label>
+              <nz-form-control>
+                <input
+                  nz-input
+                  formControlName="projetoNome"
+                  placeholder="Ex.: PDTI"
+                />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzXs="24" nzSm="8">
+            <nz-form-item nz-col nzSm="24">
+              <nz-form-label>Situação</nz-form-label>
+              <nz-form-control>
+                <nz-select
+                  formControlName="situacao"
+                  nzPlaceHolder="Ex.: Em Elaboração"
+                  nzAllowClear
+                >
+                  <nz-option
+                    [nzValue]="DeclaracaoTrabalhoSituacao.Elaboracao"
+                    nzLabel="Em Elaboração"
+                  >
+                  </nz-option>
+                  <nz-option
+                    [nzValue]="DeclaracaoTrabalhoSituacao.AguardandoFornecedor"
+                    nzLabel="Aguardando Fornecedor"
+                  >
+                  </nz-option>
+                  <nz-option
+                    [nzValue]="DeclaracaoTrabalhoSituacao.Respondida"
+                    nzLabel="Respondida"
+                  >
+                  </nz-option>
+                  <nz-option
+                    [nzValue]="
+                      DeclaracaoTrabalhoSituacao.AguardandoClassificacao
+                    "
+                    nzLabel="Aguardando Classificação Contábil"
+                  >
+                  </nz-option>
+                  <nz-option
+                    [nzValue]="
+                      DeclaracaoTrabalhoSituacao.ClassificacaoRealizada
+                    "
+                    nzLabel="Classificação Contábil Realizada"
+                  >
+                  </nz-option>
+                  <nz-option
+                    [nzValue]="DeclaracaoTrabalhoSituacao.Finalizada"
+                    nzLabel="Finalizada"
+                  >
+                  </nz-option>
+                  <nz-option
+                    [nzValue]="DeclaracaoTrabalhoSituacao.Cancelada"
+                    nzLabel="Cancelada"
+                  >
+                  </nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzXs="24" nzSm="8">
+            <nz-form-item nz-col nzSm="24">
+              <nz-form-label>Área</nz-form-label>
+              <nz-form-control>
+                <nz-select
+                  formControlName="departamentoId"
+                  nzPlaceHolder="Ex.: SUREH"
+                  nzShowSearch
+                  nzAllowClear
+                >
+                  <nz-option
+                    *ngFor="let d of departamentos"
+                    [nzLabel]="d.nome"
+                    [nzValue]="d.id"
+                  >
+                  </nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzXs="24" nzSm="8">
+            <nz-form-item nz-col nzSm="24">
+              <nz-form-label>Nome do Responsável</nz-form-label>
+              <nz-form-control>
+                <input
+                  nz-input
+                  formControlName="nomeResponsavel"
+                  placeholder="Ex.: José Silva"
+                />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzXs="24" nzSm="8">
+            <nz-form-item nz-col nzSm="24">
+              <nz-form-label>Login do Responsável</nz-form-label>
+              <nz-form-control>
+                <input
+                  nz-input
+                  formControlName="loginResponsavel"
+                  placeholder="Ex.: josesilva"
+                />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+        <div nz-row>
+          <nz-form-item nz-col nzSm="24">
+            <nz-form-control>
+              <nz-form-label>Período</nz-form-label>
+              <nz-range-picker
+                nzFormat="dd/MM/yyyy"
+                formControlName="intervaloData"
+                [nzAllowClear]="false"
+              ></nz-range-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-row>
+          <div nz-col nzSpan="24">
+            <button
+              (click)="carregarDTs()"
+              nz-button
+              nzType="primary"
+              [nzLoading]="carregandoDts"
+            >
+              Pesquisar
+            </button>
+            <button
+              (click)="resetForm()"
+              nz-button
+              class="ml-2"
+              [disabled]="carregandoDts"
+            >
+              Limpar
+            </button>
+          </div>
+        </div>
+      </form>
+    </nz-collapse-panel>
+  </nz-collapse>
+</ng-container>

@@ -1,0 +1,166 @@
+<nz-card [nzTitle]="usuarioId ? 'Editar Usuário' : 'Cadastrar Usuário'">
+  <nz-tabset nzType="card">
+    <nz-tab nzTitle="Dados">
+      <form
+        nz-form
+        [formGroup]="form"
+        nzLayout="vertical"
+        (ngSubmit)="salvar()"
+      >
+        <div nz-row nzGutter="24">
+          <div nz-col nzXs="24" nzSm="12">
+            <nz-form-item>
+              <nz-form-label> Usuário </nz-form-label>
+              <nz-form-control>
+                <nz-select
+                  formControlName="usuarioAd"
+                  nzPlaceHolder="Usuário"
+                  nzShowSearch
+                  nzServerSearch
+                  (nzOnSearch)="searchUsuario($event)"
+                  (ngModelChange)="onChangeUsuario($event)"
+                >
+                  <ng-container *ngFor="let u of usuariosAd">
+                    <nz-option
+                      *ngIf="!buscandoUsuarioAd"
+                      [nzValue]="u"
+                      [nzLabel]="u.nome"
+                    >
+                    </nz-option>
+                  </ng-container>
+                  <nz-option
+                    *ngIf="buscandoUsuarioAd"
+                    nzDisabled
+                    nzCustomContent
+                  >
+                    <i nz-icon nzType="loading" class="loading-icon mr-2"></i>
+                    Buscando ...
+                  </nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <div nz-col nzXs="24" nzSm="12">
+            <nz-form-item>
+              <nz-form-label nzRequired> Login </nz-form-label>
+              <nz-form-control>
+                <input nz-input formControlName="login" placeholder="Login" />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <div nz-col nzXs="24" nzSm="12">
+            <nz-form-item>
+              <nz-form-label nzRequired> Nome </nz-form-label>
+              <nz-form-control>
+                <input nz-input formControlName="nome" placeholder="Nome" />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <div nz-col nzXs="24" nzSm="12">
+            <nz-form-item>
+              <nz-form-label nzRequired> E-mail </nz-form-label>
+              <nz-form-control>
+                <input
+                  type="email"
+                  nz-input
+                  formControlName="email"
+                  placeholder="E-mail"
+                />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <div nz-col nzXs="24" nzSm="12">
+            <nz-form-item>
+              <nz-form-label nzRequired> Situação </nz-form-label>
+              <nz-form-control>
+                <nz-select formControlName="situacao" nzPlaceHolder="Situação">
+                  <nz-option [nzValue]="SituacaoUsuario.Ativo" nzLabel="Ativo">
+                  </nz-option>
+                  <nz-option
+                    [nzValue]="SituacaoUsuario.Inativo"
+                    nzLabel="Inativo"
+                  >
+                  </nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+
+        <nz-divider class="mt-0 mb-2"></nz-divider>
+        <div nz-row nzGutter="24">
+          <div nz-col nzSpan="24">
+            <div class="text-right">
+              <button
+                type="submit"
+                nz-button
+                nzType="primary"
+                [nzLoading]="salvandoUsuario"
+              >
+                <i nz-icon nzType="save" nzTheme="outline"></i>
+                {{ usuarioId ? "Salvar" : "Cadastrar" }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </nz-tab>
+
+    <nz-tab nzTitle="Grupos de Acesso" *ngIf="usuarioId">
+      <div nz-row nzGutter="24">
+        <div nz-col nzSpan="24">
+          <nz-select
+            [(ngModel)]="addGrupoAcessoInput"
+            nzPlaceHolder="Selecionar Grupo de Acesso"
+            (ngModelChange)="vincularGrupoAcesso($event)"
+            nzShowSearch
+            [disabled]="vinculandoOuDesvinculandoGrupoAcesso"
+            class="w-100"
+          >
+            <nz-option
+              *ngFor="let g of gruposAcesso"
+              [nzLabel]="g.nome"
+              [nzValue]="g"
+            >
+            </nz-option>
+          </nz-select>
+        </div>
+      </div>
+      <nz-table
+        #gruposAcessoTable
+        [nzData]="usuario?.grupos"
+        [nzFrontPagination]="false"
+        nzSize="small"
+        [nzLoading]="vinculandoOuDesvinculandoGrupoAcesso"
+        class="mt-3"
+      >
+        <thead>
+          <tr>
+            <th>Grupo</th>
+            <th>Administrador</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let g of gruposAcessoTable.data">
+            <td>{{ g.nome }}</td>
+            <td>{{ g.administrador ? "Sim" : "Não" }}</td>
+            <td>
+              <button
+                (click)="desvincularGrupoAcesso(g)"
+                nz-button
+                nzShape="circle"
+              >
+                <i nz-icon nzType="delete"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </nz-tab>
+  </nz-tabset>
+</nz-card>

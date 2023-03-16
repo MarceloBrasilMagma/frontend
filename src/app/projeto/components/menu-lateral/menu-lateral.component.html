@@ -1,0 +1,193 @@
+<div nz-row style="padding: 0px;">
+  <div nz-col nzSpan="4" style="background-color: #F5F5F5; padding: 0px; height: 100vh;">
+    <button nz-button (click)="abaSelecionada = abas.menu"
+      style="width: 100%; height: 65px; margin: 0px; background-color: #F2683A; color: #821618; border: none; border-radius: 0px;">
+      <i nz-icon nzType="menu" nzTheme="outline"></i>
+    </button>
+
+    <button nz-button (click)="abaSelecionada = abas.timeline"
+      style="width: 100%; height: 65px; margin: 0px; background-color: #FF911A; color: #821618; border: none;  border-radius: 0px;">
+      <i nz-icon nzType="flag" nzTheme="outline"></i>
+    </button>
+
+    <button nz-button (click)="abaSelecionada = abas.plurianual"
+      style="width: 100%; height: 65px; margin: 0px; background-color: #ffba1a; color: #821618; border: none;  border-radius: 0px;">
+      <i nz-icon nzType="calendar" nzTheme="outline"></i>
+    </button>
+    <button nz-button (click)="abaSelecionada = abas.historicoAlteracoes"
+      style="width: 100%; height: 65px; margin: 0px; background-color: #fffb1a; color: #821618; border: none;  border-radius: 0px;">
+      <span nz-icon nzType="history" nzTheme="outline"></span>
+    </button>
+  </div>
+  <div nz-col nzSpan="20" style="padding: 20px 20px 0 20px;">
+    <ng-container *ngIf="abaSelecionada == abas.menu">
+      <div nz-col nzSpan="24">
+        <h1>Links Rápidos</h1>
+      </div>
+      <div nz-row style="margin-top: 15px;">
+        <div nz-col nzFlex="auto" class="icone-link">
+          <button nz-button nz-tooltip="Página Inicial" class="botao-link" (click)="alterarComponente(componentes.Capa)"><i
+              class="fas fa-home link-rapido"></i></button>
+        </div>
+        <div nz-col nzFlex="auto" class="icone-link">
+          <button nz-button nz-tooltip="Dados do Projeto" class="botao-link" (click)="alterarComponente(componentes.DadosProjeto)"><i
+              class="fas fa-file-alt link-rapido"></i></button>
+        </div>
+        <div nz-col nzFlex="auto" class="icone-link">
+          <button nz-button nz-tooltip="Centro de Custo" class="botao-link" (click)="alterarComponente(componentes.CentroCusto)"><i
+              class="fas fa-comment-dollar link-rapido"></i></button>
+        </div>
+        <div *ngIf="exibirPosTap" nz-col nzFlex="auto" class="icone-link">
+          <button nz-button nz-tooltip="Diário de Bordo" class="botao-link" (click)="alterarComponente(componentes.DiarioBordo)"><i
+              class="fas fa-book link-rapido"></i></button>
+        </div>
+      </div>
+      <ng-template [ngIf]="exibirPosTap">
+      <div nz-row style="margin-bottom: -15px;">
+        <div nz-col nzFlex="auto" class="icone-link">
+          <button nz-button nz-tooltip="Plano de Ação" class="botao-link" (click)="alterarComponente(componentes.PlanoAcao)"><i
+              class="fas fa-route link-rapido"></i></button>
+        </div>
+        <div nz-col nzFlex="auto" class="icone-link">
+          <button nz-button nz-tooltip="Orçamento" class="botao-link" (click)="alterarComponente(componentes.Orcamentos)"><i
+              class="fas fa-hand-holding-usd link-rapido"></i></button>
+        </div>
+        <div nz-col nzFlex="auto" class="icone-link">
+          <button nz-button nz-tooltip="Cronograma" class="botao-link" (click)="alterarComponente(componentes.Cronograma)"><i
+              class="fas fa-calendar-alt link-rapido"></i></button>
+        </div>
+        <div nz-col nzFlex="auto" class="icone-link">
+          <button nz-button nz-tooltip="Lições Aprendidas" class="botao-link" (click)="alterarComponente(componentes.LicoesAprendidas)"><i
+              class="fas fa-chalkboard-teacher link-rapido"></i></button>
+        </div>
+      </div>
+    </ng-template>
+      <div nz-row class="mt-5">
+        <div nz-col nzSpan="24">
+          <h1>Ações</h1>
+        </div>
+
+        <div nz-col nzSpan="24">
+          <button nz-button class="botao-acoes" nzType="link" *ngIf="exibirTornarPlurianual"
+            (click)="tornarPlurianual()">
+            <span>Tornar Plurianual</span>
+            <i nz-icon nzType="right" nzTheme="outline"></i>
+          </button>
+        </div>
+        <div nz-col nzSpan="24">
+          <button nz-button class="botao-acoes" nzType="link" *ngIf="exibirEnviarAprovacaoTap"
+            (click)="verificarTap.emit()">
+            <span>Enviar Aprovação TAP</span>
+            <i nz-icon nzType="right" nzTheme="outline"></i>
+          </button>
+        </div>
+        <div nz-col nzSpan="24">
+          <button nz-button class="botao-acoes" nzType="link" *ngIf="exibirAprovarTap" (click)="verificarTap.emit()">
+            <span>Aprovar TAP</span>
+            <i nz-icon nzType="right" nzTheme="outline"></i>
+          </button>
+        </div>
+        <div nz-col nzSpan="24">
+          <button nz-button class="botao-acoes" nzType="link" (click)="selecionarPreProjeto()">
+            <span>Visualizar Iniciativa</span>
+            <i nz-icon nzType="right" nzTheme="outline"></i>
+          </button>
+        </div>
+      </div>
+      <div nz-row class="mt-5">
+        <div nz-col nzSpan="24">
+          <h1>Navegação</h1>
+        </div>
+        <div nz-col nzSpan="24">
+          <ul>
+            <li nz-button nzType="link" (click)="alterarComponente(componentes.Capa)">
+              <span>Página Inicial</span>
+              <i nz-icon nzType="arrow-right" nzTheme="outline"></i>
+            </li>
+            <li nz-button nzType="link" (click)="alterarComponente(componentes.DadosProjeto)">
+              <span>Dados do Projeto</span>
+              <i nz-icon nzType="arrow-right" nzTheme="outline"></i>
+            </li>
+            <li nz-button nzType="link" (click)="alterarComponente(componentes.CentroCusto)">
+              <span>Centro de Custo</span>
+              <i nz-icon nzType="arrow-right" nzTheme="outline"></i>
+            </li>
+            <li nz-button nzType="link" [routerLink]="['questionario']">
+              <span>Questionários</span>
+              <i nz-icon nzType="arrow-right" nzTheme="outline"></i>
+            </li>
+            <ng-template [ngIf]="exibirPosTap">
+              <li nz-button nzType="link" (click)="alterarComponente(componentes.DiarioBordo)">
+                <span>Diário de Bordo</span>
+                <i nz-icon nzType="arrow-right" nzTheme="outline"></i>
+              </li>
+              <li nz-button nzType="link" (click)="alterarComponente(componentes.PlanoAcao)">
+                <span>Plano de Ação</span>
+                <i nz-icon nzType="arrow-right" nzTheme="outline"></i>
+              </li>
+              <li nz-button nzType="link" (click)="alterarComponente(componentes.Orcamentos)">
+                <span>Orçamento</span>
+                <i nz-icon nzType="arrow-right" nzTheme="outline"></i>
+              </li>
+              <li nz-button nzType="link" (click)="alterarComponente(componentes.Cronograma)">
+                <span>Cronograma</span>
+                <i nz-icon nzType="arrow-right" nzTheme="outline"></i>
+              </li>
+              <li nz-button nzType="link" (click)="alterarComponente(componentes.LicoesAprendidas)">
+                <span>Lições Aprendidas</span>
+                <i nz-icon nzType="arrow-right" nzTheme="outline"></i>
+              </li>
+            </ng-template>
+          </ul>
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="abaSelecionada == abas.timeline">
+      <div nz-row>
+        <div nz-col nzSpan="24">
+          <h1>Linha do Tempo</h1>
+        </div>
+      </div>
+      <div nz-row>
+        <div nz-col nzSpan="24">
+          <app-timeline-projeto [projeto]="projeto"></app-timeline-projeto>
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="abaSelecionada == abas.plurianual">
+      <div nz-row>
+        <div nz-col nzSpan="24">
+          <h1>Plurianual</h1>
+        </div>
+      </div>
+      <div class="mt-5">
+
+        <div nz-col nzSpan="24" *ngFor="let plurianualidade of projeto.anosPlurianualidade">
+          <h1>{{plurianualidade.ano}}</h1>
+          <ul>
+            <li nz-button nzType="link" (click)="selecionarPlurianual(plurianualidade)"><span>Selecionar Ano Projeto</span> <i
+                nz-icon nzType="arrow-right" nzTheme="outline"></i></li>
+            <li nz-button nzType="link" (click)="redirecionar(plurianualidade)"><span>{{ "Visualizar " + (!!plurianualidade.plurianualId ? "Plurianual": "Iniciativa")}}</span>
+              <i nz-icon nzType="arrow-right" nzTheme="outline"></i>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="abaSelecionada == abas.historicoAlteracoes">
+      <div nz-row>
+        <div nz-col nzSpan="24">
+          <h1>Histórico de Alterações</h1>
+        </div>
+      </div>
+      <div class="mt-5">
+        <div nz-col nzSpan="24">
+          <app-historico-alteracoes [idEntidade]="projeto.id">
+          </app-historico-alteracoes>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>

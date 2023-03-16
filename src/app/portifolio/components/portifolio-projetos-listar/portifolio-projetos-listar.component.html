@@ -1,0 +1,27 @@
+    <h4 class="titulo-tabela">Lista de Projetos</h4>
+      <nz-table #projetosTable [nzData]="projetos" nzTableLayout="fixed" [nzFrontPagination]="true" [nzLoading]="buscandoProjetos" [nzScroll]="{ x: '700px'}">
+        <thead>
+          <tr>
+            <th nzWidth="100px">Id</th>
+            <th>Nome</th>
+            <th>Gerente</th>
+            <th>Sponsor</th>
+            <th>Status do Projeto</th>
+            <th>Status do Cronograma</th>
+            <!-- <th>Cronograma</th> -->
+            <th>Orçamento</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr (click)="irParaProjeto(projeto)" class="cursor-pointer linha-clicavel" *ngFor="let projeto of projetosTable.data">
+            <td>{{ projeto.plurianual ? projeto.id : projeto.projetoId }}</td>
+            <td nzEllipsis>{{ projeto.nome }}</td>
+            <td nzEllipsis>{{projeto.nomeGerenteProjeto ? projeto.nomeGerenteProjeto : projeto.nomeResponsavel }}</td>
+            <td nzEllipsis>{{projeto.nomeSponsor}}</td>
+            <td nzEllipsis>{{projeto.projetoStatusDescricao}}</td>
+            <td nzEllipsis>{{ exibirStatusCronograma(projeto.projetoCronogramaStatus) }}</td>
+            <!-- <td></td> -->
+            <td nzEllipsis>{{projeto.valorOrcado >= projeto.valorRealizado ? "Dentro do Orçamento" : "Fora do Orçamento"}}</td>
+          </tr>
+        </tbody>
+      </nz-table>

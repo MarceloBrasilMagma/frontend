@@ -1,0 +1,56 @@
+<div class="row align-items-center">
+  <div class="col-md-4 col-xs-12">
+    <div class="d-md-flex align-items-center">
+      <div class="text-center text-sm-left m-v-15 p-l-30">
+        <p class="text-dark font-weight-bold">Número: {{ projeto.id}}</p>
+        <p class="text-dark">Gerente do Projeto: {{ projeto.nomeGerenteProjeto }}</p>
+        <p class="text-dark">Gerente do Negócio: {{ projeto.nomeGerenteNegocio }}</p>
+        <p class="text-dark">Sponsor: {{ projeto.nomeSponsor }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-4 col-xs-12">
+    <div class="row">
+      <div class="d-md-block d-none border-left col-1"></div>
+      <div class="col">
+        <ul class="list-unstyled m-t-10">
+          <li class="row">
+            <p class="font-weight-semibold m-b-5">
+              <i class="text-primary text-dark m-r-10" nz-icon nzType="calendar" theme="outline"></i>
+              {{ projeto.dataCriacao | date: 'dd/MM/yyyy' }}
+            </p>
+          </li>
+          <li class="row">
+            <nz-tag [nzColor]="corSituacao">{{ projeto.situacaoDescricao }}</nz-tag>
+          </li>
+          <li class="row" *ngIf="!!projeto.centroCusto">
+            <nz-tag [nzColor]="corSituacaoCentroCusto">{{ projeto.centroCusto.situacaoDescricao }}</nz-tag>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 col-xs-12">
+    <div class="row">
+      <div class="d-md-block d-none border-left col-1"></div>
+      <div class="col">
+        <div class="d-md-flex align-items-center">
+          <div class="text-center text-sm-left m-v-15 p-l-30">
+            <p class="font-weight-semibold m-b-5">
+              <i class="text-primary text-dark m-r-10" nz-icon nzType="clock-circle" theme="outline"></i>
+              <span>Planejado: </span> <span class="text-dark">{{!projeto.planejado ? "Não disponível" :  projeto.planejado + "%"}}</span></p>
+            <p class="font-weight-semibold m-b-5">
+              <i class="text-primary text-dark m-r-10" nz-icon nzType="check-circle" theme="outline"></i>
+              <span>Planejado: </span> <span class="text-dark">{{!projeto.real ? "Não disponível" :  projeto.real + "%"}}</span></p>
+            <p class="font-weight-semibold m-b-5">
+              <i class="text-primary text-dark m-r-10" nz-icon nzType="tags" theme="outline"></i>
+              <span>Status: </span>
+              <nz-tag class="ml-1" [nzColor]="corStatus">{{!!projeto.cronogramaStatusDescricao ? projeto.cronogramaStatusDescricao : "Não disponível"}}</nz-tag>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

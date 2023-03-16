@@ -1,0 +1,68 @@
+<div class="flex flex-col 2xl:flex-row justify-between">
+  <h2>Lista de projetos</h2>
+  <div class="flex flex-col xl:flex-row gap-2 mb-3">
+    <div class="flex gap-2">
+      <button nz-button id="btnTodos" (click)="obterTotalProjetos()" class={{active}} nzSize="small" nzShape="round">
+        Todos
+      </button>
+      <button nz-button class={{active}} (click)="obterProjetosIniciacaoFutura()" nzType="default" nzSize="small"
+        nzShape="round">
+        Iniciação futura
+      </button>
+      <button nz-button class={{active}} (click)="obterProjetosAtrasado()" nzType="default" nzSize="small"
+        nzShape="round">
+        Atrasado
+      </button>
+      <button nz-button class={{active}} (click)="obterProjetosDentroDoPrazo()" nzType="default" nzSize="small"
+        nzShape="round">
+        Dentro do prazo
+      </button>
+    </div>
+    <div class="flex gap-2">
+      <button nz-button class={{active}} (click)="obterProjetosForaDoPrazo()" nzType="default" nzSize="small"
+        nzShape="round">
+        Fora do prazo
+      </button>
+      <button nz-button class={{active}} (click)="obterProjetosPausados()" nzType="default" nzSize="small"
+        nzShape="round">
+        Pausado
+      </button>
+      <button nz-button class={{active}} (click)="obterProjetosCancelados()" nzType="default" nzSize="small"
+        nzShape="round">
+        Cancelado
+      </button>
+      <button nz-button class={{active}} (click)="obterProjetosConcluidos()" nzType="default" nzSize="small"
+        nzShape="round">
+        Concluído
+      </button>
+    </div>
+  </div>
+</div>
+<nz-card *ngFor="let projeto of projetos">
+  <div class="flex flex-col md:flex-row justify-between items-center">
+    <div class="flex gap-2 truncate">
+      <!-- <span class="text-xl font-light" *ngIf="projeto.projetoPlurianual">#{{ projeto.id }}</span> -->
+      <span class="text-xl font-light">#{{ tipoProjetoId(projeto) }}</span>
+      <span class="text-xl font-medium truncate pr-4">{{ projeto.nome }}</span>
+    </div>
+    <div class="flex gap-3 items-center min-w-fit" *ngIf="!(statusIniciacaoFutura(projeto))">
+      <span nz-icon class="text-3xl" [nzType]="'check-circle'" [nzTheme]="'twotone'"
+        [nzTwotoneColor]="'#52c41a'"></span>
+      <div class="flex flex-col">
+        <span class="text-2xl font-medium flex justify-center">{{ projeto.projetoCronogramaRealizado }}%</span>
+        <span class="flex justify-center">Realizado</span>
+      </div>
+      <span nz-icon class="text-3xl" nzType="clock-circle" nzTheme="twotone" [nzTwotoneColor]="'#3489eb'"></span>
+      <div class="flex flex-col">
+        <span class="text-2xl font-medium justify-center">{{ projeto.projetoCronogramaRevisado }}%</span>
+        <span class="flex justify-center">Previsto</span>
+      </div>
+      <nz-avatar [nzSize]="30" [nzIcon]="iconeCarinha(projeto.projetoCronogramaStatus)" class="mr-2"
+        [style]="corIndicador(projeto.projetoCronogramaStatus)">
+      </nz-avatar>
+    </div>
+    <div *ngIf="statusIniciacaoFutura(projeto)" class="min-w-fit">
+      <h2>Iniciação Futura</h2>
+    </div>
+  </div>
+</nz-card>

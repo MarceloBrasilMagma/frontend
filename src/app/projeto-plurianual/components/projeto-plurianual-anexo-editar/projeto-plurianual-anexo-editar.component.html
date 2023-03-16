@@ -1,0 +1,14 @@
+<nz-card nzSize="small">
+  <nz-spin nzTip="Aguarde..." [nzSpinning]="excluindoAnexo || baixandoArquivo">
+    <nz-upload nzType="drag" nzListType="picture" [nzMultiple]="true" [nzCustomRequest]="handleUpload"
+      [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" [nzDownload]="handleDownload" [nzRemove]="handleRemove"
+      [nzShowUploadList]="{showRemoveIcon: true, showDownloadIcon: true}" [nzDisabled]="desabilitaBotoes">
+
+      <p class="ant-upload-drag-icon">
+        <i nz-icon nzType="inbox"></i>
+      </p>
+      <p class="ant-upload-text">Clique aqui ou arraste o arquivo para esta área para anexá-lo</p>
+    </nz-upload>
+  </nz-spin>
+
+</nz-card>

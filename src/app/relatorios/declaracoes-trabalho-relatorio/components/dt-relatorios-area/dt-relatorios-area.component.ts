@@ -1,0 +1,220 @@
+import { Component, Input, OnChanges, OnInit, ViewChild } from '@angular/core';
+import { Chart } from 'chart.js';
+import {
+  DeclaracaoTrabalhoRelatorioDto,
+  DeclaracaoTrabalhoSituacao,
+} from '../../../../../../web-api-client';
+
+@Component({
+  selector: 'app-dt-relatorios-area',
+  templateUrl: './dt-relatorios-area.component.html',
+  styleUrls: ['./dt-relatorios-area.component.scss'],
+})
+export class DtRelatoriosAreaComponent implements OnInit, OnChanges {
+  @Input() dts: DeclaracaoTrabalhoRelatorioDto[];
+  @ViewChild('mychart') mychart: any;
+  canvas: any;
+  ctx: any;
+  chart: any;
+  siglas: any;
+  qtdElaboracao: number[] = [];
+  qtdAguardandoFornecedor: number[] = [];
+  qtdRespondida: number[] = [];
+  qtdAguardandoClassificacao: number[] = [];
+  qtdClassificacaoRealizada: number[] = [];
+  qtdFinalizada: number[] = [];
+  qtdCancelada: number[] = [];
+  qtdAguardandoAjustes: number[] = [];
+  qtdAjustesRealizados: number[] = [];
+  situacoes: DeclaracaoTrabalhoSituacao[];
+  declaracaoTrabalhoSituacao = DeclaracaoTrabalhoSituacao;
+
+  constructor() {}
+
+  ngOnInit(): void {}
+
+  ngOnChanges() {
+    this.agruparDados();
+    this.carregarGrafico();
+  }
+
+  ngAfterViewInit() {
+    this.agruparDados();
+
+    this.carregarGrafico();
+  }
+
+  carregarGrafico() {
+    if (!!this.chart) this.chart.destroy();
+
+    this.canvas = this.mychart.nativeElement;
+    this.ctx = this.canvas.getContext('2d');
+    this.chart = new Chart(this.ctx, {
+      type: 'bar',
+      data: {
+        datasets: [
+          {
+            label: 'Em Elaboração',
+            data: this.qtdElaboracao,
+            backgroundColor: '#ede379',
+            maxBarThickness: 60
+          },
+          {
+            label: 'Aguardando Fornecedor',
+            data: this.qtdAguardandoFornecedor,
+            backgroundColor: '#eda479',
+            maxBarThickness: 60
+          },
+          {
+            label: 'Respondida',
+            data: this.qtdRespondida,
+            backgroundColor: '#38803f',
+            maxBarThickness: 60
+          },
+          {
+            label: 'Aguardando Classificação',
+            data: this.qtdAguardandoClassificacao,
+            backgroundColor: '#73c5e6',
+            maxBarThickness: 60
+          },
+          {
+            label: 'Classificação Realizada',
+            data: this.qtdClassificacaoRealizada,
+            backgroundColor: '#315b6b',
+            maxBarThickness: 60
+          },
+          {
+            label: 'Finalizados',
+            data: this.qtdFinalizada,
+            backgroundColor: '#BACF36',
+            maxBarThickness: 60
+          },
+          {
+            label: 'Cancelados',
+            data: this.qtdCancelada,
+            backgroundColor: '#CC4123',
+            maxBarThickness: 60
+          },
+          {
+            label: 'Aguardando Ajustes',
+            data: this.qtdAguardandoAjustes,
+            backgroundColor: '#87734d',
+            maxBarThickness: 60
+          },
+          {
+            label: 'Ajustes Realizados',
+            data: this.qtdAjustesRealizados,
+            backgroundColor: '#0744A1',
+            maxBarThickness: 60
+          },
+        ],
+        labels: this.siglas,
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            display: true,
+          },
+        },
+        scales: {
+          x: {
+            stacked: true,
+          },
+          y: {
+            display: true,
+            stacked: true,
+            position: 'right',
+            min: 0
+          },
+        },
+      },
+    });
+  }
+
+  agruparDados() {
+    this.qtdElaboracao = [];
+    this.qtdAguardandoFornecedor = [];
+    this.qtdRespondida = [];
+    this.qtdAguardandoClassificacao = [];
+    this.qtdClassificacaoRealizada = [];
+    this.qtdFinalizada = [];
+    this.qtdCancelada = [];
+    this.qtdAguardandoAjustes = [];
+    this.qtdAjustesRealizados = [];
+
+    this.siglas = [...new Set(this.dts.map((x) => x.sigla))];
+
+    this.siglas.forEach((element) => {
+      this.qtdElaboracao.push(
+        this.dts.filter(
+          (x) =>
+            x.sigla === element &&
+            x.situacao === DeclaracaoTrabalhoSituacao.Elaboracao
+        ).length
+      );
+      this.qtdAguardandoFornecedor.push(
+        this.dts.filter(
+          (x) =>
+            x.sigla === element &&
+            x.situacao === DeclaracaoTrabalhoSituacao.AguardandoFornecedor
+        ).length
+      );
+      this.qtdRespondida.push(
+        this.dts.filter(
+          (x) =>
+            x.sigla === element &&
+            x.situacao === DeclaracaoTrabalhoSituacao.Respondida
+        ).length
+      );
+      this.qtdAguardandoClassificacao.push(
+        this.dts.filter(
+          (x) =>
+            x.sigla === element &&
+            x.situacao === DeclaracaoTrabalhoSituacao.AguardandoClassificacao
+        ).length
+      );
+      this.qtdClassificacaoRealizada.push(
+        this.dts.filter(
+          (x) =>
+            x.sigla === element &&
+            x.situacao === DeclaracaoTrabalhoSituacao.ClassificacaoRealizada
+        ).length
+      );
+      this.qtdFinalizada.push(
+        this.dts.filter(
+          (x) =>
+            x.sigla === element &&
+            x.situacao === DeclaracaoTrabalhoSituacao.Finalizada
+        ).length
+      );
+      this.qtdCancelada.push(
+        this.dts.filter(
+          (x) =>
+            x.sigla === element &&
+            x.situacao === DeclaracaoTrabalhoSituacao.Cancelada
+        ).length
+      );
+      this.qtdAguardandoAjustes.push(
+        this.dts.filter(
+          (x) =>
+            x.sigla === element &&
+            x.situacao === DeclaracaoTrabalhoSituacao.AguardandoAjustes
+        ).length
+      );
+      this.qtdAjustesRealizados.push(
+        this.dts.filter(
+          (x) =>
+            x.sigla === element &&
+            x.situacao === DeclaracaoTrabalhoSituacao.AjustesRealizados
+        ).length
+      );
+    });
+  }
+
+  situacoesDts(situacao: DeclaracaoTrabalhoSituacao) {
+    this.situacoes = [...new Set(this.dts.map((x) => x.situacao))];
+
+    return this.situacoes.filter(s => s == situacao).length > 0
+  }
+}

@@ -1,0 +1,38 @@
+<div style="border-bottom: 1px solid rgb(233, 233, 233);">
+  <p class="mb-3">
+    <button nz-button nzType="primary" nzSize="small" (click)="exibirModalEditar()">
+      <span>Registrar nova Pergunta</span>
+    </button>
+  </p>
+</div>
+
+<nz-table #perguntasTable [nzData]="perguntas?.items" nzBordered [nzFrontPagination]="false"
+  [(nzPageIndex)]="pageIndex" [(nzPageSize)]="pageSize" [nzLoading]="carregando"
+  (nzQueryParams)="onQueryParamsChange($event)" [nzTotal]="perguntas?.totalCount" class="mt-1">
+  <thead>
+    <tr>
+      <th>Nº</th>
+      <th>Descrição</th>
+      <th nzWidth="10%">Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let perguntas of perguntasTable.data">
+      <td>{{perguntas.id}}</td>
+      <td>{{perguntas.descricao}}</td>
+      <td>
+        <nz-space>
+            <button *nzSpaceItem nz-button nzShape="circle" (click)="exibirModalEditar(perguntas)" [nzTooltipTitle]="'Editar'"
+              nz-tooltip>
+              <i nz-icon nzType="edit"></i>
+            </button>
+            <button *nzSpaceItem nz-button nzShape="circle" nzTooltipTitle="Excluir" nz-tooltip nz-popconfirm
+              nzPopconfirmTitle="Tem certeza que deseja excluir?" nzOkText="Sim"
+              (nzOnConfirm)="excluirPerguta(perguntas)">
+              <i nz-icon nzType="delete"></i>
+            </button>
+        </nz-space>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>

@@ -1,0 +1,21 @@
+<div>
+    <button class="mb-3" nz-button nz-button nzType="primary" nzSize="small" routerLink="cadastrar">
+      Cadastrar Grupo de Acesso
+    </button>
+</div>
+
+<nz-table #table [nzData]="gruposAcesso" [nzFrontPagination]="false" [nzLoading]="carregandoGruposAcesso"
+  [nzTotal]="gruposAcesso?.length" [(nzPageIndex)]="pageIndex" [(nzPageSize)]="pageSize" class="mt-2">
+  <thead>
+    <tr>
+      <th>Grupo</th>
+      <th>Administrador</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let g of table.data" class="cursor-pointer linha-clicavel" [routerLink]="['editar', g.id]">
+      <td>{{ g.nome }}</td>
+      <td>{{ g.administrador ? 'Sim' : 'Não' }}</td>
+    </tr>
+  </tbody>
+</nz-table>

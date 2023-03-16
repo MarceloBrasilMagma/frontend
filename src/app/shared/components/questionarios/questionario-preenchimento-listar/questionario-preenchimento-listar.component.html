@@ -1,0 +1,23 @@
+<nz-table #table [nzData]="questionariosPreenchimento.items" nzBordered [nzFrontPagination]="false" [nzLoading]="carregando"
+    [nzTotal]="questionariosPreenchimento.totalCount" [(nzPageIndex)]="pageIndex" [(nzPageSize)]="pageSize" nzSize="small"
+    (nzQueryParams)="onQueryParamsChange($event)" class="mt-1">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Usuário</th>
+            <th>Data do Preenchimento</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let u of table.data">
+            <td>{{ u.id}}</td>
+            <td>{{ u.usuario.nome}}</td>
+            <td>{{ u.dataCriacao | date: 'dd/MM/yyyy' }}</td>
+            <td>
+                <button nz-button nzShape="circle" [routerLink]="[u.id]">
+                    <i nz-icon nzType="eye"></i>
+                </button>
+            </td>
+        </tr>
+    </tbody>
+</nz-table>

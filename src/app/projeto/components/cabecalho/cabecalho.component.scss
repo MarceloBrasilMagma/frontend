@@ -1,0 +1,27 @@
+.dropdown-projeto {
+  padding-bottom: 0;
+  padding-top: 0;
+}
+
+.dropdown-projeto > li > i {
+  margin-right: 8px;
+}
+
+.dropdown-projeto > li {
+  border-bottom: 1px solid #dfdfdf;
+}
+
+.dropdown-projeto li:last-child {
+  border-bottom: none;
+}
+
+button {
+  display: flex;
+  align-items: center;
+}
+
+
+.disabled {
+  pointer-events: none;
+  opacity: 0.6;
+}

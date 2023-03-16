@@ -1,0 +1,26 @@
+<app-header-relatorios></app-header-relatorios>
+<div *ngIf="!carregando">
+  <nz-card>
+    <div class="flex flex-col md:flex-row gap-4">
+      <div class="w-full md:w-8/12">
+        <app-plano-acao-previsao
+          [portifolio]="portifolio"
+          [planosAcoesPortifolio]="planosAcoesPortifolio"
+        ></app-plano-acao-previsao>
+      </div>
+      <div class="w-full md:w-4/12">
+        <app-plano-acao-situacao
+          [planosAcoesPortifolio]="planosAcoesPortifolio"
+        ></app-plano-acao-situacao>
+      </div>
+    </div>
+  </nz-card>
+  <nz-card>
+    <div>
+      <app-plano-acao-acoes
+        [planosAcoesPortifolio]="planosAcoesPortifolio"
+        [portifolio]="portifolio"
+      ></app-plano-acao-acoes>
+    </div>
+  </nz-card>
+</div>

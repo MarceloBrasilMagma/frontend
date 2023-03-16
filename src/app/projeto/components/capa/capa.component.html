@@ -1,0 +1,85 @@
+<nz-row>
+  <nz-col nzSpan="8">
+    <nz-card class="card h-[12.5rem]" nzTitle="Informações Gerais">
+      <div class="mb-3">
+        <h3><i nz-icon nzType="team" nzTheme="outline"></i>Departamento</h3>
+        <h2>{{ projeto.preProjeto?.departamentoNome }}</h2>
+      </div>
+    </nz-card>
+    <nz-card class="card h-[18.75rem]" nzTitle="Participantes">
+      <div class="mb-3">
+        <h3>
+          <i nz-icon nzType="team" nzTheme="outline"></i>Gerente de Projeto
+        </h3>
+        <h2>{{ projeto.preProjeto?.nomeGerenteProjeto }}</h2>
+      </div>
+
+      <div class="mb-3">
+        <h3>
+          <i nz-icon nzType="team" nzTheme="outline"></i>Gerente de Negócio
+        </h3>
+        <h2>{{ projeto.preProjeto?.nomeGerenteNegocio }}</h2>
+      </div>
+
+      <div class="mb-3">
+        <h3><i nz-icon nzType="team" nzTheme="outline"></i>Sponsor</h3>
+        <h2>{{ projeto.preProjeto?.nomeSponsor }}</h2>
+      </div>
+    </nz-card>
+    <nz-card class="card h-[32.5rem]" nzTitle="Timeline">
+      <app-timeline-projeto [projeto]="projeto"></app-timeline-projeto>
+    </nz-card>
+  </nz-col>
+  <nz-col nzSpan="16">
+    <nz-row>
+      <nz-col nzSpan="24">
+        <nz-card
+          nzTitle="Cronograma"
+          (click)="alterarComponente(componentes.Cronograma)"
+          nzHoverable="true"
+          class="h-[32.5rem] ml-2"
+        >
+          <app-conograma-indicadores
+            [projeto]="projeto"
+          ></app-conograma-indicadores>
+          <div>
+            <app-cronograma-grafico
+              [cronograma]="projeto.cronogramas"
+              style="padding-top: 20px"
+            ></app-cronograma-grafico>
+          </div>
+        </nz-card>
+      </nz-col>
+    </nz-row>
+    <nz-row>
+      <nz-col nzSpan="24">
+        <nz-card
+          nzTitle="Orçamento"
+          (click)="alterarComponente(componentes.Orcamentos)"
+          nzHoverable="true"
+          class="h-[32.5rem] ml-2"
+        >
+          <app-orcamento-indicadores
+            [projeto]="projeto"
+          ></app-orcamento-indicadores>
+          <app-orcamento-grafico
+            [acompanhamentoOrcamentario]="projeto.acompanhamentoOrcamentario"
+            class="pt-5"
+          >
+          </app-orcamento-grafico>
+        </nz-card>
+      </nz-col>
+    </nz-row>
+  </nz-col>
+</nz-row>
+<nz-row>
+  <nz-col nzSpan="24">
+    <nz-card
+      nzTitle="Plano de ação"
+      [nzBodyStyle]="{ padding: '10px 0px' }"
+      [nzExtra]="'Total: ' + projeto.quantidadeTotal.toString()"
+    >
+      <app-plano-acao-relatorio [projeto]="projeto"></app-plano-acao-relatorio>
+    </nz-card>
+  </nz-col>
+</nz-row>

@@ -1,0 +1,35 @@
+<!-- <nz-steps nzProgressDot [nzCurrent]="timeLineIndex" nzDirection="horizontal" nzSize="small">
+  <nz-step nzTitle="Projeto Aberto" [nzDescription]="dataProjetoAberto"></nz-step>
+  <nz-step nzTitle="Aguardando Aprovação TAP"
+    [nzDescription]="dataAguardadoSolicitacaoNovoCentro"></nz-step>
+  <nz-step nzTitle="TAP Concluido" [nzDescription]="dataAguardandoCriacaoCentro"></nz-step>
+</nz-steps> -->
+<div>
+  <div class="m-t-40">
+    <div class="overflow-y-auto p-l-10 p-t-15">
+      <nz-timeline>
+        <nz-timeline-item *ngFor="let item of activityList" [nzDot]="dotTemplate">
+          <div class="m-l-20">
+            <h5 class="m-b-5">{{item.name}}</h5>
+            <p class="m-b-0">
+              <span class="font-weight-semibold">{{item.action}} </span>
+              <span class="m-l-5">{{item.concluida? "Concluído" : "Pendente"}}</span>
+            </p>
+
+            <span *ngIf="!!item.date" class="text-muted font-size-13">
+              <i nz-icon nzType="clock-circle" theme="outline"></i>
+              <span class="m-l-5">{{item.date}}</span>
+            </span>
+          </div>
+          <ng-template #dotTemplate>
+            <div class="font-size-20 p-5">
+              <i *ngIf="item.concluida" class="text-success" nz-icon nzType="check" theme="outline"></i>
+              <i *ngIf="!item.concluida" class="text-info" nz-icon nzType="question" theme="outline"></i>
+            </div>
+          </ng-template>
+        </nz-timeline-item>
+      </nz-timeline>
+    </div>
+  </div>
+
+</div>

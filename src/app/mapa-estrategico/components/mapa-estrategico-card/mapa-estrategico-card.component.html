@@ -1,0 +1,4 @@
+<div class="objetivo" [id]="'ob-card-' + objetivo?.id" style="position: relative; cursor: pointer; margin: 20px;" (click)="editar()">
+  <p class="porcentagem" style="position: absolute; top: -12px; left: -15%;">{{objetivo?.porcentagem}}%</p>
+  <p [id]="'ob-text-' + objetivo?.id" style="margin: 1% 10%; font-weight: bolder; color: white;">{{objetivo?.descricao}}</p>
+</div>

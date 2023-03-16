@@ -1,0 +1,48 @@
+  <div >
+    <p class="mb-2">{{mensagem}}</p>
+    <form nz-form nzLayout="vertical" [formGroup]="form">
+      <div nz-row >
+        <nz-form-item nz-col [nzSpan]="8" class="mb-4 mr-3">
+          <nz-form-label nzRequired>Data do Projeto</nz-form-label>
+          <nz-form-control>
+            <nz-date-picker nzMode="date" nzFormat="dd/MM/yyyy" formControlName="dataProjeto" nzPlaceHolder="Data do Projeto" class="py-0"></nz-date-picker>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item nz-col [nzSpan]="15" class="mb-4">
+          <nz-form-label nzRequired>Portfólio</nz-form-label>
+          <nz-form-control >
+            <nz-select formControlName="portifolioId" name="portifolioId" nzPlaceHolder="Portfólio">
+              <nz-option
+                *ngFor="let portifolio of portifolios"
+                [nzLabel]="portifolio.descricao"
+                [nzValue]="portifolio.id"
+                >
+              </nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-row>
+        <nz-form-item nz-col [nzSpan]="24" *ngIf="comRessalva">
+          <nz-form-control>
+            <nz-form-label nzRequired>Ressalva</nz-form-label>
+            <textarea
+              nz-input
+              formControlName="ressalva"
+              placeholder="Ressalva para aprovação da iniciativa"
+              [nzAutosize]="{ minRows: 3, maxRows: 6 }"
+            >
+            </textarea>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </form>
+  </div>
+  <div *nzModalFooter>
+    <button nz-button nzType="primary" (click)="ok()">
+      <span>Aprovar</span>
+    </button>
+    <button nz-button nzType="primary" (click)="cancelar()" nzDanger>
+      <span>Cancelar</span>
+    </button>
+  </div>

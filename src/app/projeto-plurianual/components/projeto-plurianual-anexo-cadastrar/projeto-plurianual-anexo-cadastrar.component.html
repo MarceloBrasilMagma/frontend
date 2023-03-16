@@ -1,0 +1,11 @@
+<nz-card>
+  <nz-upload nzType="drag" nzListType="picture" [nzMultiple]="true" [(nzFileList)]="fileList"
+    [nzBeforeUpload]="beforeUpload" (nzChange)="onNzUploadChangeParam($event)"
+    [nzShowUploadList]="{showRemoveIcon: true}">
+
+    <p class="ant-upload-drag-icon">
+      <i nz-icon nzType="inbox"></i>
+    </p>
+    <p class="ant-upload-text">Clique aqui ou arraste o arquivo para esta área para anexar o arquivo</p>
+  </nz-upload>
+</nz-card>

@@ -1,0 +1,86 @@
+.cdk-drag-preview {
+    box-sizing: border-box;
+    border-radius: 4px;
+    box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+        0 8px 10px 1px rgba(0, 0, 0, 0.14),
+        0 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+.cdk-drag-placeholder {
+    opacity: 0;
+}
+
+.cdk-drag-animating {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.example-box:last-child {
+    border: none;
+}
+
+.example-list.cdk-drop-list-dragging .example-box:not(.cdk-drag-placeholder) {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.drag-handle {
+    cursor: move;
+}
+
+.nps0 {
+    background-color: #b72224;
+    color: white
+}
+
+.nps1 {
+    background-color: #d52029;
+    color: white
+}
+
+.nps2 {
+    background-color: #e75323;
+    color: white
+}
+
+.nps3 {
+    background-color: #ea6f22;
+    color: white
+}
+
+.nps4 {
+    background-color: #f6a726;
+    color: white
+}
+
+.nps5 {
+    background-color: #f4c82b;
+    color: white
+}
+
+.nps6 {
+    background-color: #ebdb0a;
+    color: white
+}
+
+.nps7 {
+    background-color: #e4df43;
+    color: white
+}
+
+.nps8 {
+    background-color: #c2d32b;
+    color: white
+}
+
+.nps9 {
+    background-color: #aec93c;
+    color: white
+}
+
+.nps10 {
+    background-color: #66b44e;
+    color: white
+}
+
+::ng-deep .ant-radio-button-wrapper>.ant-radio-button {
+    background-color: red;
+}

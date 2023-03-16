@@ -1,0 +1,93 @@
+<nz-spin nzTip="Aguarde..." [nzSpinning]="isLoading">
+  <div style="margin-top: 20px; padding-bottom: 20px; border-bottom: 1px solid rgb(233, 233, 233);">
+    <nz-radio-group [(ngModel)]="opcao" (ngModelChange)="carregarOrcamentos()" [nzDisabled]="desabilitaBotoes">
+      <label nz-radio [nzValue]="0">Todos os Custos</label>
+      <label nz-radio [nzValue]="2">Custos Declarações de Trabalho</label>
+      <label nz-radio [nzValue]="1">Custos Extra Declarações de Trabalho</label>
+    </nz-radio-group>
+  </div>
+
+  <nz-table #orcamentosTable [nzData]="orcamentos" [nzFrontPagination]="false" nzSize="small">
+    <thead>
+      <tr>
+        <th>Nº DT</th>
+        <th>Responsável</th>
+        <th>Fornecedor Interno</th>
+        <th>Situação</th>
+        <th>Descrição</th>
+        <th>Despesa Administrativa</th>
+        <th>Custo Assistencial</th>
+        <th>Investimento</th>
+        <th>Total</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let o of orcamentosTable.data">
+        <td>
+          <a *ngIf="!!o.declaracaoTrabalhoId" nz-tooltip nzTooltipTitle="Visualizar DT" nzTooltipPlacement="top"
+            [routerLink]="['/declaracoes-trabalho', 'editar', dt?.id]"
+            [queryParams]="{projetoId: projeto.id}">{{o.declaracaoTrabalhoId}}</a>
+        </td>
+        <td>{{ getResponsavelDeclaracao(o) }}</td>
+        <td>{{ getFornecedorDeclaracao(o) }}</td>
+        <td>
+          <nz-tag [nzColor]="corTagSitacao(o)">
+            {{getSituacao(o)}}
+          </nz-tag>
+        </td>
+
+        <td>{{ o.descricao }}</td>
+        <td>{{ o.valorDespesaAdministrativa | currency: 'BRL' }}</td>
+        <td>{{ o.valorCustoAssistencial | currency: 'BRL' }}</td>
+        <td>{{ o.valorInvestimento | currency: 'BRL' }}</td>
+        <td>{{ o.total | currency: 'BRL' }}</td>
+        <td>
+          <nz-space>
+            <div *nzSpaceItem>
+              <button  *ngIf="possuiPermissaoEditarOrcamentos || possuiPermissaoClassificacaoContabilOrcamentos" (click)="editarOrcamento(o)" nz-button nzShape="circle" [disabled]="desabilitaBotoes">
+                <i nz-icon nzType="edit" style="font-size: 18px;"></i>
+              </button>
+            </div>
+            <div *nzSpaceItem>
+                <button *ngIf="possuiPermissaoEditarOrcamentos" nz-button nzShape="circle" nz-popconfirm nzPopconfirmTitle="Excluir?" nzOkText="Sim"
+                nzCancelText="Não" (nzOnConfirm)="excluirOrcamento(o)" [disabled]="desabilitaBotoes">
+                  <i nz-icon nzType="delete" style="font-size: 18px;"></i>
+                </button>
+              </div>
+          </nz-space>
+        </td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td class="font-weight-bold">
+          {{ orcamentoSomaValoresDespesaAdministrativa | currency: 'BRL' }}
+        </td>
+        <td class="font-weight-bold">
+          {{ orcamentoSomaValoresCustoAssistencial | currency: 'BRL' }}
+        </td>
+        <td class="font-weight-bold">
+          {{ orcamentoSomaValoresInvestimento | currency: 'BRL' }}
+        </td>
+        <td class="font-weight-bold">
+          {{ orcamentoSomaTotal | currency: 'BRL' }}
+        </td>
+        <td></td>
+      </tr>
+    </tfoot>
+  </nz-table>
+
+  <div style="border-bottom: 1px solid rgb(233, 233, 233);" *ngIf="possuiPermissaoEditarOrcamentos && projetoAprovado">
+    <p class="mt-3">
+      <button (click)="abrirModalCadastrarOrcamento()" nz-button nzType="primary" nzSize="small" [disabled]="desabilitaBotoes">
+        Cadastrar Orçamento Extra
+      </button>
+    </p>
+  </div>
+</nz-spin>

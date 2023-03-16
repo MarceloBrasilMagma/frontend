@@ -1,0 +1,82 @@
+<nz-card>
+  <div class="row">
+    <div class="col-md-6 col-lg-4">
+      <nz-card>
+        <div class="media align-items-center">
+          <nz-avatar
+            [nzSize]="60"
+            nzIcon="dollar"
+            class="ant-avatar-blue"
+          ></nz-avatar>
+          <div class="m-l-15">
+            <h2 class="m-b-0">{{ totalRevisado | currency : "BRL" }}</h2>
+            <p class="m-b-0 text-muted">Revisado</p>
+          </div>
+        </div>
+      </nz-card>
+    </div>
+    <div class="col-md-6 col-lg-4">
+      <nz-card>
+        <div class="media align-items-center">
+          <nz-avatar
+            [nzSize]="50"
+            nzIcon="line-chart"
+            class="ant-avatar-cyan"
+          ></nz-avatar>
+          <div class="m-l-15">
+            <h2 class="m-b-0">
+              {{ totalRealizado | currency : "BRL" }}
+            </h2>
+            <p class="m-b-0 text-muted">Realizado</p>
+          </div>
+        </div>
+      </nz-card>
+    </div>
+    <div class="col-md-6 col-lg-4">
+      <nz-card>
+        <div class="media align-items-center">
+          <nz-avatar
+            [nzSize]="50"
+            nzIcon="profile"
+            class="ant-avatar-gold"
+          ></nz-avatar>
+          <div class="m-l-15">
+            <h2 class="m-b-0">{{ saldoTotal | currency : "BRL" }}</h2>
+            <p class="m-b-0 text-muted">Saldo</p>
+          </div>
+        </div>
+      </nz-card>
+    </div>
+  </div>
+</nz-card>
+<nz-table
+  #orcamentoTable
+  [nzData]="acompanhamentoOrcamentario"
+  nzBordered
+  [nzTotal]="acompanhamentoOrcamentario?.length"
+  class="mt-1"
+  nzPageSize="100"
+>
+  <thead>
+    <tr>
+      <th>Mês</th>
+      <th>Centro de custo</th>
+      <th>Código da conta</th>
+      <th>Conta</th>
+      <th>Revisado</th>
+      <th>Realizado</th>
+      <th>Saldo</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let orcamento of orcamentoTable.data">
+      <td>{{ orcamento.mes }}</td>
+      <td>{{ orcamento.centroCusto }}</td>
+      <td>{{ orcamento.codigoConta }}</td>
+      <td>{{ orcamento.conta }}</td>
+      <td>{{ orcamento.orcado | currency : "BRL" }}</td>
+      <td>{{ orcamento.realizado | currency : "BRL" }}</td>
+      <td>{{ orcamento.orcado - orcamento.realizado | currency : "BRL" }}</td>
+    </tr>
+  </tbody>
+</nz-table>

@@ -1,0 +1,103 @@
+<nz-collapse>
+  <nz-collapse-panel nzHeader="Filtros" [nzActive]="false">
+    <form nz-form [formGroup]="filtrosForm" class="mt-2 mb-5">
+      <div nz-row nzGutter="24">
+        <div nz-col nzXs="24" nzSm="12">
+          <nz-form-item>
+            <nz-form-label>Data Inicial</nz-form-label>
+            <nz-form-control>
+              <input
+                nz-input
+                formControlName="dataInicial"
+                type="date"
+                max="2999-12-31"
+                nzTooltipTitle="Data Incial"
+                nz-tooltip
+              />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <div nz-col nzXs="24" nzSm="12">
+          <nz-form-item>
+            <nz-form-label>Data Final</nz-form-label>
+            <nz-form-control>
+              <input
+                nz-input
+                formControlName="dataFinal"
+                type="date"
+                max="2999-12-31"
+                nzTooltipTitle="Data Final"
+                nz-tooltip
+              />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <div nz-col nzXs="24" nzSm="24">
+          <nz-form-item>
+            <nz-form-label>Nome Usuário</nz-form-label>
+            <nz-form-control>
+              <input
+                nz-input
+                formControlName="usuarioNome"
+                placeholder="Nome do Usuário"
+                nzTooltipTitle="Nome do Usuário"
+                nz-tooltip
+              />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+      <div nz-row>
+        <div nz-col nzSpan="24">
+          <button
+            (click)="carregarLogs()"
+            nz-button
+            nzType="primary"
+            [nzLoading]="carregandoLogs"
+          >
+            Pesquisar
+          </button>
+          <button
+            (click)="resetForm()"
+            nz-button
+            class="ml-2"
+            [disabled]="carregandoLogs"
+          >
+            Limpar
+          </button>
+        </div>
+      </div>
+    </form>
+  </nz-collapse-panel>
+</nz-collapse>
+
+<nz-collapse [nzBordered]="false" class="mt-2" *ngIf="logsKeys?.length > 0">
+  <nz-collapse-panel
+    *ngFor="let key of logsKeys"
+    [nzHeader]="getTitle(key)"
+    [nzActive]="false"
+    style="margin-top: 10px"
+  >
+    <nz-card *ngFor="let log of logs[key]" style="margin-top: 10px">
+      <nz-descriptions [nzBordered]="true" nzSize="small">
+        <nz-descriptions-item nzTitle="Campo" [nzSpan]="24">
+          {{ log.campo | wordSpace }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Nome" [nzSpan]="2">
+          {{ log.usuarioNome }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Login" [nzSpan]="2">
+          {{ log.usuarioLogin }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Valor Anterior" [nzSpan]="3">
+          {{ log.valorAnterior }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Valor Atual" [nzSpan]="3">
+          {{ log.valorAtual }}
+        </nz-descriptions-item>
+      </nz-descriptions>
+    </nz-card>
+  </nz-collapse-panel>
+</nz-collapse>

@@ -1,0 +1,619 @@
+<div *ngIf="!!projeto && !!preProjeto" style="width: 90%; margin: auto;">
+  <div id="header" class="row">
+    <div class="col-2">
+      <img src="../../../../assets/images/logo/layout_set_logo.png">
+    </div>
+    <div class="col-8">
+      <h1>Plano do Projeto</h1>
+    </div>
+    <div class="col-2">
+      <h5>Data:</h5>
+      <h5>{{now}}</h5>
+    </div>
+  </div>
+
+  <h4 class="mt-5">Dados do projeto:</h4>
+
+  <div id="dados">
+
+    <div class="row">
+      <div class="col-6 bold">
+        Nome Projeto
+      </div>
+      <div class="col-6">
+        {{projeto.nome}}
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-6 bold">
+        Data de Elaboração
+      </div>
+      <div class="col-6">
+        {{preProjeto.dataCriacao.toLocaleDateString()}}
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-6 bold">
+        Área
+      </div>
+      <div class="col-6">
+        {{preProjeto.departamentoNome}}
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-6 bold">
+        Gerente de Projeto
+      </div>
+      <div class="col-6">
+        {{preProjeto.nomeGerenteProjeto}}
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-6 bold">
+        Gerente de Negócio
+      </div>
+      <div class="col-6">
+        {{preProjeto.nomeGerenteNegocio}}
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-6 bold">
+        Sponsor
+      </div>
+      <div class="col-6">
+        {{preProjeto.nomeSponsor}}
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-6 bold">
+        Centro de Custo
+      </div>
+      <div class="col-6">
+        {{projeto.codigoCentroCustoReduzido}}
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-6 bold">
+        Tipo do Projeto
+      </div>
+      <div class="col-6">
+        {{preProjeto.tipoDescricao}}
+      </div>
+    </div>
+  </div>
+
+  <h4 class="mt-5">Pré-projeto:</h4>
+
+  <div id="pre-projeto" class="row mt-3 text-justify">
+    <div class="col-12" style="padding: 0px;">
+      <nz-card nzSize="small" nzTitle="2. Detalhe e delimite o seu projeto">
+        {{preProjeto.ideia}}
+      </nz-card>
+    </div>
+
+    <div class="col-12" style="padding: 0px;">
+      <nz-card nzSize="small" nzTitle="3. Possui alinhamento direto aos Objetivos Estratégicos?">
+
+        <nz-radio-group [(ngModel)]="preProjeto.possuiAlinhamentoObjetivosEstrategicos" [nzDisabled]="true">
+          <label nz-radio [nzValue]="true">Sim</label>
+          <label nz-radio [nzValue]="false">Não</label>
+        </nz-radio-group>
+
+        <div class="mt-3" *ngIf="preProjeto.possuiAlinhamentoObjetivosEstrategicos">
+          <nz-table #objetivosTable [nzData]="preProjeto.objetivosEstrategicos" [nzFrontPagination]="false"
+            nzSize="small" class="mt-2">
+            <thead>
+              <tr>
+                <th>Objetivo</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let a of objetivosTable.data">
+                <td>{{ a.descricao }}</td>
+              </tr>
+            </tbody>
+          </nz-table>
+        </div>
+      </nz-card>
+    </div>
+
+    <div class="col-12" style="padding: 0px;">
+      <nz-card nzSize="small" nzTitle="4. Atende a algum requisito legal ou regulatório?">
+
+        <nz-radio-group [(ngModel)]="preProjeto.atendeRequisitoLegal" [nzDisabled]="true">
+          <label nz-radio [nzValue]="true">Sim</label>
+          <label nz-radio [nzValue]="false">Não</label>
+        </nz-radio-group>
+
+        <div class="mt-3" *ngIf="preProjeto.atendeRequisitoLegal">
+          {{preProjeto.descricaoAtendeRequisitoLegal}}
+        </div>
+      </nz-card>
+    </div>
+
+    <div class="col-12" style="padding: 0px;">
+      <nz-card nzSize="small"
+        nzTitle="5. Possui vínculo entre a estratégia e a operação? (Área responsável pelo preenchimento: COPEP)">
+
+        <nz-radio-group [(ngModel)]="preProjeto.possuiVinculoEstrategiaOperacao" [nzDisabled]="true">
+          <label nz-radio [nzValue]="true">Sim</label>
+          <label nz-radio [nzValue]="false">Não</label>
+        </nz-radio-group>
+
+        <div class="mt-3" *ngIf="preProjeto.possuiVinculoEstrategiaOperacao">
+          {{preProjeto.descricaoPossuiVinculoEstrategiaOperacao}}
+        </div>
+      </nz-card>
+    </div>
+
+    <div class="col-12" style="padding: 0px;">
+      <nz-card nzSize="small"
+        nzTitle="6. Acrescenta algum novo produto ou novo serviço ao negócio promovendo mudança no nível de desempenho do negócio?">
+
+        <nz-radio-group [(ngModel)]="preProjeto.acrescentaProdutoServico" [nzDisabled]="true">
+          <label nz-radio [nzValue]="true">Sim</label>
+          <label nz-radio [nzValue]="false">Não</label>
+        </nz-radio-group>
+
+        <div class="mt-3" *ngIf="preProjeto.acrescentaProdutoServico">
+          {{preProjeto.descricaoAcrescentaProdutoServico}}
+        </div>
+      </nz-card>
+    </div>
+
+    <div class="col-12" style="padding: 0px;">
+      <nz-card nzSize="small"
+        nzTitle="7. O projeto mitiga um risco que pertence a qual zona na matriz de priorização dos riscos corporativos? (Área responsável pelo preenchimento: GECOI)">
+
+        <nz-radio-group [(ngModel)]="preProjeto.zonaRisco" [nzDisabled]="true">
+          <label nz-radio [nzValue]="ZonaRisco.Verde">Verde</label>
+          <label nz-radio [nzValue]="ZonaRisco.Amarelo">Amarelo</label>
+          <label nz-radio [nzValue]="ZonaRisco.Vermelho">Vermelho</label>
+          <label nz-radio [nzValue]="-1">Não está associado</label>
+        </nz-radio-group>
+
+        <div class="mt-3" *ngIf="preProjeto.acrescentaProdutoServico">
+          {{preProjeto.descricaoZonaRisco}}
+        </div>
+      </nz-card>
+    </div>
+
+    <div class="col-12" style="padding: 0px;">
+      <nz-card nzSize="small"
+        nzTitle="8. A abrangência do resultado se restringe apenas à própria área? O impacto do resultado do projeto se restringe apenas ao objetivo da área e não abrange o negócio como um todo.">
+
+        <nz-radio-group [(ngModel)]="preProjeto.abrangenciaResultadoRestrigeApenasPropriaArea" [nzDisabled]="true">
+          <label nz-radio [nzValue]="true">Sim</label>
+          <label nz-radio [nzValue]="false">Não</label>
+        </nz-radio-group>
+
+        <div class="mt-3" *ngIf="preProjeto.abrangenciaResultadoRestrigeApenasPropriaArea">
+          {{preProjeto.descricaoAbrangenciaResultadoRestrigeApenasPropriaArea}}
+        </div>
+      </nz-card>
+    </div>
+
+    <div class="col-12" style="padding: 0px;">
+      <nz-card nzSize="small" nzTitle="9. Quais são os stakeholders envolvidos?">
+
+        <div class="mt-3">
+          <nz-table #stackholdersTable [nzData]="preProjeto.stakeHolders" [nzFrontPagination]="false" nzSize="small"
+            class="mt-2">
+            <thead>
+              <tr>
+                <th>stakeHolder</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let a of stackholdersTable.data">
+                <td>{{ a.descricao }}</td>
+              </tr>
+            </tbody>
+          </nz-table>
+        </div>
+      </nz-card>
+    </div>
+
+    <div class="col-12" style="padding: 0px;">
+      <nz-card nzSize="small" nzTitle="10. Possui novas aquisições?">
+
+        <nz-radio-group [(ngModel)]="preProjeto.possuiNovasAquisicoes" [nzDisabled]="true">
+          <label nz-radio [nzValue]="true">Sim</label>
+          <label nz-radio [nzValue]="false">Não</label>
+        </nz-radio-group>
+
+        <div class="mt-3" *ngIf="preProjeto.possuiNovasAquisicoes">
+          {{preProjeto.descricaoPossuiNovasAquisicoes}}
+        </div>
+      </nz-card>
+    </div>
+
+    <div class="col-12" style="padding: 0px;">
+      <nz-card nzSize="small" nzTitle="11. Necessário novos conhecimentos?">
+
+        <nz-radio-group [(ngModel)]="preProjeto.necessarioNovosConhecimentos" [nzDisabled]="true">
+          <label nz-radio [nzValue]="true">Sim</label>
+          <label nz-radio [nzValue]="false">Não</label>
+        </nz-radio-group>
+
+        <div class="mt-3" *ngIf="preProjeto.necessarioNovosConhecimentos">
+          {{preProjeto.descricaoNecessarioNovosConhecimentos}}
+        </div>
+      </nz-card>
+    </div>
+
+    <div class="col-12" style="padding: 0px;">
+      <nz-card nzSize="small" nzTitle="12. Áreas Envolvidas">
+
+        <div class="mt-3">
+          <nz-table #areasTable [nzData]="preProjeto.areasEnvolvidas" [nzFrontPagination]="false" nzSize="small"
+            class="mt-2">
+            <thead>
+              <tr>
+                <th>Área</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let a of areasTable.data">
+                <td>{{ a.nome }}</td>
+              </tr>
+            </tbody>
+          </nz-table>
+        </div>
+      </nz-card>
+    </div>
+
+    <div class="col-12" style="padding: 0px;">
+      <nz-card nzSize="small" nzTitle="13. Custo Total do Projeto">
+        <nz-table #orcamentosTable [nzData]="preProjeto.orcamentos" [nzFrontPagination]="false" nzSize="small">
+          <thead>
+            <tr>
+              <th>Descrição</th>
+              <th>Despesa Administrativa</th>
+              <th>Custo Assistencial</th>
+              <th>Investimento</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let o of orcamentosTable.data">
+              <td>{{ o.descricao }}</td>
+              <td>{{ getDespesaAdministrativa(o) | currency: 'BRL' }}</td>
+              <td>{{ getCustoAssistencial(o) | currency: 'BRL' }}</td>
+              <td>{{ getInvestimento(o) | currency: 'BRL' }}</td>
+              <td>{{ getTotal(o) | currency: 'BRL' }}</td>
+            </tr>
+          </tbody>
+        </nz-table>
+      </nz-card>
+    </div>
+
+    <div class="col-12" style="padding: 0px;">
+      <nz-card nzSize="small" nzTitle="14. Valor residual do projeto">
+        <div class="mt-3">
+          {{preProjeto.observacaoOrcamentos}}
+        </div>
+      </nz-card>
+    </div>
+
+    <div class="col-12" style="padding: 0px;">
+      <nz-card nzSize="small" nzTitle="Parecer Jurídico">
+        <nz-radio-group [(ngModel)]="preProjeto.parecerDepartamentoJuridico" [nzDisabled]="true">
+          <label nz-radio [nzValue]="0">Aprovado</label>
+          <label nz-radio [nzValue]="1">Reprovado</label>
+        </nz-radio-group>
+        <div class="mt-3">
+          {{preProjeto.descricaoParecerDepartamentoJuridico}}
+        </div>
+      </nz-card>
+    </div>
+
+    <div class="col-12" style="padding: 0px;">
+      <nz-card nzSize="small" nzTitle="Parecer DPO">
+        <nz-radio-group [(ngModel)]="preProjeto.parecerDepartamentoRiscos" [nzDisabled]="true">
+          <label nz-radio [nzValue]="0">Aprovado</label>
+          <label nz-radio [nzValue]="1">Reprovado</label>
+        </nz-radio-group>
+        <div class="mt-3">
+          {{preProjeto.descricaoParecerDepartamentoRiscos}}
+        </div>
+      </nz-card>
+    </div>
+
+    <div class="col-12" style="padding: 0px;" *ngIf="!!preProjeto.analiseEconomicoFinanceira">
+      <nz-card nzSize="small" nzTitle="Viabilidade Econômico-Financeira">
+        <nz-table #analiseTable [nzData]="[preProjeto.analiseEconomicoFinanceira]" [nzFrontPagination]="false" nzSize="small" class="mt-2">
+          <thead>
+            <tr>
+              <th>Área (Coordenação)</th>
+              <th>Representante da Controladoria</th>
+              <th>Data</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let a of analiseTable.data">
+              <td>{{ a.departamento?.nome }}</td>
+              <td>{{ a.nomeRepresentanteControladoria }}</td>
+              <td>{{ a.data.toLocaleDateString() }}</td>
+            </tr>
+          </tbody>
+        </nz-table>
+
+        <p>É aplicável a Análise de Viabilidade Econômico-Financeira?</p>
+        <nz-radio-group [(ngModel)]="preProjeto.analiseEconomicoFinanceira.analiseEconomicoFinanceiraAplicavel" [nzDisabled]="true">
+          <label nz-radio [nzValue]="true">Sim</label>
+          <label nz-radio [nzValue]="false">Não</label>
+        </nz-radio-group>
+        <div class="mt-3" *ngIf="preProjeto.analiseEconomicoFinanceira.analiseEconomicoFinanceiraAplicavel">
+          <p>O resultado após a implantação da ideia traz qual tipo de retorno econômico-financeiro para cooperativa?</p>
+          <nz-radio-group [(ngModel)]="preProjeto.analiseEconomicoFinanceira.retornoFinanceiroPositivo" [nzDisabled]="true">
+            <label nz-radio [nzValue]="true">Positivo</label>
+            <label nz-radio [nzValue]="false">Negativo</label>
+          </nz-radio-group>
+
+          <div class="mt-3">
+            <p>Parecer:</p>
+            <p>
+              {{preProjeto.analiseEconomicoFinanceira.parecer}}
+            </p>
+
+          </div>
+
+        </div>
+      </nz-card>
+    </div>
+
+  </div>
+
+  <h4 class="mt-5">Declarações de Trabalho:</h4>
+
+  <div id="declaracoes-trabalho" class="row mt-3 text-justify">
+    <div *ngFor="let dt of preProjeto.declaracoesTrabalho" class="col-12" style="padding: 0px;">
+      <h5>Declaração {{dt.id}}:</h5>
+
+      <nz-table #dtTable [nzData]="[dt]" [nzFrontPagination]="false" nzSize="small" class="mt-2">
+        <thead>
+          <tr>
+            <th>Nº</th>
+            <th>Responsável</th>
+            <th>Fornecedor Interno</th>
+            <th>Projeto</th>
+            <th>Situação</th>
+            <th>Prazo</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let dt of dtTable.data">
+            <td>{{ dt.id }}</td>
+            <td>{{ dt.nomeResponsavel }}</td>
+            <td>{{ dt.departamentoNome }}</td>
+            <td> {{ dt.projetoNome || dt.projetoPlurianualNome }}</td>
+            <td>
+              <nz-tag [nzColor]="corTagSitacao(dt)">
+                {{ dt.situacaoDescricao }}
+              </nz-tag>
+            </td>
+            <td>{{getDataEntregaFornecedor(dt)}}</td>
+          </tr>
+        </tbody>
+      </nz-table>
+
+      <div class="col-12" style="padding: 0px;">
+        <nz-card nzSize="small" nzTitle="2. Especificação da Demanda">
+          {{dt.solucaoProposta}}
+        </nz-card>
+      </div>
+
+      <div class="col-12" style="padding: 0px;">
+        <nz-card nzSize="small"
+          nzTitle="3. Para o desenvolvimento do projeto, você (gerente do projeto), espera que a solução seja executada para qual data?">
+          {{dt.prazoEsperadoExecucaoSolucao.toLocaleDateString()}}
+        </nz-card>
+      </div>
+
+      <div class="col-12" style="padding: 0px;">
+        <nz-card nzSize="small" nzTitle="4. Viável Tecnicamente?">
+
+          <nz-radio-group [(ngModel)]="dt.viavelTecnicamente" [nzDisabled]="true">
+            <label nz-radio [nzValue]="true">Sim</label>
+            <label nz-radio [nzValue]="false">Não</label>
+          </nz-radio-group>
+
+        </nz-card>
+      </div>
+
+      <div class="col-12" style="padding: 0px;">
+        <nz-card nzSize="small" nzTitle="5. Parecer Técnico">
+          {{dt.parecerTecnico}}
+        </nz-card>
+      </div>
+
+      <div class="col-12" style="padding: 0px;">
+        <nz-card nzSize="small" nzTitle="6. Período de Execução (em dias, meses ou anos)">
+          {{dt.periodoExecucaoSolucao}}
+        </nz-card>
+      </div>
+
+      <div class="col-12" style="padding: 0px;">
+        <nz-card nzSize="small" nzTitle="7. Considerações">
+          {{dt.consideracoes}}
+        </nz-card>
+      </div>
+
+
+      <nz-card nzSize="small" nzTitle="8. Orçamentos">
+        <nz-table #orcamentosTable [nzData]="dt.orcamentos" [nzFrontPagination]="false" nzSize="small">
+          <thead>
+            <tr>
+              <th>Descrição</th>
+              <th>Despesa Administrativa</th>
+              <th>Custo Assistencial</th>
+              <th>Investimento</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let o of orcamentosTable.data">
+              <td>{{ o.descricao }}</td>
+              <td>{{ getDespesaAdministrativa(o) | currency: 'BRL' }}</td>
+              <td>{{ getCustoAssistencial(o) | currency: 'BRL' }}</td>
+              <td>{{ getInvestimento(o) | currency: 'BRL' }}</td>
+              <td>{{ getTotal(o) | currency: 'BRL' }}</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td></td>
+              <td class="font-weight-bold">
+                {{ orcamentoSomaValoresDespesaAdministrativa | currency: 'BRL' }}
+              </td>
+              <td class="font-weight-bold">
+                {{ orcamentoSomaValoresCustoAssistencial | currency: 'BRL' }}
+              </td>
+              <td class="font-weight-bold">
+                {{ orcamentoSomaValoresInvestimento | currency: 'BRL' }}
+              </td>
+              <td class="font-weight-bold">
+                {{ orcamentoSomaTotal | currency: 'BRL' }}
+              </td>
+            </tr>
+          </tfoot>
+        </nz-table>
+      </nz-card>
+    </div>
+  </div>
+
+  <h4 class="mt-5">TAP:</h4>
+
+  <div id="tap" class="row mt-3 text-justify">
+
+    <div class="col-12" style="padding: 0px;">
+      <nz-card nzSize="small" nzTitle="Escopo do projeto:">
+        <div class="mt-3">
+          {{projeto.escopoDoProjeto}}
+        </div>
+      </nz-card>
+    </div>
+
+    <div class="col-12" style="padding: 0px;">
+      <nz-card nzSize="small" nzTitle="Objetivo do projeto:">
+        <div class="mt-3">
+          {{projeto.objetivoDoProjeto}}
+        </div>
+      </nz-card>
+    </div>
+
+    <div class="col-12" style="padding: 0px;">
+      <nz-card nzSize="small" nzTitle="Premissas do projeto:">
+        <div class="mt-3">
+          {{projeto.premissasDoProjeto}}
+        </div>
+      </nz-card>
+    </div>
+
+    <div class="col-12" style="padding: 0px;">
+      <nz-card nzSize="small" nzTitle="Restricões do projeto:">
+        <div class="mt-3">
+          {{projeto.restricoesDoProjeto}}
+        </div>
+      </nz-card>
+    </div>
+
+    <div class="col-12" style="padding: 0px;">
+      <nz-card nzSize="small" nzTitle="Comentários:">
+        <div class="mt-3">
+          {{projeto.comentarios}}
+        </div>
+      </nz-card>
+    </div>
+
+    <div class="col-12" style="padding: 0px;">
+      <nz-card nzSize="small" nzTitle="Plano de comunicação:">
+
+        <div class="mt-3">
+          <nz-table #planoComunicacaoTable [nzData]="projeto.planoDeComunicacaoVm" [nzFrontPagination]="false" nzSize="small"
+            class="mt-2">
+            <thead>
+              <tr>
+                <th>Produto</th>
+                <th>Conteúdo</th>
+                <th>Periodicidade</th>
+                <th>Público</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let plano of planoComunicacaoTable.data">
+                <td nz-tooltip nzTooltipTitle="{{plano.produtoVm.nome}}">{{ plano.produtoVm.nome }}</td>
+                <td nz-tooltip nzTooltipTitle="{{plano.conteudo}}">{{ plano.conteudo }}</td>
+                <td nz-tooltip nzTooltipTitle="{{plano.periodicidadeVm.nome}}">{{ plano.periodicidadeVm.nome }}</td>
+                <td nz-tooltip nzTooltipTitle="{{plano.publico }}">{{ plano.publico }}</td>
+              </tr>
+            </tbody>
+          </nz-table>
+        </div>
+      </nz-card>
+    </div>
+
+    <div class="col-12" style="padding: 0px;">
+      <nz-card nzSize="small" nzTitle="Riscos:">
+
+        <div class="mt-3">
+          <nz-table #riscosTable [nzData]="projeto.riscoVm" [nzFrontPagination]="false" nzSize="small"
+            class="mt-2">
+            <thead>
+              <tr>
+                <th>Descrição</th>
+                <th>Impacto</th>
+                <th>Probabilidade</th>
+                <th>Plano de ação</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let risco of riscosTable.data">
+                <td nz-tooltip nzTooltipTitle="{{risco.descricao}}">{{ risco.descricao }}</td>
+                <td nz-tooltip nzTooltipTitle="{{risco.impacto}}">{{ risco.impacto }}</td>
+                <td nz-tooltip nzTooltipTitle="{{risco.probabilidade}}">{{ risco.probabilidade}}</td>
+                <td nz-tooltip nzTooltipTitle="{{risco.planoDeAcao}}">{{ risco.planoDeAcao}}</td>
+              </tr>
+            </tbody>
+          </nz-table>
+        </div>
+      </nz-card>
+    </div>
+
+    <div class="col-12" style="padding: 0px;">
+      <nz-card nzSize="small" nzTitle="Equipe de Projeto:">
+
+        <div class="mt-3">
+          <nz-table #equipesTable [nzData]="projeto.equipesProjeto" [nzFrontPagination]="false" nzSize="small"
+            class="mt-2">
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>Login</th>
+                <th>Participação</th>
+                <th>Função</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let equipe of equipesTable.data">
+                <td nz-tooltip nzTooltipTitle="{{equipe.nome}}">{{ equipe.nome }}</td>
+                <td nz-tooltip nzTooltipTitle="{{equipe.login}}">{{ equipe.login }}</td>
+                <td nz-tooltip nzTooltipTitle="{{equipe.participacaoDescricao}}">{{ equipe.participacaoDescricao}}</td>
+                <td nz-tooltip nzTooltipTitle="{{equipe.funcao.descricao}}">{{ equipe.funcao.descricao}}</td>
+              </tr>
+            </tbody>
+          </nz-table>
+        </div>
+      </nz-card>
+    </div>
+
+  </div>
+</div>

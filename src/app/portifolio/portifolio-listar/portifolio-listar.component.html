@@ -1,0 +1,37 @@
+<div>
+    <button class="mb-3" nz-button nz-button nzType="primary" nzSize="small" routerLink="cadastrar">
+      Cadastrar Portfólio
+    </button>
+</div>
+
+<nz-table #portifoliosTable 
+  [nzData]="portifolios.items" 
+  [nzFrontPagination]="false"
+  [(nzPageIndex)]="pageIndex" 
+  [(nzPageSize)]="pageSize" 
+  [nzLoading]="carregando"
+  (nzQueryParams)="onQueryParamsChange($event)"
+  [nzTotal]="total" class="mt-1"
+  [nzScroll]="{ x: '500px'}"
+>
+  <thead>
+    <tr>
+      <th nzWidth="200px">Descrição</th>
+      <th nzWidth="80px" nzEllipsis>Data de Início</th>
+      <th nzWidth="80px" nzEllipsis>Data de Término</th>
+      <th nzWidth="80px">Ações</th> 
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let portifolio of portifoliosTable.data" [routerLink]="['visualizar', portifolio.id]" class="cursor-pointer linha-clicavel">
+      <td>{{ portifolio.descricao }}</td>
+      <td>{{ portifolio.dataInicio | date: 'dd/MM/yyyy' }}</td>
+      <td>{{ portifolio.dataTermino | date: 'dd/MM/yyyy' }} </td>
+      <td>
+        <button nz-button nzShape="circle" [routerLink]="['editar', portifolio.id]">
+          <i nz-icon nzType="edit"></i>
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>

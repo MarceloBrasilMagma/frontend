@@ -1,0 +1,200 @@
+<nz-card class="cabecalho">
+  <div nz-row>
+    <div nz-col nzFlex="1" style="font-size: 18px">
+      <nz-avatar
+        [nzSize]="40"
+        nzIcon="file-text"
+        class="mr-2"
+        style="color: #c4b5fd"
+      ></nz-avatar>
+      <span style="font-weight: bold">Projeto </span>
+      <span class="text-muted">#{{ projeto.id }}</span>
+    </div>
+    <div nz-col nzFlex="2" class="d-none d-md-block">
+      <nz-space class="d-flex justify-content-end align-items-center">
+        <ng-container *nzSpaceItem>
+          <button
+            [disabled]="!habilitarBotaoVisualizarModalMotivoPausaCancelamento" 
+            (click)="abrirModalVisualizarMotivoPausaCancelamento()"
+          >
+            <nz-tag class="mb-0" [nzColor]="corStatus">
+              {{
+                !!projeto.statusDescricao
+                  ? projeto.statusDescricao
+                  : "Não disponível"
+              }}
+            </nz-tag>
+          </button>
+        </ng-container>
+        <ng-container *nzSpaceItem>
+          <nz-tag class="ml-1 mb-0" [nzColor]="corSituacao">
+            {{
+              !!projeto.situacaoDescricao
+                ? projeto.situacaoDescricao
+                : "Não disponível"
+            }}
+          </nz-tag>
+        </ng-container>
+        <ng-container *nzSpaceItem>
+          <nz-tag class="ml-1 mb-0" [nzColor]="corSituacaoCentroCusto">{{
+            !!projeto.centroCusto?.situacaoDescricao
+              ? projeto.centroCusto?.situacaoDescricao
+              : "Não disponível"
+          }}</nz-tag>
+        </ng-container>
+        <ng-container *nzSpaceItem>
+          <nz-tag class="ml-1 mb-0" nzColor="green">{{ anoReferencia }}</nz-tag>
+        </ng-container>
+        <ng-container *nzSpaceItem>
+          <div class="d-flex align-items-center ml-1">
+            <i
+              nz-icon
+              nzType="calendar"
+              class="mr-2"
+              nzTheme="outline"
+              style="color: #c4b5fd"
+            ></i>
+            <span style="font-weight: bold" class="mr-1 truncate">
+              Elaborado em:
+            </span>
+            <span>{{
+              !!projeto.dataCriacao
+                ? projeto.dataCriacao.toLocaleDateString()
+                : "Não disponível"
+            }}</span>
+          </div>
+        </ng-container>
+      </nz-space>
+    </div>
+  </div>
+  <div class="grid lg:grid-cols-2 items-center">
+    <h2 class="titulo-projeto my-2 md:ml-12">{{ projeto.nome }}</h2>
+    <div
+      class="flex flex-col md:flex-row md:justify-end gap-2"
+      *ngIf="podeEditarPermissoes"
+    >
+      <button
+        *ngIf="exibirTornarPlurianual"
+        (click)="tornarPlurianual()"
+        nz-button
+        [disabled]="desabilitaBotoes"
+        [nzLoading]="salvandoProjeto"
+        nzType="primary"
+      >
+        <i nz-icon nzType="calendar" nzTheme="outline"></i>
+        Tornar Plurianual
+      </button>
+      <button
+        *ngIf="exibirEnviarAprovacaoTap"
+        (click)="verificarTap.emit()"
+        nz-button
+        [disabled]="desabilitaBotoes"
+        [nzLoading]="salvandoProjeto"
+        nzType="primary"
+      >
+        <i nz-icon nzType="send" nzTheme="outline"></i>
+        Enviar Aprovação TAP
+      </button>
+      <button
+        *ngIf="exibirAprovarTap"
+        (click)="verificarTap.emit()"
+        nz-button
+        [disabled]="desabilitaBotoes"
+        [nzLoading]="salvandoProjeto"
+        nzType="primary"
+      >
+        <i nz-icon nzType="check" nzTheme="outline"></i>
+        Aprovar TAP
+      </button>
+      <button
+        nz-button
+        nz-dropdown
+        [nzDropdownMenu]="menuProjeto"
+        nzType="default"
+      >
+        Ações
+        <i nz-icon nzType="down"></i>
+      </button>
+      <nz-dropdown-menu #menuProjeto="nzDropdownMenu">
+        <ul nz-menu class="dropdown-projeto">
+            <li
+              nz-menu-item
+              nz-button
+              *ngIf="exibirRetomarProjeto"
+              (click)="alterarStatusProjeto(StatusProjeto.Ativo)"
+              [nzLoading]="salvandoProjeto"
+              [disabled]="!possuiPermissaoEditar"
+            >
+              <i nz-icon nzType="play-circle" nzTheme="outline"></i>
+              Retomar Projeto
+            </li>
+            <li
+              nz-menu-item
+              nz-button
+              *ngIf="exibirConcluirProjeto"
+              (click)="alterarStatusProjeto(StatusProjeto.Concluido)"
+              [nzLoading]="salvandoProjeto"
+              [disabled]="!possuiPermissaoEditar"
+            >
+              <i nz-icon nzType="check" nzTheme="outline"></i>
+              Concluir Projeto
+            </li>
+            <li
+              nz-menu-item
+              nz-button
+              *ngIf="exibirPausarCancelarProjeto"
+              (click)="abrirModalAlterarStatusProjeto(StatusProjeto.Pausado)"
+              [nzLoading]="salvandoProjeto"
+              [disabled]="!possuiPermissaoEditar"
+            >
+              <i nz-icon nzType="pause" nzTheme="outline"></i>
+              Pausar Projeto
+            </li>
+            <li
+              nz-menu-item
+              nz-button
+              *ngIf="exibirPausarCancelarProjeto"
+              (click)="abrirModalAlterarStatusProjeto(StatusProjeto.Cancelado)"
+              nzType="default"
+              nzSize="small"
+              [nzLoading]="salvandoProjeto"
+              [disabled]="!possuiPermissaoEditar"
+            >
+              <i nz-icon nzType="stop" nzTheme="outline"></i>
+              Cancelar Projeto
+            </li>
+
+          <li
+            nz-menu-item
+            (click)="selecionarPreProjeto()"
+            nz-button
+            [nzLoading]="salvandoProjeto"
+          >
+            <i nz-icon nzType="eye" nzTheme="outline"></i>
+            Visualizar Iniciativa
+          </li>
+          <li
+            nz-menu-item
+            nz-button
+            (click)="exibirModalPermissoes()"
+            [nzLoading]="salvandoProjeto"
+          >
+            <i nz-icon nzType="lock" nzTheme="outline"></i>
+            Permissões
+          </li>
+          <li
+            nz-menu-item
+            (click)="excluirProjeto()"
+            nz-button
+            [ngClass]="{disabled: desabilitaBotoes}"
+            [nzLoading]="salvandoProjeto"
+            nzDanger
+          >
+            <i nz-icon nzType="close" nzTheme="outline"></i>
+            Excluir Projeto
+          </li>
+        </ul>
+      </nz-dropdown-menu>
+    </div>
+  </div>
+</nz-card>

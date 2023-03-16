@@ -1,0 +1,47 @@
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 content-center group">
+  <div
+    class="shadow-lg bg-white/95 hover:border-2 border-[#9457c6] p-6 grid grid-cols-1 content-between group-hover:scale-[0.9] hover:!scale-100 duration-500 rounded-xl gap-2 h-[130px] md:h-full cursor-pointer"
+    [routerLink]="['/relatorios/cronograma']">
+    <div class="flex-row md:flex-col">
+    <span nz-icon nzType="calendar" class="text-[#6b3f90] text-3xl mb-6 flex"></span>
+    <h4>Cronograma</h4>
+  </div>
+    <p class="my-2 line-clamp-3">Relatório dos cronogramas cadastrados na plataforma</p>
+  </div>
+  <div
+    class="shadow-lg bg-white/95 hover:border-2 border-[#9457c6] p-6 grid grid-cols-1 content-between group-hover:scale-[0.9] hover:!scale-100 duration-500 rounded-xl gap-2 h-[130px] md:h-full cursor-pointer"
+    [routerLink]="['/relatorios/plano-acao']">
+    <div class="flex-row md:flex-col">
+    <span nz-icon nzType="flag" class="text-[#6b3f90] text-3xl mb-6 flex"></span>
+    <h4>Plano de ação</h4>
+  </div>
+    <p class="my-2 line-clamp-3">Relatório do plano de ação</p>
+  </div>
+  <div
+    class="shadow-lg bg-white/95 hover:border-2 border-[#9457c6] p-6 grid grid-cols-1 group-hover:scale-[0.9] hover:!scale-100 duration-500 content-between rounded-xl gap-2 h-[130px] md:h-full cursor-pointer"
+    [routerLink]="['/relatorios/abrangencia']">
+    <div class="flex-row md:flex-col">
+    <span nz-icon nzType="global" class="text-[#6b3f90] text-3xl mb-6 flex"></span>
+    <h4>Abrangência</h4>
+  </div>
+    <p class="my-2 line-clamp-3">Relatório das abrangencias</p>
+  </div>
+  <div
+    class="shadow-lg bg-white/95 hover:border-2 border-[#9457c6] p-6 grid grid-cols-1 group-hover:scale-[0.9] hover:!scale-100 duration-500 content-between rounded-xl gap-2 h-[130px] md:h-full cursor-pointer"
+    [routerLink]="['/relatorios/orcamento']">
+    <div class="flex-row md:flex-col">
+    <span nz-icon nzType="dollar-circle" class="text-[#6b3f90] text-3xl mb-6 flex"></span>
+    <h4 class="truncate">Orçamento</h4>
+  </div>
+    <p class="my-2 line-clamp-3">Relatório dos orçamentos</p>
+  </div>
+  <div
+    class="shadow-lg bg-white/95 hover:border-2 border-[#9457c6] p-6 grid grid-cols-1 group-hover:scale-[0.9] hover:!scale-100 duration-500 content-between rounded-xl gap-2 h-[130px] md:h-full cursor-pointer"
+    [routerLink]="['/relatorios/declaracoes-trabalho-relatorio']">
+    <div class="flex-row md:flex-col">
+    <span nz-icon nzType="file-text" class="text-[#6b3f90] text-3xl mb-6 flex"></span>
+    <h4 class="truncate">Declaração de trabalho</h4>
+  </div>
+    <p class="my-2 line-clamp-3">Relatório das declarações de trabalho</p>
+  </div>
+</div>

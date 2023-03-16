@@ -1,0 +1,241 @@
+<div *ngIf="!orcamento?.declaracaoTrabalhoId || !orcamento">
+  <div nz-row>
+    <div nz-col nzFlex="1" class="mr-1">
+      <form nz-form [formGroup]="form" nzLayout="vertical">
+
+        <div nz-row>
+          <div nz-col nzFlex="1" style="margin: 0px 10px 0px 10px;">
+            <nz-form-item>
+              <nz-form-label nzFor="senhaAtual" nzRequired>
+                Descrição
+              </nz-form-label>
+              <nz-form-control>
+                <textarea nz-input formControlName="descricao" placeholder="Descrição" [nzAutosize]="{ minRows: 3, maxRows: 6 }"
+                  [readonly]="exibirObservacoes"></textarea>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+
+
+        <div nz-row nzGutter="24" *ngIf="exibirObservacoes" style="text-align: center; font-weight: bold;">
+          <div nz-col nzFlex="1" style="margin: 10px">
+            <span>Valores Originais</span>
+          </div>
+          <div nz-col nzFlex="1" style="margin: 10px">
+            <span>Valores Após Ajuste</span>
+          </div>
+        </div>
+
+        <div nz-row>
+          <div nz-col nzFlex="1" style="margin: 0px 10px 0px 10px;">
+            <nz-form-item>
+              <nz-form-label nzFor="senhaAtual" nzRequired>
+                Despesa Administrativa
+              </nz-form-label>
+              <nz-form-control>
+                <input nz-input formControlName="valorDespesaAdministrativa" mask="separator.2" thousandSeparator="."
+                  [decimalMarker]="','" prefix="R$ " placeholder="Despesa Administrativa"
+                  [readonly]="exibirObservacoes" />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <div nz-col nzFlex="1" *ngIf="exibirObservacoes" style="margin: 0px 10px 0px 10px;">
+            <nz-form-item>
+              <nz-form-label nzRequired>
+                Despesa Administrativa
+              </nz-form-label>
+              <nz-form-control>
+                <nz-input-group [nzAddOnAfter]="addOnAfterTemplate1">
+                  <input nz-input formControlName="valorDespesaAdministrativaObservacao" mask="separator.2"
+                    thousandSeparator="." [decimalMarker]="','" prefix="R$ " placeholder="Despesa Administrativa"
+                    [readonly]="!editarObservacoes" />
+                </nz-input-group>
+                <ng-template #addOnAfterTemplate1 style="margin: 0px; padding: 0px;">
+                  <button nz-button nzType="text" nz-dropdown [nzDropdownMenu]="menu1" nzTrigger="click"
+                  [disabled]="!editarObservacoes">
+                    transferir
+                    <i nz-icon nzType="down" nzTheme="outline"></i>
+                  </button>
+                  <nz-dropdown-menu #menu1="nzDropdownMenu">
+                    <ul nz-menu nzSelectable>
+                      <li nz-menu-item (click)="transferirAdministrativo('Assistencial')"><i nz-icon nzType="swap-right"
+                          nzTheme="outline"></i>Custo Assistencial</li>
+                      <li nz-menu-item (click)="transferirAdministrativo('Investimento')"><i nz-icon nzType="swap-right"
+                          nzTheme="outline"></i>Investimento</li>
+                    </ul>
+                  </nz-dropdown-menu>
+                </ng-template>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+
+
+        <div nz-row>
+          <div nz-col nzFlex="1" style="margin: 0px 10px 0px 10px;">
+            <nz-form-item>
+              <nz-form-label nzFor="senhaAtual" nzRequired>
+                Custo Assistencial
+              </nz-form-label>
+              <nz-form-control>
+                <input nz-input formControlName="valorCustoAssistencial" placeholder="Custo Assistencial"
+                  mask="separator.2" thousandSeparator="." [decimalMarker]="','" prefix="R$ "
+                  [readonly]="exibirObservacoes" />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <div nz-col nzFlex="1" *ngIf="exibirObservacoes" style="margin: 0px 10px 0px 10px;">
+            <nz-form-item>
+              <nz-form-label nzRequired>
+                Custo Assistencial
+              </nz-form-label>
+              <nz-form-control>
+                <nz-input-group [nzAddOnAfter]="addOnAfterTemplate2">
+                  <input nz-input formControlName="valorCustoAssistencialObservacao" placeholder="Custo Assistencial"
+                    mask="separator.2" thousandSeparator="." [decimalMarker]="','" prefix="R$ "
+                    [readonly]="!editarObservacoes" />
+                </nz-input-group>
+                <ng-template #addOnAfterTemplate2 style="margin: 0px; padding: 0px;">
+                  <button nz-button nzType="text" nz-dropdown [nzDropdownMenu]="menu2" nzTrigger="click"
+                  [disabled]="!editarObservacoes">
+                    transferir
+                    <i nz-icon nzType="down" nzTheme="outline"></i>
+                  </button>
+                  <nz-dropdown-menu #menu2="nzDropdownMenu">
+                    <ul nz-menu nzSelectable>
+                      <li nz-menu-item (click)="transferirAssistencial('Administrativo')"><i nz-icon nzType="swap-right"
+                          nzTheme="outline"></i>Despesa Administrativa</li>
+                      <li nz-menu-item (click)="transferirAssistencial('Investimento')"><i nz-icon nzType="swap-right"
+                          nzTheme="outline"></i>Investimento</li>
+                    </ul>
+                  </nz-dropdown-menu>
+                </ng-template>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+
+
+        <div nz-row>
+          <div nz-col nzFlex="1" style="margin: 0px 10px 0px 10px;">
+            <nz-form-item>
+              <nz-form-label nzFor="senhaAtual" nzRequired>
+                Investimento
+              </nz-form-label>
+              <nz-form-control>
+                <input nz-input formControlName="valorInvestimento" placeholder="Investimento" mask="separator.2"
+                  thousandSeparator="." [decimalMarker]="','" prefix="R$ " [readonly]="exibirObservacoes" />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <div nz-col nzFlex="1" *ngIf="exibirObservacoes" style="margin: 0px 10px 0px 10px;">
+            <nz-form-item>
+              <nz-form-label nzRequired>
+                Investimento
+              </nz-form-label>
+              <nz-form-control>
+
+                <nz-input-group [nzAddOnAfter]="addOnAfterTemplate3">
+                  <input nz-input formControlName="valorInvestimentoObservacao" placeholder="Investimento"
+                    mask="separator.2" thousandSeparator="." [decimalMarker]="','" prefix="R$ "
+                    [readonly]="!editarObservacoes" />
+                </nz-input-group>
+                <ng-template #addOnAfterTemplate3>
+                  <button nz-button nzType="text" nz-dropdown [nzDropdownMenu]="menu3" nzTrigger="click"
+                  [disabled]="!editarObservacoes">
+                    transferir
+                    <i nz-icon nzType="down" nzTheme="outline"></i>
+                  </button>
+                  <nz-dropdown-menu #menu3="nzDropdownMenu">
+                    <ul nz-menu nzSelectable>
+                      <li nz-menu-item (click)="transferirInvestimento('Assistencial')"><i nz-icon nzType="swap-right"
+                          nzTheme="outline"></i>Despesa Administrativa</li>
+                      <li nz-menu-item (click)="transferirInvestimento('Administrativo')"><i nz-icon nzType="swap-right"
+                          nzTheme="outline"></i>Custo Assistencial</li>
+                    </ul>
+                  </nz-dropdown-menu>
+                </ng-template>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+        <div nz-row>
+          <div nz-col nzFlex="1" *ngIf="exibirObservacoes" style="margin: 0px 10px 0px 10px;">
+            <nz-form-item>
+              <nz-form-label nzRequired>
+                Observações
+              </nz-form-label>
+              <nz-form-control>
+                <textarea nz-input formControlName="observacao" placeholder="Observações" [nzAutosize]="{ minRows: 3, maxRows: 6 }"
+                  [readonly]="!editarObservacoes"></textarea>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+
+      </form>
+      <div nz-row class="mt-3">
+        <div nz-col nzFlex="1" style="margin: 0px 10px 0px 10px;">
+          <nz-form-item>
+            <nz-form-label>
+              Total
+            </nz-form-label>
+            <nz-form-control style="width: 100%;">
+              <input nz-input [(ngModel)]="total" mask="separator.2" thousandSeparator="." [decimalMarker]="','"
+                prefix="R$ " [readOnly]="true" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <div nz-col nzFlex="1" *ngIf="exibirObservacoes" style="margin: 0px 10px 0px 10px;">
+          <nz-form-item>
+            <nz-form-label>
+              Total
+            </nz-form-label>
+            <nz-form-control [nzValidateStatus]="totalObservacoes != total ? 'error' : 'success'" style="width: 100%;"
+              nzErrorTip="Valor total inválido!">
+              <input nz-input [(ngModel)]="totalObservacoes" mask="separator.2" thousandSeparator="."
+                [decimalMarker]="','" prefix="R$ " [readOnly]="true" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *nzModalFooter>
+    <nz-row nzGutter="24">
+      <nz-col nzSpan="10">
+        <button *ngIf="exibirEnviarClassificacao" nz-button nzType="primary" nzBlock
+          (click)="salvar(SituacaoPreProjetoOrcamento.AguardandoClassificacao)" [disabled]="form.invalid || salvarInvalid"
+          [nzLoading]="saving">
+          Enviar para Classificação Contábil
+        </button>
+        <button *ngIf="exibirConcluirClassificacao" nz-button nzType="primary" nzBlock
+          (click)="salvar(SituacaoPreProjetoOrcamento.ClassificacaoRealizada)" [disabled]="form.invalid || salvarInvalid"
+          [nzLoading]="saving">
+          Concluir Classificação Contábil
+        </button>
+      </nz-col>
+      <nz-col nzSpan="14">
+        <button nz-button (click)="destroyModal()" [disabled]="saving">
+          Cancelar
+        </button>
+        <button nz-button nzType="primary" (click)="salvar()" [disabled]="form.invalid || salvarInvalid"
+          [nzLoading]="saving">
+          Salvar
+        </button>
+      </nz-col>
+    </nz-row>
+
+  </div>
+</div>
+
+<div *ngIf="!!orcamento?.declaracaoTrabalhoId">
+  <app-orcamento-dt [declaracaoTrabalhoId]="orcamento.declaracaoTrabalhoId" [orcamento]="orcamento"
+    [declaracaoSituacao]="declaracaoSituacao"></app-orcamento-dt>
+</div>

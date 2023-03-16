@@ -1,0 +1,40 @@
+<div style="border-bottom: 1px solid rgb(233, 233, 233)">
+  <p class="mb-2">
+    <button nz-button routerLink="cadastrar" nzType="primary" nzSize="small">
+      Cadastrar questionário
+    </button>
+  </p>
+</div>
+
+<nz-table
+  #table
+  [nzData]="questionarios.items"
+  nzBordered
+  [nzFrontPagination]="false"
+  [nzLoading]="carregando"
+  [nzTotal]="questionarios.totalCount"
+  [(nzPageIndex)]="pageIndex"
+  [(nzPageSize)]="pageSize"
+  nzSize="small"
+  (nzQueryParams)="onQueryParamsChange($event)"
+  class="mt-1"
+>
+  <thead>
+    <tr>
+      <th nzWidth="75px">Id</th>
+      <th>Título</th>
+      <th>Tipo</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr
+      *ngFor="let u of table.data"
+      [routerLink]="['editar', u.id]"
+      class="cursor-pointer"
+    >
+      <td>{{ u.id }}</td>
+      <td>{{ u.titulo }}</td>
+      <td>{{ u.tipoDescricao }}</td>
+    </tr>
+  </tbody>
+</nz-table>

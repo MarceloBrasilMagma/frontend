@@ -1,0 +1,81 @@
+<div *ngIf="editar">
+  <nz-card [nzActions]="[salvarAction, cancelarAction]" [nzTitle]="form.value['id'] ? 'Editar Permissão' : 'Adicionar Permissão' ">
+  <form nz-form [formGroup]="form" nzLayout="vertical">
+    <div nz-col nzSpan="24">
+      <nz-form-label nzRequired>Usuário</nz-form-label>
+      <nz-form-item class="mb-3">
+        <nz-form-control>
+          <nz-select formControlName="usuario" nzPlaceHolder="Usuário" nzAllowClear nzShowSearch nzServerSearch
+            (nzOnSearch)="searchUsuario($event)">
+            <ng-container *ngFor="let g of usuariosAd">
+              <nz-option *ngIf="!buscandoUsuarioAd" [nzValue]="g" [nzLabel]="g.nome">
+              </nz-option>
+            </ng-container>
+            <nz-option *ngIf="buscandoUsuarioAd" nzDisabled nzCustomContent>
+              <i nz-icon nzType="loading" class="loading-icon mr-2"></i> Buscando ...
+            </nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col nzSpan="24">
+      <nz-form-label nzRequired>Permissão</nz-form-label>
+      <nz-form-item class="mb-3">
+        <nz-form-control>
+          <nz-select formControlName="permissao" nzPlaceHolder="Permissão">
+            <nz-option [nzValue]="PermissaoAcessoDeclaracaoTrabalhoTipo.AcessoTotal" nzLabel="Total"></nz-option>
+            <nz-option [nzValue]="PermissaoAcessoDeclaracaoTrabalhoTipo.Visualizar" nzLabel="Visualizar"></nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+  </form>
+  </nz-card>
+  <ng-template #cancelarAction>
+    <button nz-button (click)="cancelar()" [disabled]="salvando">
+      Cancelar
+    </button>
+  </ng-template>
+  <ng-template #salvarAction>
+    <button nz-button nzType="primary" (click)="salvar()" [disabled]="form.invalid" [nzLoading]="salvando" class="ml-3">
+      Salvar
+    </button>
+  </ng-template>
+</div>
+
+<div *ngIf="!editar">
+  <button nz-button nzType="primary" (click)="editar = true" class="mb-3">
+    Adicionar
+  </button>
+  <nz-table #permissaoTable [nzData]="permissoes.items" [nzFrontPagination]="false" nzSize="small"
+    [nzLoading]="salvando" [nzTotal]="permissoes.totalCount" [(nzPageIndex)]="pageIndex" [(nzPageSize)]="pageSize"
+    (nzQueryParams)="onQueryParamsChange($event)" class="mt-1">
+    <thead>
+      <tr>
+        <th style="width: 40%;">Usuário</th>
+        <th style="width: 40%;">Permissão</th>
+        <th style="width: 10%;"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let p of permissaoTable.data">
+        <td>{{ p.nome }}</td>
+        <td>{{ p.permissaoDescricao}}</td>
+        <td>
+          <nz-space>
+            <button *nzSpaceItem (click)="editarPermissao(p)" nz-button nzShape="circle">
+              <i nz-icon nzType="edit" style="font-size: 18px;"></i>
+            </button>
+            <button *nzSpaceItem nz-button nzShape="circle" nz-popconfirm nzPopconfirmTitle="Excluir?" nzOkText="Sim"
+              nzCancelText="Não" (nzOnConfirm)="excluirPermissao(p)">
+              <i nz-icon nzType="delete" style="font-size: 18px;"></i>
+            </button>
+          </nz-space>
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+</div>
+<div *nzModalFooter>
+
+</div>

@@ -1,0 +1,79 @@
+<div>
+    <button class="mb-3" nz-button nz-button nzType="primary" nzSize="small" routerLink="cadastrar">
+      Cadastrar Usuário
+    </button>
+</div>
+
+<nz-collapse class="mt-2">
+  <nz-collapse-panel nzHeader="Filtros">
+    <form nz-form [formGroup]="filtrosForm">
+      <div nz-row nzGutter="24">
+        <div nz-col nzXs="24" nzSm="8">
+          <nz-form-item nz-col nzSm="24">
+            <nz-form-label>Login</nz-form-label>
+            <nz-form-control>
+              <input nz-input formControlName="login" placeholder="Ex.: josesilva"/>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzSm="8">
+          <nz-form-item nz-col nzSm="24">
+            <nz-form-label>Nome</nz-form-label>
+            <nz-form-control>
+              <input nz-input formControlName="nome" placeholder="Ex.: José Silva"/>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzSm="8">
+          <nz-form-item nz-col nzSm="24">
+            <nz-form-label>E-mail</nz-form-label>
+            <nz-form-control>
+              <input type="email" nz-input formControlName="email" placeholder="Ex.: josesilva@gmail.com"/>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzSm="8">
+          <nz-form-item nz-col nzSm="24">
+            <nz-form-label>Grupo de Acesso</nz-form-label>
+            <nz-form-control>
+              <nz-select formControlName="grupoId" nzPlaceHolder="Ex.: Administradores" nzShowSearch nzAllowClear (ngModelChange)="carregarUsuarios()">
+                <nz-option *ngFor="let g of gruposAcesso" [nzLabel]="g.nome" [nzValue]="g.id"> </nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+      <div nz-row>
+        <div nz-col nzSpan="24">
+          <button (click)="carregarUsuarios()" nz-button nzType="primary" [nzLoading]="carregandoUsuarios">
+            Pesquisar
+          </button>
+          <button (click)="resetForm()" nz-button class="ml-2" [disabled]="carregandoUsuarios">
+            Limpar
+          </button>
+        </div>
+      </div>
+    </form>
+  </nz-collapse-panel>
+</nz-collapse>
+
+<nz-table #table [nzData]="usuarios.items" [nzFrontPagination]="false" [nzLoading]="carregandoUsuarios"
+  [nzTotal]="usuarios.totalCount" [(nzPageIndex)]="pageIndex" [(nzPageSize)]="pageSize"
+  (nzQueryParams)="onQueryParamsChange($event)" class="mt-1" [nzScroll]="{ x: '700px'}">
+  <thead>
+    <tr>
+      <th nzWidth="100px">Login</th>
+      <th nzWidth="300px">Nome</th>
+      <th nzWidth="300px">E-mail</th>
+      <th nzWidth="80px" nzEllipsis>Administrador</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let u of table.data" class="cursor-pointer linha-clicavel" [routerLink]="['editar', u.id]">
+      <td nzEllipsis>{{ u.login }}</td>
+      <td nzEllipsis>{{ u.nome }}</td>
+      <td nzEllipsis>{{ u.email }}</td>
+      <td>{{ u.administrador ? 'Sim' : 'Não' }}</td>
+    </tr>
+  </tbody>
+</nz-table>

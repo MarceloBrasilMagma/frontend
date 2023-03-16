@@ -1,0 +1,64 @@
+// Tailwind
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url("../node_modules/ng-zorro-antd/src/ng-zorro-antd.min.css");
+@import url("./assets/lib/hljs/styles/atom-one-light.css");
+@import url("../node_modules/@fortawesome/fontawesome-free/css/all.min.css");
+@import "./assets/scss/app.scss";
+
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.nz-modal-confirm-content-scrollable {
+  .ant-modal-confirm-content {
+    max-height: 20em;
+    overflow-y: auto;
+  }
+}
+
+.modal-checkbox {
+  .ant-modal-body {
+    nz-checkbox-group {
+      .ant-checkbox-group-item {
+        display: block;
+        margin-top: 15px;
+        &:first-child {
+          margin-top: 0;
+        }
+      }
+    }
+  }
+}
+
+.linha-clicavel {
+  color: #6f6f6f;
+}
+
+.linha-clicavel:hover {
+  color: #86971c;
+}
+
+.titulo-projeto {
+  width: 100%;
+  color: #6f6f6f;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pagebreak {
+  page-break-before: always;
+}
+
+.list-style-none {
+  list-style: none;
+}
+
+[nz-icon] {
+  vertical-align: 0;
+}
+

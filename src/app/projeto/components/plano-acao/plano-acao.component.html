@@ -1,0 +1,45 @@
+<nz-card nzTitle="Plano de ação" [nzExtra]="criarExtra">
+  <nz-table #licoesTable [nzData]="planosAcao?.items" nzBordered [nzFrontPagination]="false" [(nzPageIndex)]="pageIndex"
+    [(nzPageSize)]="pageSize" [nzLoading]="carregando" (nzQueryParams)="onQueryParamsChange($event)"
+    [nzTotal]="planosAcao?.totalCount" class="mt-1">
+    <thead>
+      <tr>
+        <th>Descrição</th>
+        <th>Área</th>
+        <th>Data</th>
+        <th>Follow Up</th>
+        <th>Observações</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let planosAcao of licoesTable.data">
+        <td>{{planosAcao.descricao}}</td>
+        <td>{{planosAcao.departamentoNome}}</td>
+        <td>{{planosAcao.data | date: 'dd/MM/yyyy'}}</td>
+        <td>
+          <nz-tag class="ml-1" [nzColor]="corStatus(planosAcao)">{{planosAcao.followUpDescricao}}</nz-tag>
+        </td>
+        <td>{{planosAcao.observacao}}</td>
+        <td>
+          <nz-space>
+              <button *nzSpaceItem nz-button nzShape="circle" (click)="exibirModalEditar(planosAcao)" [nzTooltipTitle]="'Editar'"
+                nz-tooltip [disabled]="!possuiPermissaoEditar || desabilitaBotoes">
+                <i nz-icon nzType="edit"></i>
+              </button>
+              <button *nzSpaceItem nz-button nzShape="circle" nzTooltipTitle="Excluir" nz-tooltip nz-popconfirm
+                nzPopconfirmTitle="Tem certeza que deseja excluir?" nzOkText="Sim"
+                (nzOnConfirm)="excluirPlanosAcao(planosAcao)" [disabled]="!possuiPermissaoEditar || desabilitaBotoes">
+                <i nz-icon nzType="delete"></i>
+              </button>
+          </nz-space>
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+</nz-card>
+<ng-template #criarExtra>
+  <button nz-button nzType="primary" nzSize="small" (click)="exibirModalEditar()" [disabled]="!possuiPermissaoEditar || desabilitaBotoes">
+    <span>Registrar novo plano de ação</span>
+  </button>
+</ng-template>

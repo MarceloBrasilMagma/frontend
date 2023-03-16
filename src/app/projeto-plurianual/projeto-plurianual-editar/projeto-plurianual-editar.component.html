@@ -1,0 +1,900 @@
+<div class="web">
+  <nz-card *ngIf="editando">
+    <ng-container *ngIf="!carregandoProjeto">
+      <div style="position: fixed; z-index: 2; left: 100%; padding-top: 100px">
+        <div class="row" style="position: relative; left: -60px">
+          <button
+            nz-button
+            (click)="abrirMenuLateral(abas.plurianual)"
+            class="btn-menu-lateral-ppe"
+          >
+            <i nz-icon nzType="left" nzTheme="outline"></i>
+          </button>
+        </div>
+      </div>
+      <nz-drawer
+        [nzWidth]="400"
+        [nzClosable]="true"
+        [nzVisible]="exibirMenuLateral"
+        nzPlacement="right"
+        (nzOnClose)="fecharMenuLateral()"
+        [nzBodyStyle]="{ padding: '0px' }"
+      >
+        <ng-container *nzDrawerContent>
+          <app-menu-lateral-plurianual
+            [projeto]="projeto"
+            [abaSelecionada]="abaSelecionada"
+          >
+          </app-menu-lateral-plurianual>
+        </ng-container>
+      </nz-drawer>
+    </ng-container>
+
+    <div class="grid lg:grid-cols-2">
+      <h2 class="titulo-projeto mb-2 md:mb-0">
+        {{ projetoPlurianual?.nome }}
+      </h2>
+      <div class="flex flex-col md:flex-row md:justify-end gap-2">
+        <button
+          *ngIf="exibirSolicitarLevantamentoCusto"
+          nz-button
+          [disabled]="desabilitaBotoes"
+          (click)="exibirModalConfirmacaoSolicitarLevantamento()"
+          [nzLoading]="salvandoProjeto"
+          nzType="primary"
+        >
+          <i nz-icon nzType="stock" nzTheme="outline"></i>
+          Solicitar Levantamento de Custo e Prazo
+        </button>
+        <button
+          *ngIf="exibirConcluirLevantamentoCusto"
+          nz-button
+          [disabled]="desabilitaBotoes"
+          (click)="verificarDeclaracaoTrabalho()"
+          nzType="primary"
+          [nzLoading]="salvandoProjeto"
+        >
+          <i nz-icon nzType="stock" nzTheme="outline"></i>
+          Concluir Levantamento de Custo e Prazo
+        </button>
+        <button
+          *ngIf="exibirSolicitarAjustes"
+          nz-button
+          [disabled]="desabilitaBotoes"
+          (click)="abrirModalMotivo(SituacaoProjetoPlurianual.EmElaboracao)"
+          [nzLoading]="salvandoProjeto"
+          nzType="primary"
+        >
+          <i nz-icon nzType="rollback" nzTheme="outline"></i>
+          Solicitar Ajustes
+        </button>
+        <button
+          *ngIf="exibirAprovarProjeto"
+          nz-button
+          [disabled]="desabilitaBotoes"
+          (click)="exibirModalConfirmacaoAprovacao()"
+          nzType="primary"
+          [nzLoading]="salvandoProjeto"
+        >
+          <i nz-icon nzType="check" nzTheme="outline"></i>
+          Aprovar Projeto
+        </button>
+        <button
+          *ngIf="exibirAprovarProjetoComRessalva"
+          nz-button
+          [disabled]="desabilitaBotoes"
+          (click)="exibirModalConfirmacaoRessalva()"
+          nzType="primary"
+          [nzLoading]="salvandoProjeto"
+        >
+          <i nz-icon nzType="check" nzTheme="outline"></i>
+          {{
+            !exibirAprovarProjeto
+              ? "Editar Ressalvas"
+              : "Aprovar Projeto com Ressalvas"
+          }}
+        </button>
+        <button
+          *ngIf="exibirReprovarProjeto"
+          nz-button
+          [disabled]="desabilitaBotoes"
+          (click)="exibirModalConfirmacaoReprovacao()"
+          nzDanger
+          [nzLoading]="salvandoProjeto"
+        >
+          <i nz-icon nzType="close" nzTheme="outline"></i>
+          Reprovar Projeto
+        </button>
+        <button
+          *ngIf="podeEditarPermissoes"
+          nz-button
+          nz-dropdown
+          [nzDropdownMenu]="menuPlurianual"
+          nzType="default"
+        >
+          Ações
+          <i nz-icon nzType="down"></i>
+        </button>
+        <nz-dropdown-menu #menuPlurianual="nzDropdownMenu">
+          <ul nz-menu class="dropdown-plurianual">
+            <li
+              nz-menu-item
+              nz-button
+              *ngIf="exibirRetomarProjeto"
+              (click)="alterarStatusProjeto(StatusProjeto.Ativo)"
+              [nzLoading]="salvandoProjeto"
+              [disabled]="!possuiPermissaoEditar(['Administrador'])"
+            >
+              <i nz-icon nzType="play-circle" nzTheme="outline"></i>
+              Retomar Projeto
+            </li>
+            <li
+              nz-menu-item
+              nz-button
+              *ngIf="exibirConcluirProjeto"
+              (click)="alterarStatusProjeto(StatusProjeto.Concluido)"
+              [nzLoading]="salvandoProjeto"
+              [disabled]="!possuiPermissaoEditar(['Administrador'])"
+            >
+              <i nz-icon nzType="check" nzTheme="outline"></i>
+              Concluir Projeto
+            </li>
+            <li
+              nz-menu-item
+              nz-button
+              *ngIf="exibirPausarCancelarProjeto"
+              (click)="abrirModalAlterarStatusProjeto(StatusProjeto.Pausado)"
+              [nzLoading]="salvandoProjeto"
+              [disabled]="!possuiPermissaoEditar(['Administrador'])"
+            >
+              <i nz-icon nzType="pause" nzTheme="outline"></i>
+              Pausar Projeto
+            </li>
+            <li
+              nz-menu-item
+              nz-button
+              *ngIf="exibirPausarCancelarProjeto"
+              (click)="abrirModalAlterarStatusProjeto(StatusProjeto.Cancelado)"
+              [nzLoading]="salvandoProjeto"
+              [disabled]="!possuiPermissaoEditar(['Administrador'])"
+            >
+              <i nz-icon nzType="stop" nzTheme="outline"></i>
+              Cancelar Projeto
+            </li>
+
+            <li
+              nz-menu-item
+              (click)="exibirModalConfirmacaoSalvar()"
+              nz-button
+              [ngClass]="{ disabled: desabilitaBotoes }"
+              [nzLoading]="salvandoProjeto"
+            >
+              <i nz-icon nzType="save" nzTheme="outline"></i>
+              Salvar
+            </li>
+            <li
+              nz-menu-item
+              (click)="imprimir()"
+              nz-button
+              [nzLoading]="salvandoProjeto"
+            >
+              <i nz-icon nzType="printer" nzTheme="outline"></i>
+              Imprimir
+            </li>
+            <li
+              nz-menu-item
+              nz-button
+              (click)="exibirModalPermissoes()"
+              [nzLoading]="salvandoProjeto"
+            >
+              <i nz-icon nzType="lock" nzTheme="outline"></i>
+              Permissões
+            </li>
+            <li
+              nz-menu-item
+              nz-button
+              [routerLink]="['questionario']"
+              nzType="default"
+            >
+              <i nz-icon nzType="form" nzTheme="outline"></i>
+              Questionários
+            </li>
+            <li
+              nz-menu-item
+              (click)="excluirProjeto()"
+              nz-button
+              [ngClass]="{ disabled: desabilitaBotoes }"
+              [nzLoading]="salvandoProjeto"
+              nzDanger
+            >
+              <i nz-icon nzType="close" nzTheme="outline"></i>
+              Excluir Projeto
+            </li>
+          </ul>
+        </nz-dropdown-menu>
+      </div>
+    </div>
+
+    <nz-divider></nz-divider>
+
+    <div class="row align-items-center">
+      <div class="col-md-6 col-xs-12">
+        <div class="d-md-flex align-items-center">
+          <div class="text-center text-sm-left">
+            <p class="text-dark font-weight-bold">
+              Número: {{ projetoPlurianual?.id }}
+            </p>
+            <p class="text-dark">
+              Gerente do Projeto: {{ projetoPlurianual?.nomeResponsavel }}
+            </p>
+            <p class="text-dark">
+              Sponsor: {{ projetoPlurianual?.nomeSponsor }}
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-xs-12">
+        <div class="row">
+          <div class="d-md-block d-none border-left col-1"></div>
+          <div class="col">
+            <ul class="list-unstyled m-t-10">
+              <li class="row ml-0">
+                <span class="font-weight-semibold m-b-5">
+                  <i
+                    class="text-primary text-dark m-r-10"
+                    nz-icon
+                    nzType="calendar"
+                    theme="outline"
+                  ></i>
+                  {{ projetoPlurianual?.dataCriacao | date : "dd/MM/yyyy" }}
+                </span>
+              </li>
+              <li class="row ml-0">
+                <button
+                  [disabled]="
+                    !habilitarBotaoVisualizarModalMotivoPausaCancelamento
+                  "
+                  (click)="abrirModalVisualizarMotivoPausaCancelamento()"
+                >
+                  <nz-tag [nzColor]="corStatus">{{
+                    projeto?.statusDescricao
+                  }}</nz-tag>
+                </button>
+              </li>
+              <li class="row ml-0">
+                <nz-tag [nzColor]="corSituacao">{{
+                  projetoPlurianual?.situacaoDescricao
+                }}</nz-tag>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div nz-row nzGutter="24" *ngIf="exibirMotivoPedidoAjustes">
+      <nz-divider></nz-divider>
+      <div nz-col nzSpan="24">
+        <nz-collapse [nzBordered]="false" class="mt-2">
+          <nz-collapse-panel nzHeader="Mensagens" [nzActive]="true">
+            <div *ngFor="let situacao of mensagens">
+              <nz-card
+                nzSize="small"
+                [nzTitle]="
+                  situacao.situacaoAnteriorDescricao +
+                  ' 🠮 ' +
+                  situacao.situacaoDescricao
+                "
+                class="mt-3"
+                style="width: 100%; text-align: justify"
+              >
+                <p>
+                  <span style="font-weight: bolder">Data: </span
+                  >{{ situacao.data.toLocaleString() }}
+                </p>
+                <p>
+                  <span style="font-weight: bolder">Mensagem:</span>
+                  {{ situacao.mensagem }}
+                </p>
+              </nz-card>
+            </div>
+          </nz-collapse-panel>
+        </nz-collapse>
+      </div>
+    </div>
+  </nz-card>
+
+  <div class="row" *ngIf="exibirAbaDeclaracaoTrabalho">
+    <div class="col-md-4 col-lg-4 col-sm-12 cursor-pointer">
+      <nz-card (click)="tabIndex = 2">
+        <div class="media align-items-center">
+          <nz-avatar
+            [nzSize]="60"
+            nzIcon="dollar"
+            class="avatar-purple"
+          ></nz-avatar>
+          <div class="m-l-15">
+            <h2 class="m-b-0">
+              {{ projetoPlurianual?.valorOrcado | currency : "BRL" }}
+            </h2>
+            <p class="m-b-0 text-muted">Orçado</p>
+          </div>
+        </div>
+      </nz-card>
+    </div>
+    <div class="col-md-4 col-lg-4 col-sm-12 cursor-pointer">
+      <nz-card (click)="tabIndex = 2">
+        <div class="d-flex bd-highlight">
+          <div class="bd-highlight">
+            <nz-avatar
+              [nzSize]="60"
+              nzIcon="bar-chart"
+              class="avatar-green"
+            ></nz-avatar>
+          </div>
+          <div class="m-l-15 flex-grow-1 bd-highlight">
+            <h2 class="m-b-0">
+              {{ projetoPlurianual?.valorRealizado | currency : "BRL" }}
+            </h2>
+            <p class="m-b-0 text-muted">Realizado</p>
+          </div>
+          <div class="bd-highlight">
+            <nz-tag [nzColor]="'cyan'">
+              <span class="font-weight-semibold m-l-5">0%</span>
+            </nz-tag>
+          </div>
+        </div>
+      </nz-card>
+    </div>
+    <div class="col-md-4 col-lg-4 col-sm-12 cursor-pointer">
+      <nz-card (click)="tabIndex = 2">
+        <div class="media align-items-center">
+          <nz-avatar
+            [nzSize]="50"
+            nzIcon="profile"
+            class="avatar-orange"
+          ></nz-avatar>
+          <div class="m-l-15">
+            <h2 class="m-b-0">
+              {{ projetoPlurianual?.valorSaldo | currency : "BRL" }}
+            </h2>
+            <p class="m-b-0 text-muted">Saldo</p>
+          </div>
+        </div>
+      </nz-card>
+    </div>
+  </div>
+
+  <nz-card
+    [nzTitle]="!editando ? 'Cadastrar Projeto Plurianual' : null"
+    id="form-card"
+  >
+    <nz-tabset
+      nzType="card"
+      [nzSelectedIndex]="tabIndex"
+      (nzSelectedIndexChange)="selectedIndexChange($event)"
+    >
+      <nz-tab nzTitle="Dados">
+        <nz-affix nzTarget="form-card" class="affix-toggle-expandir">
+          <div class="toggle-expandir-wrapper">
+            <p class="mb-2">
+              <button
+                nz-button
+                (click)="expandAll()"
+                nzSize="small"
+                class="mr-2"
+              >
+                <i nz-icon nzType="down"></i
+                ><span class="d-none d-sm-inline">Expandir tudo</span>
+              </button>
+              <button nz-button (click)="collapseAll()" nzSize="small">
+                <i nz-icon nzType="up"></i
+                ><span class="d-none d-sm-inline">Recolher tudo</span>
+              </button>
+            </p>
+          </div>
+        </nz-affix>
+
+        <nz-collapse [nzBordered]="false" class="mt-2">
+          <nz-collapse-panel nzHeader="1. Dados do Projeto" [nzActive]="true">
+            <nz-card nzSize="small">
+              <form nz-form [formGroup]="form" nzLayout="vertical">
+                <div nz-row nzGutter="24">
+                  <div nz-col nzXs="24" nzSm="12">
+                    <nz-form-item>
+                      <nz-form-label nzRequired>
+                        Nome do Projeto
+                      </nz-form-label>
+                      <nz-form-control>
+                        <input
+                          nz-input
+                          formControlName="nome"
+                          placeholder="Nome do Projeto"
+                          [readonly]="
+                            !possuiPermissaoEditar(['Administrador']) &&
+                            editando
+                          "
+                        />
+                      </nz-form-control>
+                    </nz-form-item>
+                  </div>
+
+                  <div nz-col nzXs="24" nzSm="12">
+                    <nz-form-item>
+                      <nz-form-label nzRequired>Área</nz-form-label>
+                      <nz-form-control>
+                        <nz-select
+                          formControlName="departamentoId"
+                          (ngModelChange)="selecionouDepartamento($event)"
+                          nzPlaceHolder="Área"
+                          nzShowSearch
+                          nzAllowClear
+                          [nzDisabled]="
+                            !possuiPermissaoEditar(['Administrador']) &&
+                            editando
+                          "
+                        >
+                          <nz-option
+                            *ngFor="let d of departamentos"
+                            [nzLabel]="d.nome"
+                            [nzValue]="d.id"
+                          >
+                          </nz-option>
+                        </nz-select>
+                      </nz-form-control>
+                    </nz-form-item>
+                  </div>
+
+                  <div nz-col nzXs="24" nzSm="12">
+                    <nz-form-item>
+                      <nz-form-label nzRequired> Gerente </nz-form-label>
+                      <nz-form-control>
+                        <nz-select
+                          formControlName="responsavel"
+                          nzPlaceHolder="Responsável"
+                          nzAllowClear
+                          nzShowSearch
+                          nzServerSearch
+                          (nzOnSearch)="searchResponsavel($event)"
+                          [nzDisabled]="
+                            !possuiPermissaoEditar(['Administrador']) &&
+                            editando
+                          "
+                        >
+                          <ng-container *ngFor="let g of responsaveisAd">
+                            <nz-option
+                              *ngIf="!buscandoResponsavelAd"
+                              [nzValue]="g"
+                              [nzLabel]="g.nome"
+                            >
+                            </nz-option>
+                          </ng-container>
+                          <nz-option
+                            *ngIf="buscandoResponsavelAd"
+                            nzDisabled
+                            nzCustomContent
+                          >
+                            <i
+                              nz-icon
+                              nzType="loading"
+                              class="loading-icon mr-2"
+                            ></i>
+                            Buscando ...
+                          </nz-option>
+                        </nz-select>
+                      </nz-form-control>
+                    </nz-form-item>
+                  </div>
+
+                  <div nz-col nzXs="24" nzSm="12">
+                    <nz-form-item>
+                      <nz-form-label nzRequired>
+                        Sponsor do Projeto
+                      </nz-form-label>
+                      <nz-form-control>
+                        <nz-select
+                          formControlName="sponsor"
+                          nzPlaceHolder="Sponsor do Projeto"
+                          nzAllowClear
+                          nzShowSearch
+                          nzServerSearch
+                          (nzOnSearch)="searchSponsor($event)"
+                          [nzDisabled]="
+                            !possuiPermissaoEditar(['Administrador']) &&
+                            editando
+                          "
+                        >
+                          <ng-container *ngFor="let s of sponsorsProjetoAd">
+                            <nz-option
+                              *ngIf="!buscandoSponsorAd"
+                              [nzValue]="s"
+                              [nzLabel]="s.nome"
+                            >
+                            </nz-option>
+                          </ng-container>
+                          <nz-option
+                            *ngIf="buscandoSponsorAd"
+                            nzDisabled
+                            nzCustomContent
+                          >
+                            <i
+                              nz-icon
+                              nzType="loading"
+                              class="loading-icon mr-2"
+                            ></i>
+                            Buscando ...
+                          </nz-option>
+                        </nz-select>
+                      </nz-form-control>
+                    </nz-form-item>
+                  </div>
+
+                  <div nz-col nzXs="24" nzSm="12">
+                    <nz-form-item>
+                      <nz-form-label>Cesta</nz-form-label>
+                      <nz-form-control>
+                        <nz-select
+                          formControlName="cestaId"
+                          nzPlaceHolder="Cesta"
+                          nzShowSearch
+                          nzAllowClear
+                        >
+                          <nz-option
+                            *ngFor="let c of cestas"
+                            [nzLabel]="c.descricao"
+                            [nzValue]="c.id"
+                          >
+                          </nz-option>
+                        </nz-select>
+                      </nz-form-control>
+                    </nz-form-item>
+                  </div>
+                  <div nz-col nzXs="24" nzSm="12">
+                    <nz-form-item>
+                      <nz-form-label nzRequired>Portfólio</nz-form-label>
+                      <nz-form-control>
+                        <nz-select
+                          formControlName="portifolioId"
+                          nzPlaceHolder="Portfólio"
+                          nzShowSearch
+                          nzAllowClear
+                        >
+                          <nz-option
+                            *ngFor="let p of portifolios"
+                            [nzLabel]="p.descricao"
+                            [nzValue]="p.id"
+                          >
+                          </nz-option>
+                        </nz-select>
+                      </nz-form-control>
+                    </nz-form-item>
+                  </div>
+
+                  <div nz-col nzXs="24" nzSm="12">
+                    <nz-form-item>
+                      <nz-form-label nzRequired>Ano</nz-form-label>
+                      <nz-form-control>
+                        <nz-date-picker
+                          formControlName="anoReferencia"
+                          nzPlaceHolder="Ano"
+                          nzMode="year"
+                        >
+                        </nz-date-picker>
+                      </nz-form-control>
+                    </nz-form-item>
+                  </div>
+                </div>
+              </form>
+            </nz-card>
+          </nz-collapse-panel>
+
+          <nz-collapse-panel
+            nzHeader="2. Qual o escopo para o ano seguinte?"
+            [nzActive]="true"
+          >
+            <p class="text-red-500">* Preenchimento Obrigatório</p>
+            <nz-card nzSize="small">
+              <form nz-form [formGroup]="form" nzLayout="vertical">
+                <div nz-row nzGutter="24">
+                  <div nz-col nzSpan="24">
+                    <nz-form-item class="mb-0">
+                      <nz-form-control>
+                        <textarea
+                          nz-input
+                          formControlName="escopoAnoSeguinte"
+                          placeholder="Escopo para o ano seguinte"
+                          required
+                          [nzAutosize]="{ minRows: 3, maxRows: 6 }"
+                          [readonly]="
+                            !possuiPermissaoEditar(['Administrador']) &&
+                            editando
+                          "
+                        >
+                        </textarea>
+                      </nz-form-control>
+                    </nz-form-item>
+                  </div>
+                </div>
+              </form>
+            </nz-card>
+          </nz-collapse-panel>
+
+          <nz-collapse-panel nzHeader="3. Prazos" [nzActive]="true">
+            <nz-card nzSize="small">
+              <form nz-form [formGroup]="form" nzLayout="vertical">
+                <div nz-row nzGutter="24">
+                  <div nz-col nzSpan="12">
+                    <nz-form-item class="mb-0">
+                      <nz-form-label> Prazo de Execução Inicial </nz-form-label>
+                      <nz-form-control>
+                        <nz-date-picker
+                          formControlName="prazoExecucaoInicial"
+                          name="prazoExecucaoInicial"
+                          [nzAllowClear]="false"
+                          nzFormat="dd/MM/yyyy"
+                          [nzInputReadOnly]="
+                            !possuiPermissaoEditar(['Administrador']) &&
+                            editando
+                          "
+                        ></nz-date-picker>
+                      </nz-form-control>
+                    </nz-form-item>
+                  </div>
+                  <div nz-col nzSpan="12">
+                    <nz-form-item class="mb-0">
+                      <nz-form-label> Prazo de Execução Final </nz-form-label>
+                      <nz-form-control>
+                        <nz-date-picker
+                          formControlName="prazoExecucaoFinal"
+                          name="prazoExecucaoFinal"
+                          [nzAllowClear]="false"
+                          nzFormat="dd/MM/yyyy"
+                          [nzInputReadOnly]="
+                            !possuiPermissaoEditar(['Administrador']) &&
+                            editando
+                          "
+                        ></nz-date-picker>
+                      </nz-form-control>
+                    </nz-form-item>
+                  </div>
+                </div>
+              </form>
+            </nz-card>
+          </nz-collapse-panel>
+        </nz-collapse>
+      </nz-tab>
+
+      <nz-tab
+        nzTitle="Declarações de Trabalho"
+        *ngIf="exibirAbaDeclaracaoTrabalho"
+      >
+        <div style="border-bottom: 1px solid rgb(233, 233, 233)">
+          <p class="mb-2">
+            <button
+              nz-button
+              [disabled]="!exibirCadastrarDt"
+              nzType="primary"
+              nzSize="small"
+              routerLink="/declaracoes-trabalho/cadastrar"
+              [queryParams]="{ projetoPlurianualId: projetoPlurianualId }"
+            >
+              <span class="d-none d-sm-block"
+                >Cadastrar Declaração de Trabalho</span
+              >
+              <span class="d-block d-sm-none">Cadastrar DT</span>
+            </button>
+          </p>
+        </div>
+
+        <nz-table
+          #dtsTable
+          [nzData]="projetoPlurianual?.declaracoesTrabalho"
+          [nzFrontPagination]="false"
+          nzSize="small"
+        >
+          <thead>
+            <tr>
+              <th>Nº</th>
+              <th>Fornecedor Interno</th>
+              <th>Responsável</th>
+              <th>Situação</th>
+              <th>Prazo</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let dt of dtsTable.data">
+              <td
+                class="cursor-pointer"
+                [routerLink]="['/declaracoes-trabalho', 'editar', dt.id]"
+                [queryParams]="{ projetoPlurianualId: dt.projetoPlurianualId }"
+              >
+                {{ dt.id }}
+              </td>
+              <td>{{ dt.departamentoNome }}</td>
+              <td>{{ dt.nomeResponsavel }}</td>
+              <td>
+                <nz-tag [nzColor]="corTagSitacao(dt)">
+                  {{ dt.situacaoDescricao }}
+                </nz-tag>
+              </td>
+              <td>{{ getDataEntregaFornecedor(dt) }}</td>
+              <td>
+                <button
+                  nz-tooltip
+                  nzTooltipTitle="Visualizar DT"
+                  nzTooltipPlacement="top"
+                  nz-button
+                  nzShape="circle"
+                  [routerLink]="['/declaracoes-trabalho', 'editar', dt.id]"
+                  [queryParams]="{
+                    projetoPlurianualId: dt.projetoPlurianualId
+                  }"
+                >
+                  <i nz-icon nzType="edit"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </nz-table>
+      </nz-tab>
+
+      <nz-tab
+        nzTitle="Orçamento"
+        *ngIf="exibirAbaDeclaracaoTrabalho && !!projetoPlurianual"
+      >
+        <app-orcamento-projeto-plurianual-listar
+          [projeto]="projetoPlurianual"
+          (projetoChanged)="projetoAlterada($event)"
+          [statusProjeto]="projeto?.status"
+        >
+        </app-orcamento-projeto-plurianual-listar>
+      </nz-tab>
+
+      <nz-tab *ngIf="!!projetoPlurianual" nzTitle="Anexos">
+        <nz-spin nzTip="Aguarde..." [nzSpinning]="carregandoProjeto">
+          <app-projeto-plurianual-anexo-editar
+            [projetoPlurianual]="projetoPlurianual"
+            [statusProjeto]="projeto?.status"
+          >
+          </app-projeto-plurianual-anexo-editar>
+        </nz-spin>
+      </nz-tab>
+
+      <nz-tab *ngIf="!projetoPlurianualId" nzTitle="Anexos">
+        <app-projeto-plurianual-anexo-cadastrar
+          [(anexos)]="anexosCadastro"
+        ></app-projeto-plurianual-anexo-cadastrar>
+      </nz-tab>
+    </nz-tabset>
+    <div
+      nz-col
+      nzFlex="1"
+      class="flex flex-col md:flex-row md:justify-end gap-2"
+      *ngIf="podeEditarPermissoes"
+    >
+      <button
+        *ngIf="exibirSolicitarLevantamentoCusto"
+        nz-button
+        [disabled]="desabilitaBotoes"
+        (click)="exibirModalConfirmacaoSolicitarLevantamento()"
+        [nzLoading]="salvandoProjeto"
+        nzType="primary"
+      >
+        <i nz-icon nzType="stock" nzTheme="outline"></i>
+        Solicitar Levantamento de Custo e Prazo
+      </button>
+      <button
+        *ngIf="exibirConcluirLevantamentoCusto"
+        nz-button
+        [disabled]="desabilitaBotoes"
+        (click)="verificarDeclaracaoTrabalho()"
+        nzType="primary"
+        [nzLoading]="salvandoProjeto"
+      >
+        <i nz-icon nzType="stock" nzTheme="outline"></i>
+        Concluir Levantamento de Custo e Prazo
+      </button>
+      <button
+        *ngIf="exibirSolicitarAjustes"
+        nz-button
+        [disabled]="desabilitaBotoes"
+        (click)="abrirModalMotivo(SituacaoProjetoPlurianual.EmElaboracao)"
+        [nzLoading]="salvandoProjeto"
+        nzType="primary"
+      >
+        <i nz-icon nzType="rollback" nzTheme="outline"></i>
+        Solicitar Ajustes
+      </button>
+      <button
+        *ngIf="exibirAprovarProjeto"
+        nz-button
+        [disabled]="desabilitaBotoes"
+        (click)="exibirModalConfirmacaoAprovacao()"
+        nzType="primary"
+        [nzLoading]="salvandoProjeto"
+      >
+        <i nz-icon nzType="check" nzTheme="outline"></i>
+        Aprovar Projeto
+      </button>
+      <button
+        *ngIf="exibirAprovarProjetoComRessalva"
+        nz-button
+        [disabled]="desabilitaBotoes"
+        (click)="exibirModalConfirmacaoRessalva()"
+        nzType="primary"
+        [nzLoading]="salvandoProjeto"
+      >
+        <i nz-icon nzType="check" nzTheme="outline"></i>
+        {{
+          !exibirAprovarProjeto
+            ? "Editar Ressalvas"
+            : "Aprovar Projeto com Ressalvas"
+        }}
+      </button>
+      <button
+        *ngIf="exibirReprovarProjeto"
+        nz-button
+        [disabled]="desabilitaBotoes"
+        (click)="exibirModalConfirmacaoReprovacao()"
+        nzDanger
+        [nzLoading]="salvandoProjeto"
+      >
+        <i nz-icon nzType="close" nzTheme="outline"></i>
+        Reprovar Projeto
+      </button>
+      <button
+        nz-button
+        nz-dropdown
+        [nzDropdownMenu]="menuPlurianual"
+        nzType="default"
+      >
+        Ações
+        <i nz-icon nzType="down"></i>
+      </button>
+      <nz-dropdown-menu #menuPlurianual="nzDropdownMenu">
+        <ul nz-menu class="dropdown-plurianual">
+          <li
+            nz-menu-item
+            (click)="exibirModalConfirmacaoSalvar()"
+            [ngClass]="{ disabled: desabilitaBotoes }"
+            nz-button
+            [nzLoading]="salvandoProjeto"
+          >
+            <i nz-icon nzType="save" nzTheme="outline"></i>
+            Salvar
+          </li>
+          <li
+            nz-menu-item
+            nz-button
+            (click)="exibirModalPermissoes()"
+            [nzLoading]="salvandoProjeto"
+          >
+            <i nz-icon nzType="lock" nzTheme="outline"></i>
+            Permissões
+          </li>
+          <li
+            nz-menu-item
+            (click)="excluirProjeto()"
+            nz-button
+            [ngClass]="{ disabled: desabilitaBotoes }"
+            [nzLoading]="salvandoProjeto"
+            nzDanger
+          >
+            <i nz-icon nzType="close" nzTheme="outline"></i>
+            Excluir Projeto
+          </li>
+        </ul>
+      </nz-dropdown-menu>
+    </div>
+  </nz-card>
+</div>
+<app-projeto-plurianual-impressao
+  *ngIf="projetoPlurianual"
+  class="print"
+  [projetoPlurianual]="projetoPlurianual"
+  [cestaProjetoPlurianual]="cestaProjetoPlurianual"
+  [portifolioProjetoPlurianual]="portifolioProjetoPlurianual"
+  [mensagens]="mensagens"
+>
+</app-projeto-plurianual-impressao>

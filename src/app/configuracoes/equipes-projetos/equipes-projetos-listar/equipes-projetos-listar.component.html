@@ -1,0 +1,36 @@
+<div>
+    <button class="mb-3" nz-button nzType="primary" nzSize="small" (click)="exibirModalEditar()">
+      <span>Registrar nova Função</span>
+    </button>
+</div>
+
+<nz-table #funcoesTable [nzData]="funcaoProjeto?.items" [nzFrontPagination]="false"
+  [(nzPageIndex)]="pageIndex" [(nzPageSize)]="pageSize" [nzLoading]="carregando"
+  (nzQueryParams)="onQueryParamsChange($event)" [nzTotal]="funcaoProjeto?.totalCount" class="mt-1" [nzScroll]="{ x: '650px'}">
+  <thead>
+    <tr>
+      <th nzWidth="50px">Id</th>
+      <th nzWidth="350px">Nome</th>
+      <th nzWidth="80px" nzEllipsis>Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let equipeProjeto of funcoesTable.data">
+      <td class="cursor-pointer linha-clicavel" (click)="exibirModalEditar(equipeProjeto)">{{equipeProjeto.id}}</td>
+      <td class="cursor-pointer linha-clicavel" (click)="exibirModalEditar(equipeProjeto)">{{equipeProjeto.descricao}}</td>
+      <td>
+        <nz-space>
+            <button *nzSpaceItem nz-button nzShape="circle" (click)="exibirModalEditar(equipeProjeto)" [nzTooltipTitle]="'Editar'"
+              nz-tooltip>
+              <i nz-icon nzType="edit"></i>
+            </button>
+            <button *nzSpaceItem nz-button nzShape="circle" nzTooltipTitle="Excluir" nz-tooltip nz-popconfirm
+              nzPopconfirmTitle="Tem certeza que deseja excluir?" nzOkText="Sim"
+              (nzOnConfirm)="excluirFuncaoProjeto(equipeProjeto)">
+              <i nz-icon nzType="delete"></i>
+            </button>
+        </nz-space>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>

@@ -1,0 +1,62 @@
+<div class="bg-overlay"></div>
+<div class="bg-img"></div>
+<div class="container-fluid p-h-0 p-v-20 h-100">
+  <div class="d-flex flex-column justify-content-center justify-content-md-between h-100 pb-md-5">
+    <div class="d-none d-md-block"></div>
+    <div class="container">
+      <div class="row align-items-center justify-content-center">
+        <div class="col-sm-9 col-md-7 col-lg-5">
+          <nz-card class="login-card shadow-lg">
+            <div class="d-flex align-items-center justify-content-center mb-4">
+              <img width="190" src="assets/images/logo/logo-pmosoft.svg">
+            </div>
+            <div style="width: 210px" class="mx-auto text-center m-b-30">
+              <p class="txt-informe-credenciais">Informe abaixo suas credenciais de acesso</p>
+            </div>
+            <form nz-form [formGroup]="loginForm" nzLayout="vertical" class="login-form" (ngSubmit)="submitForm()">
+              <nz-form-item class="custom-form-item">
+                <nz-form-label nzFor="userName">Login de rede</nz-form-label>
+                <nz-form-control nzHasFeedback>
+                  <nz-input-group>
+                    <input type="text" nz-input formControlName="userName" #login placeholder="Login de rede">
+                  </nz-input-group>
+                </nz-form-control>
+              </nz-form-item>
+              <nz-form-item class="custom-form-item" style="margin-bottom:10px">
+                <nz-form-label nzFor="password">Senha</nz-form-label>
+                <nz-form-control nzHasFeedback>
+                  <nz-input-group>
+                    <input type="password" nz-input formControlName="password" placeholder="Senha">
+                  </nz-input-group>
+                </nz-form-control>
+              </nz-form-item>
+              <nz-form-item class="mb-0 mt-4">
+                <nz-form-control>
+                  <div class="align-items-center">
+                    <button nz-button class="login-form-button float-left btn-acessar"
+                      style="margin-top: 14px; margin-right: 17px;" [nzLoading]="autenticando"
+                      [disabled]="loginForm.invalid">
+                      Acessar
+                    </button>
+                  </div>
+                </nz-form-control>
+              </nz-form-item>
+            </form>
+          </nz-card>
+        </div>
+      </div>
+    </div>
+    <div class="d-none d-md-flex p-h-50 justify-content-between">
+      <img width="130" height="25" src="assets/images/logo/logo-pmsoft-mini-horizontal.svg">
+      <!--<ul class="list-inline">
+          <li class="list-inline-item">
+            <a class="text-dark text-link" href="">Legal</a>
+          </li>
+          <li class="list-inline-item">
+            <a class="text-dark text-link" href="">Privacy</a>
+          </li>
+        </ul>
+        -->
+    </div>
+  </div>
+</div>

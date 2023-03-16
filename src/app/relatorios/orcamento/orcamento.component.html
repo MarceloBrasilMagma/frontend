@@ -1,0 +1,21 @@
+<app-header-relatorios (filtroOrcamento)="carregarRelatorio($event)"></app-header-relatorios>
+<nz-card *ngIf="!!relatorio">
+  <div class="flex flex-col md:flex-row gap-3">
+    <div class="w-full md:w-4/12">
+      <app-orcamento-geral [relatorio]="relatorio"></app-orcamento-geral>
+    </div>
+    <div class="w-full md:w-8/12">
+      <app-orcamento-mes-a-mes [orcamentos]="relatorio.orcamentos"></app-orcamento-mes-a-mes>
+    </div>
+  </div>
+  <div class="flex flex-col md:flex-row pt-3">
+    <div class="w-full">
+      <app-orcamento-situacao [relatorio]="relatorio"></app-orcamento-situacao>
+    </div>
+  </div>
+</nz-card>
+<nz-card *ngIf="!!relatorio">
+  <div>
+    <app-orcamento-projetos [relatorio]="relatorio"></app-orcamento-projetos>
+  </div>
+</nz-card>

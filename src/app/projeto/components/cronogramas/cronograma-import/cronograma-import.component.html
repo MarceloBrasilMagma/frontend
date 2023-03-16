@@ -1,0 +1,58 @@
+<nz-table
+  #cronogramasTable
+  [nzData]="tarefasOrdenadas"
+  nzBordered
+  [nzFrontPagination]="false"
+  class="mt-1"
+>
+  <thead>
+    <tr>
+      <th>Número</th>
+      <th>Indicador</th>
+      <th>Previsto</th>
+      <th>Concluído</th>
+      <th>Nome da Tarefa</th>
+      <th>Duração</th>
+      <th>Início</th>
+      <th>Término</th>
+      <th>Predecessores</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of cronogramasTable.data">
+      <td>{{ item.numero }}</td>
+      <td class="text-center">
+        <nz-avatar
+          [nzSize]="30"
+          [nzIcon]="carinha"
+          class="mr-2"
+          [style]="
+            getCorIndicador(
+              item.tarefa.percentualEsperado,
+              item.tarefa.percentualCompletado
+            )
+          "
+        ></nz-avatar>
+      </td>
+      <td>{{ item.tarefa.percentualEsperado | number : "1.0-0" }}%</td>
+      <td>{{ item.tarefa.percentualCompletado | number : "1.0-0" }}%</td>
+      <td>
+        <span *ngFor="let a of getArray(item.depth)">&nbsp;</span>
+        <span *ngIf="item.childs.length" class="font-bold">{{
+          item.tarefa.nome
+        }}</span>
+        <span *ngIf="!item.childs.length">{{ item.tarefa.nome }}</span>
+      </td>
+      <td>
+        {{
+          item.tarefa.duracaoDias > 0
+            ? item.tarefa.duracaoDias + " Dias e "
+            : ""
+        }}{{ item.tarefa.duracaoHoras }} Horas
+      </td>
+      <td>{{ item.tarefa.inicio.toLocaleString() }}</td>
+      <td>{{ item.tarefa.fim.toLocaleString() }}</td>
+      <td>{{ item.predecessor }}</td>
+    </tr>
+  </tbody>
+</nz-table>

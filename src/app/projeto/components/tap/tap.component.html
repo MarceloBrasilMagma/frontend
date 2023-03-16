@@ -1,0 +1,663 @@
+<nz-card style="width: 100%">
+  <div nz-row nzGutter="24" nzAlign="middle">
+    <div nz-col nzSpan="24">
+      <nz-tabset
+        nzType="card"
+        (nzSelectChange)="selecionarAba($event)"
+        [nzSelectedIndex]="abaSelecionada"
+      >
+        <nz-tab nzTitle="Dados do Projeto">
+          <nz-card
+            *ngIf="abaSelecionada == abas.dados"
+            [nzActions]="[salvarDadosAction]"
+          >
+            <nz-collapse class="mb-2">
+              <nz-collapse-panel
+                [nzHeader]="'Escopo do projeto'"
+                [nzActive]="true"
+              >
+                <p class="text-red-500">* Preenchimento Obrigatório</p>
+                <form nz-form [formGroup]="form" nzLayout="vertical">
+                  <div nz-row nzGutter="24">
+                    <div nz-col nzSpan="24">
+                      <nz-form-item class="mb-0">
+                        <nz-form-control>
+                          <textarea
+                            nz-input
+                            formControlName="escopoDoProjeto"
+                            placeholder="Defina o escopo do seu projeto"
+                            [nzAutosize]="{ minRows: 3, maxRows: 6 }"
+                            [readonly]="!possuiPermissaoEditar"
+                          >
+                          </textarea>
+                        </nz-form-control>
+                      </nz-form-item>
+                    </div>
+                  </div>
+                </form>
+              </nz-collapse-panel>
+            </nz-collapse>
+            <nz-collapse class="mb-2">
+              <nz-collapse-panel
+                [nzHeader]="'Objetivo do projeto'"
+                [nzActive]="true"
+              >
+                <p class="text-red-500">* Preenchimento Obrigatório</p>
+                <form nz-form [formGroup]="form" nzLayout="vertical">
+                  <div nz-row nzGutter="24">
+                    <div nz-col nzSpan="24">
+                      <nz-form-item class="mb-0">
+                        <nz-form-control>
+                          <textarea
+                            nz-input
+                            formControlName="objetivoDoProjeto"
+                            placeholder="Objetivo do projeto"
+                            required
+                            [nzAutosize]="{ minRows: 3, maxRows: 6 }"
+                            [readonly]="!possuiPermissaoEditar"
+                          >
+                          </textarea>
+                        </nz-form-control>
+                      </nz-form-item>
+                    </div>
+                  </div>
+                </form>
+              </nz-collapse-panel>
+            </nz-collapse>
+            <nz-collapse class="mb-2">
+              <nz-collapse-panel
+                [nzHeader]="'Premissas do projeto'"
+                [nzActive]="true"
+              >
+                <p class="text-red-500">* Preenchimento Obrigatório</p>
+                <form nz-form [formGroup]="form" nzLayout="vertical">
+                  <div nz-row nzGutter="24">
+                    <div nz-col nzSpan="24">
+                      <nz-form-item class="mb-0">
+                        <nz-form-control>
+                          <textarea
+                            nz-input
+                            formControlName="premissasDoProjeto"
+                            placeholder="Premissas do projeto"
+                            required
+                            [nzAutosize]="{ minRows: 3, maxRows: 6 }"
+                            [readonly]="!possuiPermissaoEditar"
+                          >
+                          </textarea>
+                        </nz-form-control>
+                      </nz-form-item>
+                    </div>
+                  </div>
+                </form>
+              </nz-collapse-panel>
+            </nz-collapse>
+            <nz-collapse class="mb-2">
+              <nz-collapse-panel
+                [nzHeader]="'Restrições do projeto'"
+                [nzActive]="true"
+              >
+                <p class="text-red-500">* Preenchimento Obrigatório</p>
+                <form nz-form [formGroup]="form" nzLayout="vertical">
+                  <div nz-row nzGutter="24">
+                    <div nz-col nzSpan="24">
+                      <nz-form-item class="mb-0">
+                        <nz-form-control>
+                          <textarea
+                            nz-input
+                            formControlName="restricoesDoProjeto"
+                            placeholder="Restrições do projeto"
+                            required
+                            [nzAutosize]="{ minRows: 3, maxRows: 6 }"
+                            [readonly]="!possuiPermissaoEditar"
+                          >
+                          </textarea>
+                        </nz-form-control>
+                      </nz-form-item>
+                    </div>
+                  </div>
+                </form>
+              </nz-collapse-panel>
+            </nz-collapse>
+            <nz-collapse class="mb-2">
+              <nz-collapse-panel
+                [nzHeader]="'Riscos do projeto'"
+                [nzActive]="true"
+              >
+                <p class="text-red-500">* Preenchimento Obrigatório</p>
+                <form nz-form [formGroup]="form" nzLayout="vertical">
+                  <div nz-row nzGutter="24">
+                    <div nz-col nzSpan="24">
+                      <nz-form-item class="mb-0">
+                        <nz-form-control>
+                          <textarea
+                            nz-input
+                            formControlName="riscosDoProjeto"
+                            placeholder="Riscos do projeto"
+                            required
+                            [nzAutosize]="{ minRows: 3, maxRows: 6 }"
+                            [readonly]="!possuiPermissaoEditar"
+                          >
+                          </textarea>
+                        </nz-form-control>
+                      </nz-form-item>
+                    </div>
+                  </div>
+                </form>
+              </nz-collapse-panel>
+            </nz-collapse>
+            <nz-collapse class="mb-2">
+              <nz-collapse-panel [nzHeader]="'Comentários'" [nzActive]="true">
+                <p class="text-red-500">* Preenchimento Obrigatório</p>
+                <form nz-form [formGroup]="form" nzLayout="vertical">
+                  <div nz-row nzGutter="24">
+                    <div nz-col nzSpan="24">
+                      <nz-form-item class="mb-0">
+                        <nz-form-control>
+                          <textarea
+                            nz-input
+                            formControlName="comentarios"
+                            placeholder="Comentários"
+                            required
+                            [nzAutosize]="{ minRows: 3, maxRows: 6 }"
+                            [readonly]="!possuiPermissaoEditar"
+                          >
+                          </textarea>
+                        </nz-form-control>
+                      </nz-form-item>
+                    </div>
+                  </div>
+                </form>
+              </nz-collapse-panel>
+            </nz-collapse>
+          </nz-card>
+        </nz-tab>
+
+        <nz-tab nzTitle="Riscos">
+          <nz-card
+            *ngIf="abaSelecionada == abas.riscos"
+            [nzActions]="[salvarAction]"
+          >
+            <nz-card nzSize="small">
+              <nz-divider
+                nzOrientation="left"
+                nzText="Incluir riscos"
+              ></nz-divider>
+              <form nz-form [formGroup]="riscoForm">
+                <div nz-row [nzGutter]="16">
+                  <div nz-col class="gutter-row" [nzSpan]="6">
+                    <div class="inner-box">
+                      <nz-form-label nzRequired> Descrição </nz-form-label>
+                      <nz-form-item>
+                        <nz-form-control>
+                          <textarea
+                            nz-input
+                            formControlName="descricao"
+                            placeholder="Descrição do risco"
+                            required
+                            [nzAutosize]="{ minRows: 2, maxRows: 4 }"
+                            [nzDisabled]="!possuiPermissaoEditar"
+                          >
+                          </textarea>
+                        </nz-form-control>
+                      </nz-form-item>
+                    </div>
+                  </div>
+                  <div nz-col class="gutter-row" [nzSpan]="6">
+                    <div class="inner-box">
+                      <nz-form-label nzRequired> Impacto </nz-form-label>
+                      <nz-form-item>
+                        <nz-form-control>
+                          <textarea
+                            nz-input
+                            formControlName="impacto"
+                            placeholder="Impacto"
+                            required
+                            [nzAutosize]="{ minRows: 2, maxRows: 4 }"
+                            [nzDisabled]="!possuiPermissaoEditar"
+                          >
+                          </textarea>
+                        </nz-form-control>
+                      </nz-form-item>
+                    </div>
+                  </div>
+                  <div nz-col class="gutter-row" [nzSpan]="6">
+                    <div class="inner-box">
+                      <nz-form-label nzRequired> Probabilidade </nz-form-label>
+                      <nz-form-item>
+                        <nz-form-control>
+                          <textarea
+                            nz-input
+                            formControlName="probabilidade"
+                            placeholder="Probabilidade"
+                            required
+                            [nzAutosize]="{ minRows: 2, maxRows: 4 }"
+                            [nzDisabled]="!possuiPermissaoEditar"
+                          >
+                          </textarea>
+                        </nz-form-control>
+                      </nz-form-item>
+                    </div>
+                  </div>
+                  <div nz-col class="gutter-row" [nzSpan]="6">
+                    <div class="inner-box">
+                      <nz-form-label nzRequired> Plano de ação </nz-form-label>
+                      <nz-form-item>
+                        <nz-form-control>
+                          <textarea
+                            nz-input
+                            formControlName="planoDeAcao"
+                            placeholder="Plano de ação"
+                            required
+                            [nzAutosize]="{ minRows: 2, maxRows: 4 }"
+                            [nzDisabled]="!possuiPermissaoEditar"
+                          >
+                          </textarea>
+                        </nz-form-control>
+                      </nz-form-item>
+                    </div>
+                  </div>
+                </div>
+              </form>
+              <div class="flex justify-end">
+                <button
+                  type="submit"
+                  nz-button
+                  nzType="primary"
+                  class="mb-3"
+                  (click)="incluirRisco()"
+                  [disabled]="!possuiPermissaoEditar || desabilitaBotoes"
+                >
+                  <i nz-icon nzType="save" nzTheme="outline"></i>
+                  Incluir
+                </button>
+              </div>
+              <nz-table
+                #risco
+                nzBordered
+                [nzData]="projeto.riscoVm"
+                [nzFrontPagination]="false"
+                nzSize="small"
+                class="mt-2"
+              >
+                <thead>
+                  <tr>
+                    <th>Descrição</th>
+                    <th>Impacto</th>
+                    <th>Probabilidade</th>
+                    <th>Plano de ação</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let risco of projeto.riscoVm">
+                    <td nz-tooltip nzTooltipTitle="{{ risco.descricao }}">
+                      {{ risco.descricao }}
+                    </td>
+                    <td nz-tooltip nzTooltipTitle="{{ risco.impacto }}">
+                      {{ risco.impacto }}
+                    </td>
+                    <td nz-tooltip nzTooltipTitle="{{ risco.probabilidade }}">
+                      {{ risco.probabilidade }}
+                    </td>
+                    <td nz-tooltip nzTooltipTitle="{{ risco.planoDeAcao }}">
+                      {{ risco.planoDeAcao }}
+                    </td>
+                    <td nzWidth="5%">
+                      <button
+                        nz-button
+                        nzShape="circle"
+                        (click)="excluirRisco(risco.id)"
+                        [disabled]="!possuiPermissaoEditar || desabilitaBotoes"
+                      >
+                        <i nz-icon nzType="delete"></i>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </nz-table>
+            </nz-card>
+          </nz-card>
+        </nz-tab>
+        <nz-tab nzTitle="Plano de Comunicação">
+          <nz-card
+            *ngIf="abaSelecionada == abas.comunicacao"
+            [nzActions]="[salvarAction]"
+          >
+            <nz-card nzSize="small">
+              <nz-divider
+                nzOrientation="left"
+                nzText="Incluir plano de comunicação"
+              ></nz-divider>
+              <form nz-form [formGroup]="planoForm">
+                <div nz-row [nzGutter]="16">
+                  <div nz-col class="gutter-row" [nzSpan]="6">
+                    <div class="inner-box">
+                      <nz-form-label nzRequired> Produto </nz-form-label>
+                      <nz-form-item>
+                        <nz-form-control>
+                          <nz-select
+                            nzPlaceHolder="Selecione um produto"
+                            formControlName="produtoId"
+                            [nzDisabled]="!possuiPermissaoEditar"
+                          >
+                            <nz-option
+                              *ngFor="let produto of produtos"
+                              [nzLabel]="produto.nome"
+                              [nzValue]="produto.id"
+                            >
+                            </nz-option>
+                          </nz-select>
+                        </nz-form-control>
+                      </nz-form-item>
+                    </div>
+                  </div>
+                  <div nz-col class="gutter-row" [nzSpan]="6">
+                    <div class="inner-box">
+                      <nz-form-label nzRequired> Conteúdo </nz-form-label>
+                      <nz-form-item>
+                        <nz-form-control>
+                          <input
+                            nz-input
+                            type="text"
+                            formControlName="conteudo"
+                            placeholder="Conteúdo"
+                            [nzDisabled]="!possuiPermissaoEditar"
+                          />
+                        </nz-form-control>
+                      </nz-form-item>
+                    </div>
+                  </div>
+                  <div nz-col class="gutter-row" [nzSpan]="6">
+                    <div class="inner-box">
+                      <nz-form-label nzRequired> Periodicidade </nz-form-label>
+                      <nz-form-item>
+                        <nz-form-control>
+                          <nz-select
+                            nzPlaceHolder="Selecione um período"
+                            formControlName="periodicidadeId"
+                            [nzDisabled]="!possuiPermissaoEditar"
+                          >
+                            <nz-option
+                              *ngFor="let periodo of periodicidades"
+                              [nzLabel]="periodo.nome"
+                              [nzValue]="periodo.id"
+                            >
+                            </nz-option>
+                          </nz-select>
+                        </nz-form-control>
+                      </nz-form-item>
+                    </div>
+                  </div>
+                  <div nz-col class="gutter-row" [nzSpan]="6">
+                    <div class="inner-box">
+                      <nz-form-label nzRequired> Público </nz-form-label>
+                      <nz-form-item>
+                        <nz-form-control>
+                          <input
+                            nz-input
+                            type="text"
+                            formControlName="publico"
+                            placeholder="Público"
+                            [nzDisabled]="!possuiPermissaoEditar"
+                          />
+                        </nz-form-control>
+                      </nz-form-item>
+                    </div>
+                  </div>
+                </div>
+              </form>
+              <div class="flex justify-end">
+                <button
+                  type="submit"
+                  nz-button
+                  nzType="primary"
+                  class="mb-3"
+                  (click)="incluirPlano()"
+                  [disabled]="!possuiPermissaoEditar || desabilitaBotoes"
+                >
+                  <i nz-icon nzType="save" nzTheme="outline"></i>
+                  Incluir
+                </button>
+              </div>
+              <nz-table
+                nzBordered
+                [nzData]="projeto.planoDeComunicacaoVm"
+                [nzFrontPagination]="false"
+                nzSize="small"
+                class="mt-2"
+              >
+                <thead>
+                  <tr>
+                    <th>Produto</th>
+                    <th>Conteúdo</th>
+                    <th>Periodicidade</th>
+                    <th>Público</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let plano of projeto.planoDeComunicacaoVm">
+                    <td nz-tooltip nzTooltipTitle="{{ plano.produtoVm.nome }}">
+                      {{ plano.produtoVm.nome }}
+                    </td>
+                    <td nz-tooltip nzTooltipTitle="{{ plano.conteudo }}">
+                      {{ plano.conteudo }}
+                    </td>
+                    <td
+                      nz-tooltip
+                      nzTooltipTitle="{{ plano.periodicidadeVm.nome }}"
+                    >
+                      {{ plano.periodicidadeVm.nome }}
+                    </td>
+                    <td nz-tooltip nzTooltipTitle="{{ plano.publico }}">
+                      {{ plano.publico }}
+                    </td>
+                    <td nzWidth="5%">
+                      <button
+                        nz-button
+                        nzShape="circle"
+                        (click)="excluirPlano(plano.id)"
+                        [disabled]="!possuiPermissaoEditar || desabilitaBotoes"
+                      >
+                        <i nz-icon nzType="delete"></i>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </nz-table>
+            </nz-card>
+          </nz-card>
+        </nz-tab>
+        <nz-tab nzTitle="Equipe do Projeto">
+          <nz-card
+            *ngIf="abaSelecionada == abas.equipe"
+            [nzActions]="[salvarAction]"
+          >
+            <nz-card nzSize="small">
+              <nz-divider
+                nzOrientation="left"
+                nzText="Incluir Membro da Equipe"
+              ></nz-divider>
+              <form nz-form [formGroup]="equipeForm">
+                <div nz-row [nzGutter]="24">
+                  <div nz-col class="gutter-row" [nzSpan]="8">
+                    <div class="inner-box">
+                      <nz-form-label nzRequired> Usuário </nz-form-label>
+                      <nz-form-item>
+                        <nz-form-control>
+                          <nz-select
+                            formControlName="usuario"
+                            nzPlaceHolder="Usuário"
+                            nzAllowClear
+                            nzShowSearch
+                            nzServerSearch
+                            [nzDisabled]="!possuiPermissaoEditar"
+                            (nzOnSearch)="searchUsuario($event)"
+                          >
+                            <ng-container *ngFor="let g of usuariosAd">
+                              <nz-option
+                                *ngIf="!buscandoUsuarioAd"
+                                [nzValue]="g"
+                                [nzLabel]="g.nome"
+                              >
+                              </nz-option>
+                            </ng-container>
+                            <nz-option
+                              *ngIf="buscandoUsuarioAd"
+                              nzDisabled
+                              nzCustomContent
+                            >
+                              <i
+                                nz-icon
+                                nzType="loading"
+                                class="loading-icon mr-2"
+                              ></i>
+                              Buscando ...
+                            </nz-option>
+                          </nz-select>
+                        </nz-form-control>
+                      </nz-form-item>
+                    </div>
+                  </div>
+                  <div nz-col class="gutter-row" [nzSpan]="8">
+                    <div class="inner-box">
+                      <nz-form-label nzRequired> Participação </nz-form-label>
+                      <nz-form-item>
+                        <nz-form-control>
+                          <nz-select
+                            formControlName="participacao"
+                            nzPlaceHolder="Participação"
+                            nzAllowClear
+                            [nzDisabled]="!possuiPermissaoEditar"
+                          >
+                            <nz-option
+                              [nzValue]="participacao.Integral"
+                              nzLabel="Tempo Integral"
+                            ></nz-option>
+                            <nz-option
+                              [nzValue]="participacao.Parcial"
+                              nzLabel="Tempo Parcial"
+                            ></nz-option>
+                            <nz-option
+                              [nzValue]="participacao.SobDemanda"
+                              nzLabel="Sob Demanda"
+                            ></nz-option>
+                          </nz-select>
+                        </nz-form-control>
+                      </nz-form-item>
+                    </div>
+                  </div>
+                  <div nz-col class="gutter-row" [nzSpan]="8">
+                    <div class="inner-box">
+                      <nz-form-label nzRequired> Função </nz-form-label>
+                      <nz-form-item>
+                        <nz-form-control>
+                          <nz-select
+                            formControlName="funcao"
+                            nzPlaceHolder="Função"
+                            nzAllowClear
+                            nzShowSearch
+                            [nzDisabled]="!possuiPermissaoEditar"
+                          >
+                            <nz-option
+                              *ngFor="let funcao of funcoes"
+                              [nzValue]="funcao.id"
+                              [nzLabel]="funcao.descricao"
+                            >
+                            </nz-option>
+                          </nz-select>
+                        </nz-form-control>
+                      </nz-form-item>
+                    </div>
+                  </div>
+                </div>
+              </form>
+              <div nz-row class="flex justify-end">
+                <button
+                  type="submit"
+                  nz-button
+                  nzType="primary"
+                  class="mb-3"
+                  (click)="incluirEquipe()"
+                  [nzLoading]="carregando"
+                  [disabled]="!possuiPermissaoEditar || desabilitaBotoes"
+                >
+                  <i nz-icon nzType="save" nzTheme="outline"></i>
+                  Incluir
+                </button>
+              </div>
+              <nz-table
+                #risco
+                nzBordered
+                [nzData]="projeto.equipesProjeto"
+                [nzFrontPagination]="false"
+                nzSize="small"
+                class="mt-2"
+                [nzLoading]="carregando"
+              >
+                <thead>
+                  <tr>
+                    <th>Nome</th>
+                    <th>Login</th>
+                    <th>Participação</th>
+                    <th>Função</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let equipe of projeto.equipesProjeto">
+                    <td nz-tooltip nzTooltipTitle="{{ equipe.nome }}">
+                      {{ equipe.nome }}
+                    </td>
+                    <td nz-tooltip nzTooltipTitle="{{ equipe.login }}">
+                      {{ equipe.login }}
+                    </td>
+                    <td
+                      nz-tooltip
+                      nzTooltipTitle="{{ equipe.participacaoDescricao }}"
+                    >
+                      {{ equipe.participacaoDescricao }}
+                    </td>
+                    <td
+                      nz-tooltip
+                      nzTooltipTitle="{{ equipe.funcao.descricao }}"
+                    >
+                      {{ equipe.funcao.descricao }}
+                    </td>
+                    <td nzWidth="5%">
+                      <button
+                        nz-button
+                        nzShape="circle"
+                        nz-popconfirm
+                        nzPopconfirmTitle="Tem certeza que deseja excluir?"
+                        nzOkText="Sim"
+                        (nzOnConfirm)="excluirEquipe(equipe.id)"
+                        [disabled]="!possuiPermissaoEditar || desabilitaBotoes"
+                      >
+                        <i nz-icon nzType="delete"></i>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </nz-table>
+            </nz-card>
+          </nz-card>
+        </nz-tab>
+      </nz-tabset>
+    </div>
+  </div>
+  <ng-template #salvarDadosAction>
+    <div class="flex justify-end">
+      <button
+        nz-button
+        nzType="primary"
+        (click)="atualizarProjeto()"
+        [nzLoading]="salvando"
+        class="mr-3"
+        [disabled]="!possuiPermissaoEditar || desabilitaBotoes"
+      >
+        Salvar
+      </button>
+    </div>
+  </ng-template>
+</nz-card>

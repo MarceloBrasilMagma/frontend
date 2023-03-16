@@ -1,0 +1,31 @@
+<div nz-row style="padding: 0px;">
+  <div nz-col nzSpan="4" style="background-color: #F5F5F5; padding: 0px; height: 100vh;">
+    <button nz-button (click)="abaSelecionada = abas.plurianual"
+      style="width: 100%; height: 65px; margin: 0px; background-color: #ffba1a; color: #821618; border: none;  border-radius: 0px;">
+      <i nz-icon nzType="calendar" nzTheme="outline"></i>
+    </button>
+  </div>
+  <div nz-col nzSpan="20" style="padding: 20px;">
+    <ng-container *ngIf="abaSelecionada == abas.plurianual">
+      <div nz-row>
+        <div nz-col nzSpan="24">
+          <h1>Plurianual</h1>
+        </div>
+      </div>
+      <div class="mt-5">
+
+        <div nz-col nzSpan="24" *ngFor="let plurianualidade of projeto.anosPlurianualidade">
+          <h1>{{plurianualidade.ano}}</h1>
+          <ul>
+            <li nz-button nzType="link" (click)="selecionarPlurianual(plurianualidade)">
+              <span>Selecionar Ano Projeto</span> <i nz-icon nzType="arrow-right" nzTheme="outline"></i></li>
+            <li nz-button nzType="link" (click)="redirecionar(plurianualidade)">
+              <span>{{ "Visualizar " + (!!plurianualidade.plurianualId ? "Plurianual": "Iniciativa")}}</span>
+              <i nz-icon nzType="arrow-right" nzTheme="outline"></i>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>

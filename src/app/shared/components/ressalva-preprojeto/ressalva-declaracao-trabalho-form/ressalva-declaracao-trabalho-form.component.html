@@ -1,0 +1,167 @@
+<div>
+  <div nz-row>
+    <div nz-col nzFlex="1" class="mr-1">
+      <form nz-form [formGroup]="form" nzLayout="vertical">
+
+        <div nz-row>
+          <div nz-col nzFlex="1" style="margin: 0px 10px 0px 10px;">
+            <nz-form-item>
+              <nz-form-label nzFor="descricao" nzRequired>
+                Descrição
+              </nz-form-label>
+              <nz-form-control>
+                <textarea nz-input formControlName="descricao" placeholder="Descrição" [nzAutosize]="{ minRows: 3, maxRows: 6 }"
+                  readonly></textarea>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+
+
+        <div nz-row nzGutter="24" style="text-align: center; font-weight: bold;">
+          <div nz-col nzFlex="1" style="margin: 10px">
+            <span>Valores Originais</span>
+          </div>
+          <div nz-col nzFlex="1" style="margin: 10px">
+            <span>Valores Após Ajuste</span>
+          </div>
+        </div>
+
+        <div nz-row>
+          <div nz-col nzFlex="1" style="margin: 0px 10px 0px 10px;">
+            <nz-form-item>
+              <nz-form-label nzFor="valorDespesaAdministrativa" nzRequired>
+                Despesa Administrativa
+              </nz-form-label>
+              <nz-form-control>
+                <input nz-input formControlName="valorDespesaAdministrativa" mask="separator.2" thousandSeparator="." [decimalMarker]="','"
+                  prefix="R$ " placeholder="Despesa Administrativa" readonly />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <div nz-col nzFlex="1" style="margin: 0px 10px 0px 10px;">
+            <nz-form-item>
+              <nz-form-label nzRequired>
+                Despesa Administrativa
+              </nz-form-label>
+              <nz-form-control>
+                <nz-input-group>
+                  <input nz-input formControlName="valorDespesaAdministrativaRessalva" mask="separator.2"
+                    thousandSeparator="." [decimalMarker]="','" prefix="R$ " placeholder="Despesa Administrativa" />
+                </nz-input-group>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+
+
+        <div nz-row>
+          <div nz-col nzFlex="1" style="margin: 0px 10px 0px 10px;">
+            <nz-form-item>
+              <nz-form-label nzFor="valorCustoAssistencial" nzRequired>
+                Custo Assistencial
+              </nz-form-label>
+              <nz-form-control>
+                <input nz-input formControlName="valorCustoAssistencial" placeholder="Custo Assistencial"
+                  mask="separator.2" thousandSeparator="." [decimalMarker]="','" prefix="R$ " readonly />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <div nz-col nzFlex="1" style="margin: 0px 10px 0px 10px;">
+            <nz-form-item>
+              <nz-form-label nzRequired>
+                Custo Assistencial
+              </nz-form-label>
+              <nz-form-control>
+                <nz-input-group>
+                  <input nz-input formControlName="valorCustoAssistencialRessalva" placeholder="Custo Assistencial"
+                    mask="separator.2" thousandSeparator="." [decimalMarker]="','" prefix="R$ " />
+                </nz-input-group>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+
+
+        <div nz-row>
+          <div nz-col nzFlex="1" style="margin: 0px 10px 0px 10px;">
+            <nz-form-item>
+              <nz-form-label nzFor="valorInvestimento" nzRequired>
+                Investimento
+              </nz-form-label>
+              <nz-form-control>
+                <input nz-input formControlName="valorInvestimento" placeholder="Investimento" mask="separator.2"
+                  thousandSeparator="."  [decimalMarker]="','" prefix="R$ " readonly />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <div nz-col nzFlex="1" style="margin: 0px 10px 0px 10px;">
+            <nz-form-item>
+              <nz-form-label nzRequired>
+                Investimento
+              </nz-form-label>
+              <nz-form-control>
+
+                <nz-input-group>
+                  <input nz-input formControlName="valorInvestimentoRessalva" placeholder="Investimento"
+                    mask="separator.2" thousandSeparator="." [decimalMarker]="','" prefix="R$ " />
+                </nz-input-group>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+        <div nz-row>
+          <div nz-col nzFlex="1" style="margin: 0px 10px 0px 10px;">
+            <nz-form-item>
+              <nz-form-label nzRequired>
+                Ressalvas
+              </nz-form-label>
+              <nz-form-control>
+                <textarea nz-input formControlName="ressalva" placeholder="Ressalvas"
+                  [nzAutosize]="{ minRows: 3, maxRows: 6 }"></textarea>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+      </form>
+      <div nz-row class="mt-3">
+        <div nz-col nzFlex="1" style="margin: 0px 10px 0px 10px;">
+          <nz-form-item>
+            <nz-form-label>
+              Total
+            </nz-form-label>
+            <nz-form-control>
+              <input nz-input [(ngModel)]="total" mask="separator.2" thousandSeparator="." [decimalMarker]="','" prefix="R$ "
+                [readOnly]="true" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <div nz-col nzFlex="1" style="margin: 0px 10px 0px 10px;">
+          <nz-form-item>
+            <nz-form-label>
+              Total
+            </nz-form-label>
+            <nz-form-control nzErrorTip="Valor total inválido!">
+              <input nz-input [(ngModel)]="totalRessalva" mask="separator.2" thousandSeparator="."  [decimalMarker]="','" prefix="R$ "
+                [readOnly]="true" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *nzModalFooter>
+    <button nz-button (click)="destroyModal()" [disabled]="saving">
+      Cancelar
+    </button>
+    <button nz-button nzType="primary" (click)="salvar()" [disabled]="form.invalid || salvarInvalid"
+      [nzLoading]="saving">
+      Salvar
+    </button>
+  </div>
+</div>

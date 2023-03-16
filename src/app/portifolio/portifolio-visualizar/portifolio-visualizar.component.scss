@@ -1,0 +1,51 @@
+.total-projetos {
+  display: flex;
+  align-items: center;
+  padding-right: 24px;
+  border-bottom: 2px solid #F5F5F5;
+}
+
+.barra-superior {
+  display: flex;
+  align-items: center;
+}
+
+.total-projetos .label {
+  flex: 0 0 120px;
+  padding-left: 24px;
+}
+
+.total-projetos .bar-container {
+  flex: 1;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  height: 8px;
+}
+
+.total-projetos .bar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.val-estrategico { background: rgb(211, 95, 3) }
+.val-operacional { background: rgb(75, 44, 101) }
+.val-tatico { background: rgb(203, 146, 222) }
+
+// .doughnut {
+//   border-right: 2px solid #F5F5F5;
+// }
+
+.titulo-grafico {
+  padding-left: 13px;
+}
+
+.orcamento {
+  display: flex;
+  flex-direction: column;
+}
+
+.orcamento-titulo {
+  align-self: flex-start;
+}

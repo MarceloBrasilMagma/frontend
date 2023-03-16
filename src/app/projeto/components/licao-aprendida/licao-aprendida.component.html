@@ -1,0 +1,44 @@
+<nz-card nzTitle="Lições Aprendidas" [nzExtra]="criarExtra">
+
+  <nz-table #licoesTable [nzData]="licoesAprendidas?.items" nzBordered [nzFrontPagination]="false"
+    [(nzPageIndex)]="pageIndex" [(nzPageSize)]="pageSize" [nzLoading]="carregando"
+    (nzQueryParams)="onQueryParamsChange($event)" [nzTotal]="licoesAprendidas?.totalCount" class="mt-1">
+    <thead>
+      <tr>
+        <th>Data</th>
+        <th>Fase</th>
+        <th>Área Impactada</th>
+        <th>Pontos Positivos</th>
+        <th>Pontos de Atenção</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let licoesAprendidas of licoesTable.data">
+        <td>{{licoesAprendidas.data | date: 'dd/MM/yyyy'}}</td>
+        <td>{{licoesAprendidas.faseDescricao}}</td>
+        <td>{{licoesAprendidas.departamentoNome}}</td>
+        <td>{{licoesAprendidas.pontosPositivos}}</td>
+        <td>{{licoesAprendidas.pontosAtencao}}</td>
+        <td>
+          <nz-space>
+              <button *nzSpaceItem nz-button nzShape="circle" (click)="exibirModalEditar(licoesAprendidas)"
+                [nzTooltipTitle]="'Editar'" nz-tooltip [disabled]="!possuiPermissaoEditar || desabilitaBotoes">
+                <i nz-icon nzType="edit"></i>
+              </button>
+              <button *nzSpaceItem nz-button nzShape="circle" nzTooltipTitle="Excluir" nz-tooltip nz-popconfirm
+                nzPopconfirmTitle="Tem certeza que deseja excluir?" nzOkText="Sim"
+                (nzOnConfirm)="excluirLicoesAprendidas(licoesAprendidas)" [disabled]="!possuiPermissaoEditar || desabilitaBotoes">
+                <i nz-icon nzType="delete"></i>
+              </button>
+          </nz-space>
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+</nz-card>
+<ng-template #criarExtra>
+  <button nz-button nzType="primary" nzSize="small" (click)="exibirModalEditar()" [disabled]="!possuiPermissaoEditar || desabilitaBotoes">
+    <span>Registrar nova lição</span>
+  </button>
+</ng-template>

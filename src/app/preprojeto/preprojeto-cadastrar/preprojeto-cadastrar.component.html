@@ -1,0 +1,836 @@
+<nz-card id="form-card" [nzActions]="[acoes]">
+  <div nz-row style="margin-bottom: 2%">
+    <h4>Cadastrar projeto</h4>
+    <div nz-col nzFlex="1" class="d-none d-lg-block">
+      <nz-space class="d-flex justify-content-end">
+        <button
+          *nzSpaceItem
+          nz-button
+          nz-popconfirm
+          nzPopconfirmTitle="Tem certeza que deseja salvar?"
+          nzOkText="Sim"
+          (nzOnConfirm)="cadastrar(false)"
+          nzType="default"
+          [nzLoading]="false"
+        >
+          <i nz-icon nzType="save" nzTheme="outline"></i>
+          Salvar
+        </button>
+
+        <button
+          *nzSpaceItem
+          nz-button
+          nz-popconfirm
+          nzPopconfirmTitle="Tem certeza que deseja enviar PMO?"
+          nzOkText="Sim"
+          (nzOnConfirm)="cadastrar(true)"
+          nzType="primary"
+          [nzLoading]="false"
+        >
+          <i nz-icon nzType="send" nzTheme="outline"></i>
+          Salvar e Enviar PMO
+        </button>
+      </nz-space>
+    </div>
+    <div nz-col nzFlex="1" class="d-block d-lg-none text-right">
+      <nz-space>
+        <div *nzSpaceItem>
+          <button nz-button nz-dropdown [nzDropdownMenu]="menu4">
+            Ações
+            <i nz-icon nzType="down"></i>
+          </button>
+          <nz-dropdown-menu #menu4="nzDropdownMenu">
+            <ul nz-menu>
+              <li
+                nz-menu-item
+                (click)="cadastrar(false)"
+                nzType="default"
+                [nzLoading]="false"
+              >
+                <i nz-icon nzType="save" nzTheme="outline"></i>
+                Salvar
+              </li>
+              <li
+                nz-menu-item
+                nz-button
+                (click)="cadastrar(true)"
+                nzType="primary"
+                [nzLoading]="false"
+              >
+                <i nz-icon nzType="send" nzTheme="outline"></i>
+                Salvar e Enviar PMO
+              </li>
+            </ul>
+          </nz-dropdown-menu>
+        </div>
+      </nz-space>
+    </div>
+  </div>
+
+  <nz-affix nzTarget="form-card" class="affix-toggle-expandir">
+    <div *ngIf="stakeholders" class="toggle-expandir-wrapper">
+      <p class="mb-2">
+        <button
+          *ngIf="!anyExpanded"
+          nz-button
+          (click)="expandAll()"
+          nzSize="small"
+          class="mr-2"
+        >
+          <i nz-icon nzType="down"></i
+          ><span class="d-none d-sm-inline">Expandir tudo</span>
+        </button>
+        <button
+          *ngIf="anyExpanded"
+          nz-button
+          (click)="collapseAll()"
+          nzSize="small"
+        >
+          <i nz-icon nzType="up"></i
+          ><span class="d-none d-sm-inline">Recolher tudo</span>
+        </button>
+      </p>
+    </div>
+  </nz-affix>
+
+  <nz-collapse [nzBordered]="false" class="mt-2">
+    <nz-collapse-panel nzHeader="1. Dados do Projeto" [nzActive]="true">
+      <nz-card nzSize="small">
+        <form nz-form [formGroup]="form" nzLayout="vertical">
+          <div nz-row nzGutter="24">
+            <div nz-col nzXs="24" nzSm="12">
+              <nz-form-item>
+                <nz-form-label nzRequired> Nome do Projeto </nz-form-label>
+                <nz-form-control>
+                  <input
+                    nz-input
+                    formControlName="nome"
+                    placeholder="Nome do Projeto"
+                  />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <div nz-col nzXs="24" nzSm="12">
+              <nz-form-item>
+                <nz-form-label nzRequired>Área</nz-form-label>
+                <nz-form-control>
+                  <nz-select
+                    formControlName="departamentoId"
+                    nzPlaceHolder="Área"
+                    nzShowSearch
+                    nzAllowClear
+                    (ngModelChange)="selecionouDepartamento($event)"
+                  >
+                    <nz-option
+                      *ngFor="let d of departamentos"
+                      [nzLabel]="d.nome"
+                      [nzValue]="d.id"
+                    >
+                    </nz-option>
+                  </nz-select>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <div nz-col nzXs="24" nzSm="12">
+              <nz-form-item>
+                <nz-form-label nzRequired> Gerente do Projeto </nz-form-label>
+                <nz-form-control>
+                  <nz-select
+                    formControlName="gerenteProjeto"
+                    nzPlaceHolder="Gerente do Projeto"
+                    nzAllowClear
+                    nzShowSearch
+                    nzServerSearch
+                    (nzOnSearch)="searchGerenteProjeto($event)"
+                  >
+                    <ng-container *ngFor="let g of gerentesProjetoAd">
+                      <nz-option
+                        *ngIf="!buscandoGerenteProjetoAd"
+                        [nzValue]="g"
+                        [nzLabel]="g.nome"
+                      >
+                      </nz-option>
+                    </ng-container>
+                    <nz-option
+                      *ngIf="buscandoGerenteProjetoAd"
+                      nzDisabled
+                      nzCustomContent
+                    >
+                      <i nz-icon nzType="loading" class="loading-icon mr-2"></i>
+                      Buscando ...
+                    </nz-option>
+                  </nz-select>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <div nz-col nzXs="24" nzSm="12">
+              <nz-form-item>
+                <nz-form-label nzRequired> Gerente do Negócio </nz-form-label>
+                <nz-form-control>
+                  <nz-select
+                    formControlName="gerenteNegocio"
+                    nzPlaceHolder="Gerente do Negócio"
+                    nzAllowClear
+                    nzShowSearch
+                    nzServerSearch
+                    (nzOnSearch)="searchGerenteNegocio($event)"
+                  >
+                    <ng-container *ngFor="let g of gerentesNegocioAd">
+                      <nz-option
+                        *ngIf="!buscandoGerenteNegocioAd"
+                        [nzValue]="g"
+                        [nzLabel]="g.nome"
+                      >
+                      </nz-option>
+                    </ng-container>
+                    <nz-option
+                      *ngIf="buscandoGerenteNegocioAd"
+                      nzDisabled
+                      nzCustomContent
+                    >
+                      <i nz-icon nzType="loading" class="loading-icon mr-2"></i>
+                      Buscando ...
+                    </nz-option>
+                  </nz-select>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <div nz-col nzXs="24" nzSm="12">
+              <nz-form-item>
+                <nz-form-label nzRequired> Sponsor do Projeto </nz-form-label>
+                <nz-form-control>
+                  <nz-select
+                    formControlName="sponsorProjeto"
+                    nzPlaceHolder="Sponsor do Projeto"
+                    nzAllowClear
+                    nzShowSearch
+                    nzServerSearch
+                    (nzOnSearch)="searchSponsorProjeto($event)"
+                  >
+                    <ng-container *ngFor="let s of sponsorsProjetoAd">
+                      <nz-option
+                        *ngIf="!buscandoSponsorProjetoAd"
+                        [nzValue]="s"
+                        [nzLabel]="s.nome"
+                      >
+                      </nz-option>
+                    </ng-container>
+                    <nz-option
+                      *ngIf="buscandoSponsorProjetoAd"
+                      nzDisabled
+                      nzCustomContent
+                    >
+                      <i nz-icon nzType="loading" class="loading-icon mr-2"></i>
+                      Buscando ...
+                    </nz-option>
+                  </nz-select>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <div nz-col nzXs="24" nzSm="12">
+              <nz-form-item>
+                <nz-form-label nzRequired> Origem do Projeto </nz-form-label>
+                <nz-form-control>
+                  <nz-select
+                    formControlName="origem"
+                    nzPlaceHolder="Origem do Projeto"
+                  >
+                    <nz-option
+                      [nzValue]="OrigemPreProjeto.Workshop"
+                      nzLabel="Workshop"
+                    ></nz-option>
+                    <nz-option
+                      [nzValue]="OrigemPreProjeto.DemandaEspontanea"
+                      nzLabel="Demanda Espontânea"
+                    ></nz-option>
+                  </nz-select>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <div nz-col nzXs="24" nzSm="12" *ngIf="exibirPontuacaoWorkshop">
+              <nz-form-item>
+                <nz-form-label nzRequired>
+                  Pontuação no Workshop
+                </nz-form-label>
+                <nz-form-control>
+                  <input
+                    nz-input
+                    type="number"
+                    formControlName="pontuacaoWorkshop"
+                    placeholder="Pontuação no Workshop"
+                  />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <div nz-col nzXs="24" nzSm="12">
+              <nz-form-item>
+                <nz-form-label>Cesta</nz-form-label>
+                <nz-form-control>
+                  <nz-select
+                    formControlName="cestaId"
+                    nzPlaceHolder="Cesta"
+                    nzShowSearch
+                    nzAllowClear
+                  >
+                    <nz-option
+                      *ngFor="let c of cestas"
+                      [nzLabel]="c.descricao"
+                      [nzValue]="c.id"
+                    >
+                    </nz-option>
+                  </nz-select>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+        </form>
+      </nz-card>
+    </nz-collapse-panel>
+
+    <nz-collapse-panel
+      nzHeader="2. Detalhe e delimite o seu projeto"
+      [nzActive]="true"
+    >
+      <p class="text-red-500">* Preenchimento Obrigatório</p>
+      <nz-card nzSize="small">
+        <form nz-form [formGroup]="form" nzLayout="vertical">
+          <div nz-row nzGutter="24">
+            <div nz-col nzSpan="24">
+              <nz-form-item class="mb-0">
+                <nz-form-control>
+                  <textarea
+                    nz-input
+                    formControlName="ideia"
+                    placeholder="Detalhe e delimite o seu projeto"
+                    [nzAutosize]="{ minRows: 3, maxRows: 6 }"
+                  >
+                  </textarea>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+        </form>
+      </nz-card>
+    </nz-collapse-panel>
+
+    <nz-collapse-panel
+      nzHeader="3. Possui alinhamento direto aos Objetivos Estratégicos?"
+      [nzActive]="true"
+    >
+      <p>
+        O projeto deve estar diretamente ligada aos objetivos estratégicos das
+        perspectivas processos internos ou aprendizado e crescimento que
+        encontram-se disponíveis no mapa estratégico.
+      </p>
+      <p class="text-red-500">* Preenchimento Obrigatório</p>
+      <nz-card nzSize="small">
+        <form nz-form [formGroup]="form" nzLayout="vertical">
+          <div nz-row nzGutter="24">
+            <div nz-col nzSpan="24">
+              <nz-form-item class="mb-0">
+                <nz-form-control nzErrorTip="Selecione uma opção!">
+                  <nz-radio-group
+                    formControlName="possuiAlinhamentoObjetivosEstrategicos"
+                  >
+                    <label nz-radio [nzValue]="true">Sim</label>
+                    <label nz-radio [nzValue]="false">Não</label>
+                  </nz-radio-group>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+        </form>
+        <div
+          nz-row
+          nzGutter="24"
+          *ngIf="possuiAlinhamentoObjetivosEstrategicos"
+        >
+          <div nz-col nzSpan="24">
+            <nz-form-item class="mb-0">
+              <nz-form-control>
+                <nz-select
+                  [(ngModel)]="addObjetivoEstrategicoInput"
+                  nzPlaceHolder="Selecione o objetivo estratégico"
+                  (ngModelChange)="addObjetivoEstrategico($event)"
+                  nzShowSearch
+                  nzAllowClear
+                >
+                  <nz-option
+                    *ngFor="let o of objetivos"
+                    [nzLabel]="o.descricao"
+                    [nzValue]="o"
+                  >
+                  </nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+
+        <nz-table
+          #objetivosTable
+          *ngIf="possuiAlinhamentoObjetivosEstrategicos"
+          [nzData]="objetivosPreProjeto"
+          [nzFrontPagination]="false"
+          nzSize="small"
+          class="mt-2"
+        >
+          <thead>
+            <tr>
+              <th>Objetivo</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let a of objetivosTable.data">
+              <td>{{ a.descricao }}</td>
+              <td>
+                <button
+                  (click)="removerObjetivoEstrategico(a)"
+                  nz-button
+                  nzShape="circle"
+                >
+                  <i nz-icon nzType="delete"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </nz-table>
+      </nz-card>
+    </nz-collapse-panel>
+
+    <nz-collapse-panel
+      nzHeader="4. Atende a algum requisito legal ou regulatório?"
+      [nzActive]="true"
+    >
+      <p>
+        O projeto deve atender requisitos que impactem no funcionamento do
+        negócio ou na reputação da marca.
+      </p>
+      <p class="text-red-500">* Preenchimento Obrigatório</p>
+      <nz-card nzSize="small">
+        <form nz-form [formGroup]="form" nzLayout="vertical">
+          <div nz-row nzGutter="24">
+            <div nz-col nzSpan="24">
+              <nz-form-item class="mb-0">
+                <nz-form-control nzErrorTip="Selecione uma opção!">
+                  <nz-radio-group formControlName="atendeRequisitoLegal">
+                    <label nz-radio [nzValue]="true">Sim</label>
+                    <label nz-radio [nzValue]="false">Não</label>
+                  </nz-radio-group>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <div *ngIf="atendeRequisitoLegal" nz-col nzSpan="24">
+              <nz-form-item class="mb-0 mt-3">
+                <nz-form-label>Qual requisito?</nz-form-label>
+                <nz-form-control>
+                  <textarea
+                    nz-input
+                    formControlName="descricaoAtendeRequisitoLegal"
+                    placeholder="Qual requisito?"
+                    [nzAutosize]="{ minRows: 3, maxRows: 6 }"
+                  >
+                  </textarea>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+        </form>
+      </nz-card>
+    </nz-collapse-panel>
+
+    <nz-collapse-panel
+      nzHeader="5. Possui vínculo entre a estratégia e a operação? (Área responsável pelo preenchimento: COPEP)"
+      [nzActive]="true"
+    >
+      <p>
+        O projeto deve ligar um processo operacional a um objetivo estratégico.
+      </p>
+      <nz-card nzSize="small">
+        <form nz-form [formGroup]="form" nzLayout="vertical">
+          <div nz-row nzGutter="24">
+            <div nz-col nzSpan="24">
+              <nz-form-item class="mb-0">
+                <nz-form-control nzErrorTip="Selecione uma opção!">
+                  <nz-radio-group
+                    formControlName="possuiVinculoEstrategiaOperacao"
+                  >
+                    <label nz-radio [nzValue]="true">Sim</label>
+                    <label nz-radio [nzValue]="false">Não</label>
+                  </nz-radio-group>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <div *ngIf="possuiVinculoEstrategiaOperacao" nz-col nzSpan="24">
+              <nz-form-item class="mb-0 mt-3">
+                <nz-form-label>Qual o nome do processo?</nz-form-label>
+                <nz-form-control>
+                  <textarea
+                    nz-input
+                    formControlName="descricaoPossuiVinculoEstrategiaOperacao"
+                    placeholder="Área responsável irá realizar o parecer"
+                    [nzAutosize]="{ minRows: 3, maxRows: 6 }"
+                  >
+                  </textarea>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+        </form>
+      </nz-card>
+    </nz-collapse-panel>
+
+    <nz-collapse-panel
+      nzHeader="6. Acrescenta algum novo produto ou novo serviço ao negócio promovendo mudança no nível de desempenho do negócio?"
+      [nzActive]="true"
+    >
+      <p class="text-red-500">* Preenchimento Obrigatório</p>
+      <nz-card nzSize="small">
+        <form nz-form [formGroup]="form" nzLayout="vertical">
+          <div nz-row nzGutter="24">
+            <div nz-col nzSpan="24">
+              <nz-form-item class="mb-0">
+                <nz-form-control nzErrorTip="Selecione uma opção!">
+                  <nz-radio-group formControlName="acrescentaProdutoServico">
+                    <label nz-radio [nzValue]="true">Sim</label>
+                    <label nz-radio [nzValue]="false">Não</label>
+                  </nz-radio-group>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <div nz-col nzSpan="24" *ngIf="acrescentaProdutoServico">
+              <nz-form-item class="mb-0 mt-3">
+                <nz-form-label
+                  >Qual novo produto ou novo serviço?</nz-form-label
+                >
+                <nz-form-control>
+                  <textarea
+                    nz-input
+                    formControlName="descricaoAcrescentaProdutoServico"
+                    placeholder="Qual novo produto ou novo serviço?"
+                    [nzAutosize]="{ minRows: 3, maxRows: 6 }"
+                  >
+                  </textarea>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+        </form>
+      </nz-card>
+    </nz-collapse-panel>
+
+    <nz-collapse-panel
+      nzHeader="7. A ideia mitiga algum risco estratégico? Informar em qual zona da matriz o risco está posicionado (se houver associação) (Área responsável pelo preenchimento: GECOI)"
+      [nzActive]="true"
+    >
+      <p>Apontar os riscos corporativos que podem ser mitigados pela ideia</p>
+      <nz-card nzSize="small">
+        <form nz-form [formGroup]="form" nzLayout="vertical">
+          <div nz-row nzGutter="24">
+            <div nz-col nzSpan="24">
+              <nz-form-item class="mb-0">
+                <nz-form-control nzErrorTip="Selecione uma opção!">
+                  <nz-radio-group formControlName="zonaRisco">
+                    <label nz-radio [nzValue]="ZonaRisco.Verde">Verde</label>
+                    <label nz-radio [nzValue]="ZonaRisco.Amarelo"
+                      >Amarelo</label
+                    >
+                    <label nz-radio [nzValue]="ZonaRisco.Vermelho"
+                      >Vermelho</label
+                    >
+                    <label nz-radio [nzValue]="-1">Não está associado</label>
+                  </nz-radio-group>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <div nz-col nzSpan="24">
+              <nz-form-item class="mb-0 mt-3">
+                <nz-form-label>Qual é o risco corporativo?</nz-form-label>
+                <nz-form-control>
+                  <textarea
+                    nz-input
+                    formControlName="descricaoZonaRisco"
+                    placeholder="Área responsável irá realizar o parecer"
+                    [nzAutosize]="{ minRows: 3, maxRows: 6 }"
+                  ></textarea>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+        </form>
+      </nz-card>
+    </nz-collapse-panel>
+
+    <nz-collapse-panel
+      nzHeader="8. A abrangência do resultado se restringe apenas à própria área?"
+      [nzActive]="true"
+    >
+      <p>
+        O impacto do resultado do projeto se restringe apenas ao objetivo da
+        área e não abrange o negócio como um todo.
+      </p>
+      <p class="text-red-500">* Preenchimento Obrigatório</p>
+      <nz-card nzSize="small">
+        <form nz-form [formGroup]="form" nzLayout="vertical">
+          <div nz-row nzGutter="24">
+            <div nz-col nzSpan="24">
+              <nz-form-item class="mb-0">
+                <nz-form-control nzErrorTip="Selecione uma opção!">
+                  <nz-radio-group
+                    formControlName="abrangenciaResultadoRestrigeApenasPropriaArea"
+                  >
+                    <label nz-radio [nzValue]="true">Sim</label>
+                    <label nz-radio [nzValue]="false">Não</label>
+                  </nz-radio-group>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <div
+              *ngIf="!abrangenciaResultadoRestrigeApenasPropriaArea"
+              nz-col
+              nzSpan="24"
+            >
+              <nz-form-item class="mb-0 mt-3">
+                <nz-form-label>Quais áreas?</nz-form-label>
+                <nz-form-control>
+                  <textarea
+                    nz-input
+                    formControlName="descricaoAbrangenciaResultadoRestrigeApenasPropriaArea"
+                    placeholder="Quais áreas?"
+                    [nzAutosize]="{ minRows: 3, maxRows: 6 }"
+                  >
+                  </textarea>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+        </form>
+      </nz-card>
+    </nz-collapse-panel>
+
+    <nz-collapse-panel
+      nzHeader="9. Quais são os stakeholders envolvidos?"
+      [nzActive]="true"
+    >
+      <p>
+        Indicar quem é o público de interesse diretamente envolvido com o
+        resultado do projeto.
+      </p>
+      <nz-card nzSize="small">
+        <form nz-form [formGroup]="form" nzLayout="vertical">
+          <div nz-row nzGutter="24">
+            <div nz-col nzSpan="24">
+              <nz-form-item class="mb-0">
+                <nz-form-control>
+                  <nz-select
+                    formControlName="stakeHolders"
+                    nzPlaceHolder="Selecione o(s) stakeholder(s)"
+                    nzSize="large"
+                    nzMode="multiple"
+                    nzShowSearch
+                  >
+                    <nz-option
+                      *ngFor="let s of stakeholders"
+                      [nzLabel]="s.descricao"
+                      [nzValue]="s.id"
+                    >
+                    </nz-option>
+                  </nz-select>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+        </form>
+      </nz-card>
+    </nz-collapse-panel>
+
+    <nz-collapse-panel
+      nzHeader="10. Possui novas aquisições?"
+      [nzActive]="true"
+    >
+      <p>
+        Aquisição de novos equipamentos (eletrônicos, máquinas), mobiliário,
+        sistemas, pessoal e materiais.
+      </p>
+      <p class="text-red-500">* Preenchimento Obrigatório</p>
+      <nz-card nzSize="small">
+        <form nz-form [formGroup]="form" nzLayout="vertical">
+          <div nz-row nzGutter="24">
+            <div nz-col nzSpan="24">
+              <nz-form-item class="mb-0">
+                <nz-form-control nzErrorTip="Selecione uma opção!">
+                  <nz-radio-group formControlName="possuiNovasAquisicoes">
+                    <label nz-radio [nzValue]="true">Sim</label>
+                    <label nz-radio [nzValue]="false">Não</label>
+                  </nz-radio-group>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <div *ngIf="possuiNovasAquisicoes" nz-col nzSpan="24">
+              <nz-form-item class="mb-0 mt-3">
+                <nz-form-label>Qual nova aquisição?</nz-form-label>
+                <nz-form-control>
+                  <textarea
+                    nz-input
+                    formControlName="descricaoPossuiNovasAquisicoes"
+                    placeholder="Qual nova aquisição?"
+                    [nzAutosize]="{ minRows: 3, maxRows: 6 }"
+                  >
+                  </textarea>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+        </form>
+      </nz-card>
+    </nz-collapse-panel>
+
+    <nz-collapse-panel
+      nzHeader="11. Necessário novos conhecimentos?"
+      [nzActive]="true"
+    >
+      <p>Necessidade de consultorias, coach, treinamentos, benchmarking.</p>
+      <p class="text-red-500">* Preenchimento Obrigatório</p>
+      <nz-card nzSize="small">
+        <form nz-form [formGroup]="form" nzLayout="vertical">
+          <div nz-row nzGutter="24">
+            <div nz-col nzSpan="24">
+              <nz-form-item class="mb-0">
+                <nz-form-control nzErrorTip="Selecione uma opção!">
+                  <nz-radio-group
+                    formControlName="necessarioNovosConhecimentos"
+                  >
+                    <label nz-radio [nzValue]="true">Sim</label>
+                    <label nz-radio [nzValue]="false">Não</label>
+                  </nz-radio-group>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <div *ngIf="necessarioNovosConhecimentos" nz-col nzSpan="24">
+              <nz-form-item class="mb-0 mt-3">
+                <nz-form-label>Qual necessidade?</nz-form-label>
+                <nz-form-control>
+                  <textarea
+                    nz-input
+                    formControlName="descricaoNecessarioNovosConhecimentos"
+                    placeholder="Qual necessidade?"
+                    [nzAutosize]="{ minRows: 3, maxRows: 6 }"
+                  >
+                  </textarea>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+        </form>
+      </nz-card>
+    </nz-collapse-panel>
+
+    <nz-collapse-panel nzHeader="12. Áreas Envolvidas" [nzActive]="true">
+      <nz-card nzSize="small">
+        <div nz-row nzGutter="24">
+          <div nz-col nzSpan="24">
+            <nz-form-item class="mb-0">
+              <nz-form-control>
+                <nz-select
+                  [(ngModel)]="addAreaEnvolvidaInput"
+                  nzPlaceHolder="Selecione a área envolvida"
+                  (ngModelChange)="addAreaEnvolvida($event)"
+                  nzShowSearch
+                  nzAllowClear
+                >
+                  <nz-option
+                    *ngFor="let d of departamentos"
+                    [nzLabel]="d.nome"
+                    [nzValue]="d"
+                  >
+                  </nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+
+        <nz-table
+          #areasEnvolvidasTable
+          [nzData]="areasEnvolvidas"
+          [nzFrontPagination]="false"
+          nzSize="small"
+          class="mt-2"
+        >
+          <thead>
+            <tr>
+              <th>Área</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let a of areasEnvolvidasTable.data">
+              <td>{{ a.nome }}</td>
+              <td>
+                <button
+                  (click)="removerAreaEnvolvida(a)"
+                  nz-button
+                  nzShape="circle"
+                >
+                  <i nz-icon nzType="delete"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </nz-table>
+      </nz-card>
+    </nz-collapse-panel>
+  </nz-collapse>
+</nz-card>
+
+<ng-template #acoes>
+  <div nz-col nzFlex="1" class="d-none d-lg-block">
+    <nz-space class="d-flex justify-content-end">
+      <button
+        *nzSpaceItem
+        nz-button
+        nz-popconfirm
+        nzPopconfirmTitle="Tem certeza que deseja salvar?"
+        nzOkText="Sim"
+        (nzOnConfirm)="cadastrar(false)"
+        nzType="default"
+        [nzLoading]="false"
+      >
+        <i nz-icon nzType="save" nzTheme="outline"></i>
+        Salvar
+      </button>
+      <button
+        *nzSpaceItem
+        nz-button
+        nz-popconfirm
+        nzPopconfirmTitle="Tem certeza que deseja enviar PMO?"
+        nzOkText="Sim"
+        (nzOnConfirm)="cadastrar(true)"
+        nzType="primary"
+        [nzLoading]="false"
+      >
+        <i nz-icon nzType="send" nzTheme="outline"></i>
+        Salvar e Enviar PMO
+      </button>
+    </nz-space>
+  </div>
+</ng-template>
+<!-- <button nz-button nzType="primary" nzShape="circle" (click)="exibirModalConfirmacao()" [nzLoading]="cadastrandoProjeto"
+  class="salvar-floating-button">
+  <i nz-icon nzType="save" nzTheme="outline"></i>
+</button> -->

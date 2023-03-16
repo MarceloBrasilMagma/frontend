@@ -1,0 +1,68 @@
+<!-- Card: Graficos -->
+<nz-card>
+  <div class="row total-projetos pb-3">
+    <div class="col-md-6">
+      <div class="row barra-superior">
+        <div class="label">Projetos: {{ totalProjetos }}</div>
+        <div class="bar-container mr-4">
+          <div class="bar val-estrategico" [style]="{'flex-basis': ((projetosEstrategicos / totalProjetos) * 100) + '%' }"></div>
+          <div class="bar val-operacional" [style]="{'flex-basis': ((projetosOperacionais / totalProjetos) * 100) + '%' }"></div>
+          <div class="bar val-tatico" [style]="{'flex-basis': ((projetosTaticos / totalProjetos) * 100) + '%' }"></div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="row d-flex justify-content-end">
+        <div class="pr-1 pl-2">
+          <nz-badge nzColor="rgb(211, 95, 3)"></nz-badge>
+          <span>Estratégicos: {{projetosEstrategicos}}</span>
+        </div>
+        <div class="pl-2">
+          <nz-badge nzColor="rgb(75, 44, 101)"></nz-badge>
+          <span>Operacionais: {{projetosOperacionais}}</span>
+        </div>
+        <div class="pl-2">
+          <nz-badge nzColor="rgb(203, 146, 222)"></nz-badge>
+          <span>Táticos: {{projetosTaticos}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6 doughnut pt-3 overflow-hidden">
+      <h4 class="titulo-grafico">Situações</h4>
+      <div class="d-flex justify-content-center">
+        <app-portifolio-grafico [quantidadesStatus]="quantidadesStatus"></app-portifolio-grafico>
+      </div>
+    </div>
+    <div class="col-md-6 orcamento h-100 pt-3">
+      <h4 class="orcamento-titulo">Orçamento</h4>
+      <div>
+        <p class="mb-0">Revisado: {{ valorRevisadoAcumulado | currency: "BRL" : "symbol" : "1.0-0"}}</p>
+        <nz-progress
+          [nzPercent]="barraRevisadoAcumulado"
+          nzStatus="active"
+          [nzStrokeColor]="{ from: '#4b2c65', to: '#4b2c65' }"
+          [nzShowInfo]="false"
+        ></nz-progress>
+        <nz-progress
+          [nzPercent]="barraRealizadoAcumulado"
+          nzStatus="active"
+          [nzStrokeColor]="{ from: '#D35F03', to: '#D35F03' }"
+          [nzShowInfo]="false"
+        ></nz-progress>
+        <p>Realizado: {{valorRealizadoAcumulado | currency: "BRL" : "symbol" : "1.0-0"}}</p>
+      </div>
+      <p class="orcamento-desvio">Desvio: {{desvioOrcamento | percent : "1.0-2"}}</p>
+    </div>
+  </div>
+</nz-card>
+
+<!-- Card: Tabela -->
+<nz-card [nzLoading]="carregando">
+  <app-portifolio-projetos-listar
+    *ngIf="portifolio"
+    [portifolioCarregado]="portifolio"
+  ></app-portifolio-projetos-listar>
+</nz-card>
+

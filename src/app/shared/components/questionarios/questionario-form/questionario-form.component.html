@@ -1,0 +1,170 @@
+<nz-card
+  [nzTitle]="questionarioId ? questionario.titulo : 'Novo questionário'"
+  class="card-body-sm-pt"
+  [nzLoading]="carregando"
+  [nzExtra]="headerButtons"
+>
+  <ng-template #headerButtons>
+    <button
+      type="submit"
+      (click)="salvar()"
+      nz-button
+      nzType="primary"
+      [nzLoading]="carregando"
+      class="mr-2"
+      *ngIf="!questionarioId"
+    >
+      <i nz-icon nzType="save" nzTheme="outline"></i>
+      Cadastrar
+    </button>
+    <ng-template [ngIf]="questionarioId">
+      <button
+        nz-button
+        nzType="primary"
+        [routerLink]="['preencher']"
+        class="mr-2"
+      >
+        <i nz-icon nzType="form" nzTheme="outline"></i>
+        Preencher questionário
+      </button>
+      <button nz-button [routerLink]="['preenchimentos']" class="mr-2">
+        <i nz-icon nzType="eye" nzTheme="outline"></i>
+        Visualizar respostas
+      </button>
+      <button
+        nz-button
+        nz-dropdown
+        [nzDropdownMenu]="menuQuestionario"
+        nzType="default"
+      >
+        Ações
+        <i nz-icon nzType="down"></i>
+      </button>
+      <nz-dropdown-menu #menuQuestionario="nzDropdownMenu">
+        <ul nz-menu class="dropdown-questionario">
+          <li
+            nz-menu-item
+            (click)="salvar()"
+            nzType="default"
+            [nzLoading]="carregando"
+          >
+            <i nz-icon nzType="save" nzTheme="outline"></i>
+            Salvar
+          </li>
+          <li
+            nz-menu-item
+            nz-button
+            (click)="excluir()"
+            nzType="default"
+            [nzLoading]="carregando"
+            nzDanger
+          >
+            <i nz-icon nzType="close" nzTheme="outline"></i>
+            Excluir questionário
+          </li>
+        </ul>
+      </nz-dropdown-menu>
+    </ng-template>
+  </ng-template>
+  <ul class="list-none" *ngIf="questionarioId">
+    <li class="text-dark">
+      Questionário modelo: {{ questionario?.questionarioModelo?.titulo }}
+    </li>
+    <li class="text-dark">Tipo: {{ questionario?.tipoDescricao }}</li>
+  </ul>
+</nz-card>
+<nz-card
+  nzTitle="Dados do questionário"
+  class="card-body-sm-pt"
+  [nzLoading]="carregando"
+>
+  <form nz-form [formGroup]="form" nzLayout="vertical" (ngSubmit)="salvar()">
+    <div nz-row nzGutter="24">
+      <div nz-col nzXs="24" nzSm="24">
+        <nz-form-item>
+          <nz-form-label nzRequired> Título do questionário </nz-form-label>
+          <nz-form-control>
+            <input nz-input formControlName="titulo" />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
+    <div nz-row nzGutter="24">
+      <div nz-col nzXs="24" nzSm="12">
+        <nz-form-item>
+          <nz-form-label nzRequired>
+            Questionário modelo associado
+          </nz-form-label>
+          <nz-form-control>
+            <nz-select
+              formControlName="questionarioModeloId"
+              nzPlaceHolder="Selecione um questionário modelo"
+              nzAllowClear
+            >
+              <nz-option
+                *ngFor="let qm of questionariosModelo"
+                [nzLabel]="qm.titulo"
+                [nzValue]="qm.id"
+              >
+              </nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col nzXs="24" nzSm="12">
+        <nz-form-item>
+          <nz-form-label nzRequired> Tipo </nz-form-label>
+          <nz-form-control>
+            <nz-select
+              formControlName="tipo"
+              nzPlaceHolder="Selecione um tipo"
+              nzAllowClear
+            >
+              <nz-option
+                [nzValue]="TipoQuestionario.Unico"
+                [nzLabel]="'Único'"
+              ></nz-option>
+              <nz-option
+                [nzValue]="TipoQuestionario.Multiplo"
+                [nzLabel]="'Múltiplo'"
+              ></nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
+  </form>
+</nz-card>
+<nz-card
+  *ngIf="questionarioId"
+  nzTitle="Grupos de perguntas"
+  class="card-body-sm-pt"
+  [nzLoading]="carregando"
+>
+  <div nz-row nzGutter="24" *ngFor="let grupo of questionario.gruposPerguntas">
+    <div nz-col nzSpan="21">
+      <input
+        nz-input
+        type="text"
+        [(ngModel)]="grupo.titulo"
+        (change)="salvarGrupo(grupo)"
+      />
+    </div>
+    <div nz-col nzSpan="3">
+      <button nz-button nzShape="circle" [routerLink]="['grupo', grupo.id]">
+        <i nz-icon nzType="edit"></i>
+      </button>
+    </div>
+  </div>
+  <div nz-row nzGutter="24">
+    <div nz-col nzSpan="24">
+      <input
+        nz-input
+        type="text"
+        [(ngModel)]="novoGrupo"
+        (change)="salvarNovoGrupo()"
+        placeholder="Digite para incluir um novo grupo de perguntas"
+      />
+    </div>
+  </div>
+</nz-card>

@@ -1,0 +1,11 @@
+<div style="text-align: justify;">
+  {{mensagem}}
+</div>
+<div *nzModalFooter>
+  <button nz-button nzType="primary" (click)="ok()" [style]="'background-color:'+ corOk + ';'">
+    <span>{{textoOk}}</span>
+  </button>
+  <button nz-button nzType="primary" (click)="cancelar()" [style]="'background-color:'+ corCancelar + ';'">
+    <span>{{textoCancelar}}</span>
+  </button>
+</div>

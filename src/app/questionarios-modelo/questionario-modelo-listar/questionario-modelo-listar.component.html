@@ -1,0 +1,35 @@
+<div style="border-bottom: 1px solid rgb(233, 233, 233);">
+    <p class="mb-2">
+        <button nz-button routerLink="/questionarios-modelo/cadastrar" nzType="primary" nzSize="small">
+            Cadastrar questionário modelo
+        </button>
+    </p>
+</div>
+
+<nz-card>
+  <nz-table #table [nzData]="questionarios.items" nzBordered [nzFrontPagination]="false" [nzLoading]="carregando"
+      [nzTotal]="questionarios.totalCount" [(nzPageIndex)]="pageIndex" [(nzPageSize)]="pageSize" nzSize="small"
+      (nzQueryParams)="onQueryParamsChange($event)" class="mt-1">
+      <thead>
+          <tr>
+              <th nzWidth="75px">Id</th>
+              <th>Título</th>
+              <th nzWidth="150px">Data de criação</th>
+              <th nzWidth="150px">Criador</th>
+              <th nzWidth="150px">Data de alteração</th>
+              <th nzWidth="150px">Última alteração</th>
+              
+          </tr>
+      </thead>
+      <tbody>
+          <tr *ngFor="let u of table.data" class="cursor-pointer" [routerLink]="['/questionarios-modelo', 'editar', u.id]">
+              <td>{{ u.id }}</td>
+              <td>{{ u.titulo }}</td>
+              <td>{{ u.dataCriacao | date: 'shortDate' }}</td>
+              <td>{{ u.usuarioCriacaoId }}</td>
+              <td>{{ u.dataAlteracao | date: 'shortDate' }}</td>
+              <td>{{ u.usuarioAlteracaoId }}</td>
+          </tr>
+      </tbody>
+  </nz-table>
+</nz-card>

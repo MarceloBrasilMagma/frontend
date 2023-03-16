@@ -1,0 +1,42 @@
+<nz-card nzTitle="Diário de Bordo" [nzExtra]="criarExtra">
+  <nz-table #diariosTable [nzData]="diariosBordo?.items" nzBordered [nzFrontPagination]="false"
+    [(nzPageIndex)]="pageIndex" [(nzPageSize)]="pageSize" [nzLoading]="carregando"
+    (nzQueryParams)="onQueryParamsChange($event)" [nzTotal]="diariosBordo?.totalCount" class="mt-1">
+    <thead>
+      <tr>
+        <th>Tipo</th>
+        <th>Gerente do Projeto</th>
+        <th>Data do Registro</th>
+        <th>Descrição da Atividade</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let diario of diariosTable.data">
+        <td>{{diario.tipoDescricao}}</td>
+        <td>{{diario.nomeGerenteProjeto}}</td>
+        <td>{{diario.dataRegistro | date: 'dd/MM/yyyy'}}</td>
+        <td>{{diario.descricao}}</td>
+        <td>
+          <nz-space>
+              <button *nzSpaceItem nz-button nzShape="circle" (click)="exibirModalEditar(diario)" [nzTooltipTitle]="'Editar'"
+                nz-tooltip [disabled]="desabilitarEdicao">
+                <i nz-icon nzType="edit"></i>
+              </button>
+              <button *nzSpaceItem nz-button nzShape="circle" nzTooltipTitle="Excluir" nz-tooltip nz-popconfirm
+                nzPopconfirmTitle="Tem certeza que deseja excluir?" nzOkText="Sim"
+                (nzOnConfirm)="excluirDiario(diario)" [disabled]="desabilitarEdicao">
+                <i nz-icon nzType="delete"></i>
+              </button>
+          </nz-space>
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+</nz-card>
+
+<ng-template #criarExtra>
+  <button nz-button nzType="primary" nzSize="small" (click)="exibirModalEditar()" [disabled]="desabilitarEdicao">
+    <span>Registrar novo evento</span>
+  </button>
+</ng-template>

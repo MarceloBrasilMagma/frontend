@@ -1,0 +1,27 @@
+<div class="common-layout {{ 'is-' + selectedHeaderColor }}" [ngClass]="{
+        'is-folded': isFolded,
+        'is-side-nav-dark' : isSideNavDark,
+        'is-expand' : isExpand
+    }">
+    <app-header class="print"></app-header>
+    <app-sidenav class="print"></app-sidenav>
+    <div class="page-container">
+        <div class="main-content-header print">
+            <h2 class="page-title mb-2 " *ngIf="breadcrumbs$ | async; let breadcrumbs">
+                {{(breadcrumbs[0].label)}}</h2>
+            <nz-breadcrumb nzSeparator=">">
+                <nz-breadcrumb-item *ngFor="let breadcrumb of breadcrumbs$ | async">
+                    <a [routerLink]="breadcrumb.url">
+                        {{ breadcrumb.label }}
+                    </a>
+                </nz-breadcrumb-item>
+            </nz-breadcrumb>
+        </div>
+        <div class="main-content">
+            <div [@routeAnimations]="prepareRoute(outlet)">
+                <router-outlet #outlet="outlet"></router-outlet>
+            </div>
+        </div>
+        <app-footer class="print"></app-footer>
+    </div>
+</div>

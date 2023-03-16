@@ -1,0 +1,57 @@
+<!-- Content -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 content-center group">
+  <div
+    class="shadow-lg bg-white/95 hover:border-2 border-[#9457c6] p-6 grid grid-cols-1 content-between group-hover:scale-[0.9] hover:!scale-100 duration-500 rounded-xl gap-2 h-[130px] md:h-full cursor-pointer"
+    [routerLink]="['/configuracoes/usuarios']">
+    <div class="flex-row md:flex-col">
+    <span nz-icon nzType="user" class="text-[#6b3f90] text-3xl mb-6 flex"></span>
+    <h4>Usuários</h4>
+  </div>
+    <p class="my-2 line-clamp-3">Lista completa dos usuários cadastrados na plataforma</p>
+  </div>
+  <div
+    class="shadow-lg bg-white/95 hover:border-2 border-[#9457c6] p-6 grid grid-cols-1 content-between group-hover:scale-[0.9] hover:!scale-100 duration-500 rounded-xl gap-2 h-[130px] md:h-full cursor-pointer"
+    [routerLink]="['/configuracoes/grupos-acesso']">
+    <div class="flex-row md:flex-col">
+    <span nz-icon nzType="team" class="text-[#6b3f90] text-3xl mb-6 flex"></span>
+    <h4>Grupos de acesso</h4>
+  </div>
+    <p class="my-2 line-clamp-3">Lista completa dos grupos de acesso cadastrados na plataforma</p>
+  </div>
+  <div
+    class="shadow-lg bg-white/95 hover:border-2 border-[#9457c6] p-6 grid grid-cols-1 group-hover:scale-[0.9] hover:!scale-100 duration-500 content-between rounded-xl gap-2 h-[130px] md:h-full cursor-pointer"
+    [routerLink]="['/configuracoes/equipes-projetos']">
+    <div class="flex-row md:flex-col">
+    <span nz-icon nzType="solution" class="text-[#6b3f90] text-3xl mb-6 flex"></span>
+    <h4>Funções</h4>
+  </div>
+    <p class="my-2 line-clamp-3">Lista completa das funções cadastradas na plataforma</p>
+  </div>
+  <div
+    class="shadow-lg bg-white/95 hover:border-2 border-[#9457c6] p-6 grid grid-cols-1 group-hover:scale-[0.9] hover:!scale-100 duration-500 content-between rounded-xl gap-2 h-[130px] md:h-full cursor-pointer"
+    [routerLink]="['/configuracoes/departamentos']">
+    <div class="flex-row md:flex-col">
+    <span nz-icon nzType="home" class="text-[#6b3f90] text-3xl mb-6 flex"></span>
+    <h4 class="truncate">Departamentos</h4>
+  </div>
+    <p class="my-2 line-clamp-3">Lista completa dos departamentos cadastrados na plataforma</p>
+  </div>
+  <div
+    class="shadow-lg bg-white/95 hover:border-2 border-[#9457c6] p-6 grid grid-cols-1 group-hover:scale-[0.9] hover:!scale-100 duration-500 content-between rounded-xl gap-2 h-[130px] md:h-full cursor-pointer"
+    [routerLink]="['/configuracoes/periodicidades-projetos']">
+    <div class="flex-row md:flex-col">
+    <span nz-icon nzType="schedule" class="text-[#6b3f90] text-3xl mb-6 flex"></span>
+    <h4 class="truncate">Periodicidade</h4>
+  </div>
+    <p class="my-2 line-clamp-3">Lista completa das periodicidades cadastradas na plataforma</p>
+  </div>
+  <div
+    class="shadow-lg bg-white/95 hover:border-2 border-[#9457c6] p-6 grid grid-cols-1 group-hover:scale-[0.9] hover:!scale-100 duration-500 content-between rounded-xl gap-2 h-[130px] md:h-full cursor-pointer"
+    [routerLink]="['/configuracoes/objetivos-estrategicos']">
+    <div class="flex-row md:flex-col">
+    <span nz-icon nzType="flag" class="text-[#6b3f90] text-3xl mb-6 flex"></span>
+    <h4 class="truncate">Objetivos estratégicos</h4>
+  </div>
+    <p class="my-2 line-clamp-3">Lista completa dos objetivos estratégicos cadastrados na plataforma</p>
+  </div>
+</div>

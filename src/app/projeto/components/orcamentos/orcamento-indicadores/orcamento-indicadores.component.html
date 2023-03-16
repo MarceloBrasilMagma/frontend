@@ -1,0 +1,65 @@
+<div class="row">
+  <div class="col-md-6 col-lg-4">
+    <nz-card>
+      <div class="media align-items-center">
+        <nz-avatar
+          [nzSize]="60"
+          nzIcon="dollar"
+          class="ant-avatar-blue"
+        ></nz-avatar>
+        <div class="m-l-15">
+          <h2 class="m-b-0">{{ projeto?.valorTotal | currency : "BRL" }}</h2>
+          <p class="m-b-0 text-muted">Revisado</p>
+        </div>
+      </div>
+    </nz-card>
+  </div>
+  <div class="col-md-6 col-lg-4">
+    <nz-card>
+      <div class="media align-items-center">
+        <nz-avatar
+          [nzSize]="50"
+          nzIcon="line-chart"
+          class="ant-avatar-cyan"
+        ></nz-avatar>
+        <div class="m-l-15">
+          <h2 class="m-b-0">
+            {{ projeto?.valorRealizado | currency : "BRL" }}
+          </h2>
+          <p class="m-b-0 text-muted">
+            Realizado:
+            {{
+              !!porcentagemRealizado
+                ? "-"
+                : (this.projeto.valorRealizado / this.projeto.valorTotal
+                  | percent : "1.0-2")
+            }}
+          </p>
+        </div>
+      </div>
+    </nz-card>
+  </div>
+  <div class="col-md-6 col-lg-4">
+    <nz-card>
+      <div class="media align-items-center">
+        <nz-avatar
+          [nzSize]="50"
+          nzIcon="profile"
+          class="ant-avatar-gold"
+        ></nz-avatar>
+        <div class="m-l-15">
+          <h2 class="m-b-0">{{ projeto?.valorSaldo | currency : "BRL" }}</h2>
+          <p class="m-b-0 text-muted">
+            Saldo:
+            <span class="font-weight-semibold m-l-5">{{
+              !!porcentagemSaldo
+                ? "-"
+                : (1 - this.projeto.valorRealizado / this.projeto.valorTotal
+                  | percent : "1.0-2")
+            }}</span>
+          </p>
+        </div>
+      </div>
+    </nz-card>
+  </div>
+</div>

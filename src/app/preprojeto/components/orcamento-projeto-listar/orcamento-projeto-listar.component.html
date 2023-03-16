@@ -1,0 +1,93 @@
+<nz-spin nzTip="Aguarde..." [nzSpinning]="isLoading">
+  <div style="margin-top: 20px; padding-bottom: 20px; border-bottom: 1px solid rgb(233, 233, 233);">
+    <nz-radio-group [(ngModel)]="opcao" (ngModelChange)="carregarOrcamentos()">
+      <label nz-radio [nzValue]="0">Todos os Custos</label>
+      <label nz-radio [nzValue]="2">Custos Declarações de Trabalho</label>
+      <label nz-radio [nzValue]="1">Custos Extra Declarações de Trabalho</label>
+    </nz-radio-group>
+  </div>
+
+  <nz-table #orcamentosTable [nzData]="orcamentos" [nzFrontPagination]="false" nzSize="small">
+    <thead>
+      <tr nz-row>
+        <th nz-col [nzSpan]="1">Nº DT</th>
+        <th nz-col [nzSpan]="3">Responsável</th>
+        <th nz-col [nzSpan]="3">Fornecedor Interno</th>
+        <th nz-col [nzSpan]="3">Situação</th>
+        <th nz-col [nzSpan]="2">Descrição</th>
+        <th nz-col [nzSpan]="3">Despesa Administrativa</th>
+        <th nz-col [nzSpan]="2">Custo Assistencial</th>
+        <th nz-col [nzSpan]="2">Investimento</th>
+        <th nz-col [nzSpan]="2">Total</th>
+        <th nz-col [nzSpan]="3"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr nz-row *ngFor="let o of orcamentosTable.data">
+        <td nz-col [nzSpan]="1">
+          <a *ngIf="!!o.declaracaoTrabalhoId" nz-tooltip nzTooltipTitle="Visualizar DT" nzTooltipPlacement="top"
+            [routerLink]="['/declaracoes-trabalho', 'editar', dt?.id]"
+            [queryParams]="{projetoId: projeto.id}">{{o.declaracaoTrabalhoId}}</a>
+        </td>
+        <td nz-col [nzSpan]="3">{{ getResponsavelDeclaracao(o) }}</td>
+        <td nz-col [nzSpan]="3">{{ getFornecedorDeclaracao(o) }}</td>
+        <td nz-col [nzSpan]="3">
+          <nz-tag [nzColor]="corTagSitacao(o)">
+            {{getSituacao(o)}}
+          </nz-tag>
+        </td>
+        <td nz-col [nzSpan]="2">{{ o.descricao }}</td>
+        <td nz-col [nzSpan]="3">{{ o.valorDespesaAdministrativa | currency: 'BRL' }}</td>
+        <td nz-col [nzSpan]="2">{{ o.valorCustoAssistencial | currency: 'BRL' }}</td>
+        <td nz-col [nzSpan]="2">{{ o.valorInvestimento | currency: 'BRL' }}</td>
+        <td nz-col [nzSpan]="2">{{ o.total | currency: 'BRL' }}</td>
+        <td nz-col [nzSpan]="3">
+          <nz-space>
+            <div *nzSpaceItem>
+              <button *ngIf="possuiPermissaoEditarOrcamentos || possuiPermissaoClassificacaoContabilOrcamentos"
+                (click)="editarOrcamento(o)" nz-button nzShape="circle">
+                <i nz-icon nzType="edit" style="font-size: 18px;"></i>
+              </button>
+            </div>
+            <div *nzSpaceItem>
+              <button *ngIf="possuiPermissaoEditarOrcamentos" nz-button nzShape="circle" nz-popconfirm
+                nzPopconfirmTitle="Excluir?" nzOkText="Sim" nzCancelText="Não" (nzOnConfirm)="excluirOrcamento(o)">
+                <i nz-icon nzType="delete" style="font-size: 18px;"></i>
+              </button>
+            </div>
+          </nz-space>
+        </td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr nz-row>
+        <td nz-col [nzSpan]="1"></td>
+        <td nz-col [nzSpan]="3"></td>
+        <td nz-col [nzSpan]="3"></td>
+        <td nz-col [nzSpan]="3"></td>
+        <td nz-col [nzSpan]="2"></td>
+        <td nz-col [nzSpan]="3" class="font-weight-bold">
+          {{ orcamentoSomaValoresDespesaAdministrativa | currency: 'BRL' }}
+        </td>
+        <td nz-col [nzSpan]="2" class="font-weight-bold">
+          {{ orcamentoSomaValoresCustoAssistencial | currency: 'BRL' }}
+        </td>
+        <td nz-col [nzSpan]="2" class="font-weight-bold">
+          {{ orcamentoSomaValoresInvestimento | currency: 'BRL' }}
+        </td>
+        <td nz-col [nzSpan]="2" class="font-weight-bold">
+          {{ orcamentoSomaTotal | currency: 'BRL' }}
+        </td>
+        <td nz-col [nzSpan]="3"></td>
+      </tr>
+    </tfoot>
+  </nz-table>
+
+  <div style="border-bottom: 1px solid rgb(233, 233, 233);" *ngIf="possuiPermissaoEditarOrcamentos && projetoAprovado">
+    <p class="mt-3">
+      <button (click)="abrirModalCadastrarOrcamento()" nz-button nzType="primary" nzSize="small">
+        Cadastrar Orçamento Extra
+      </button>
+    </p>
+  </div>
+</nz-spin>

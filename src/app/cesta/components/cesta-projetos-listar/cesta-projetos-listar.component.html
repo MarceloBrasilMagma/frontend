@@ -1,0 +1,66 @@
+<nz-card nzTitle="Projetos">
+
+<nz-table #projetosTable
+  [nzData]="projetos"
+  [nzFrontPagination]="true"
+  [nzScroll]="{ x: '500px'}"
+>
+  <thead>
+    <tr>
+      <th nzWidth="150px" nzEllipsis>Projeto</th>
+      <th nzWidth="80px" nzEllipsis>DA</th>
+      <th nzWidth="80px" nzEllipsis>Custo</th>
+      <th nzWidth="80px" nzEllipsis>Investimento</th>
+      <th nzWidth="80px" nzEllipsis>Total</th>
+      <th nzWidth="100px" nzEllipsis>Categoria</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let projeto of projetosTable.data">
+      <td nzEllipsis>{{ projeto.nome }}</td>
+      <td nzEllipsis>{{ projeto.projetoDA | currency: 'BRL' }}</td>
+      <td >{{ projeto.projetoCusto | currency: 'BRL' }}</td>
+      <td>{{ projeto.projetoValorInvestimento | currency: 'BRL' }}</td>
+      <td>{{ projeto.valorOrcado | currency: 'BRL'}}</td>
+      <td nzEllipsis>{{ projeto.tipoDescricao }}</td>
+    </tr>
+  </tbody>
+</nz-table>
+
+<nz-divider class="mt-0 mb-2"></nz-divider>
+
+  <div nz-row nzGutter="24">
+    <div nz-col nzSpan="24">
+        <div class="text-right">
+            <button nz-button nzType="primary" (click)="showModal()">
+              <span nz-icon nzType="plus" nzTheme="outline"></span>Incluir projeto
+            </button>
+        </div>
+    </div>
+  </div>
+
+  <nz-modal 
+    [(nzVisible)]="isVisible" 
+    nzTitle="Incluir projeto" 
+    (nzOnCancel)="handleCancel()"
+    (nzOnOk)="incluirProjeto()" 
+    [nzOkLoading]="isOkLoading"
+    [nzWidth]="1200"
+    [nzBodyStyle]="{ height: '300px'}"
+  >
+    <form nz-form [formGroup]="form" *nzModalContent>
+      <nz-form-control>
+        <nz-select [nzMaxTagCount]="50" 
+          nzMode="multiple" 
+          nzPlaceHolder="Selecione um projeto"
+          formControlName="itens"
+        >
+          <nz-option *ngFor="let projeto of projetosNaoInclusos" [nzLabel]="projeto.id + ' - ' + projeto.nome"
+            [nzValue]="projeto">
+          </nz-option>
+        </nz-select>
+      </nz-form-control>
+    </form>
+  </nz-modal>
+
+</nz-card>

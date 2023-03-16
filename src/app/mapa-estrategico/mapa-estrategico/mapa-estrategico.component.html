@@ -1,0 +1,91 @@
+<div id="div-principal">
+  <div *ngIf="!!objetivoPrincipal" nz-row nzGutter="24" id="geral" class="perspectiva">
+    <!-- <div style="height: 100%; width: 10%; margin: auto;">
+    </div> -->
+    <div style="height: 100%; width: 80%; margin: auto;">
+      <div nz-row style="height: 100%;">
+        <div [id]="'ob-' + objetivoPrincipal?.id" style="margin: auto;">
+          <app-mapa-estrategico-card [objetivo]="objetivoPrincipal"></app-mapa-estrategico-card>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div nz-row nzGutter="24" id="classificacao">
+    <!-- <div style="height: 100%; width: 10%;" style="margin: auto;"></div> -->
+    <div style="height: 100%; width: 45%; padding: 20px;" class="classificacao" id="crescimento">
+      <span>Crescimento</span>
+    </div>
+    <div style="height: 100%; width: 45%; padding: 20px;" class="classificacao" id="sustentabilidade">
+      <span>Sustentabilidade</span>
+    </div>
+  </div>
+
+  <div nz-row nzGutter="24" id="financeiro-resultado" class="perspectiva">
+    <div class="aprendizado-text"><i nz-icon nzType="fund-view" nzTheme="outline" style="color: white;width: 30px;height: 30px;align-self: flex-start;"></i><p style="color:white;height: 30px;align-self: center;position: relative;top: 2rem;">Financeiro e Resultado</p></div>
+    <div style="height: 100%; width: 45%;" class="classificacao" id="crescimento">
+      <div nz-row style="height: 100%;" *ngIf="!!objetivosFinanceirosCrescimento">
+        <div *ngFor="let objetivo of objetivosFinanceirosCrescimento" [id]="'ob-' + objetivo.id" style="margin: auto;">
+          <app-mapa-estrategico-card [objetivo]="objetivo"></app-mapa-estrategico-card>
+        </div>
+      </div>
+    </div>
+    <div nz-col style="height: 100%; width: 45%;" class="classificacao" id="sustentabilidade">
+      <div nz-row style="height: 100%;" *ngIf="!!objetivosFinanceirosSustentabilidade">
+        <div *ngFor="let objetivo of objetivosFinanceirosSustentabilidade" [id]="'ob-' + objetivo.id"
+          style="margin: auto;">
+          <app-mapa-estrategico-card [objetivo]="objetivo"></app-mapa-estrategico-card>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div nz-row id="mercado-clientes" class="perspectiva">
+    <div class="aprendizado-text"><i nz-icon nzType="user" nzTheme="outline" style="color: white;width: 30px;height: 30px;align-self: flex-start;"></i><p style="color:white;height: 30px;align-self: center;position: relative;top: 2rem;">Mercado e Clientes</p></div>
+    <div style="height: 100%; width: 45%;" class="classificacao" id="crescimento">
+      <div nz-row style="height: 100%;" *ngIf="!!objetivosMercadoCrescimento">
+        <div *ngFor="let objetivo of objetivosMercadoCrescimento" [id]="'ob-' + objetivo.id" style="margin: auto;">
+          <app-mapa-estrategico-card [objetivo]="objetivo"></app-mapa-estrategico-card>
+        </div>
+      </div>
+    </div>
+    <div nz-col style="height: 100%; width: 45%;" class="classificacao" id="sustentabilidade">
+      <div nz-row style="height: 100%;" *ngIf="!!objetivosMercadoSustentabilidade">
+        <div *ngFor="let objetivo of objetivosMercadoSustentabilidade" [id]="'ob-' + objetivo.id" style="margin: auto;">
+          <app-mapa-estrategico-card [objetivo]="objetivo"></app-mapa-estrategico-card>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div nz-row id="processos-internos" class="perspectiva">
+    <div class="aprendizado-text"><i nz-icon nzType="setting" [nzTheme]="'fill'" style="height: 30px;align-self: flex-start;"></i><p style="color:white;height: 30px;align-self: center;position: relative;top: 2rem;">Processos Internos</p></div>
+    <div nz-col style="height: 100%; width: 45%;" class="classificacao" id="crescimento">
+      <div style="height: 100%;" *ngIf="!!objetivosProcessosCrescimento">
+        <div *ngFor="let objetivo of objetivosProcessosCrescimento" [id]="'ob-' + objetivo.id" style="margin: auto;">
+          <app-mapa-estrategico-card [objetivo]="objetivo"></app-mapa-estrategico-card>
+        </div>
+      </div>
+    </div>
+    <div nz-col style="height: 100%; width: 45%;" id="classificacao" id="sustentabilidade">
+      <div nz-row style="height: 100%;" *ngIf="!!objetivosProcessosSustentabilidade">
+        <div *ngFor="let objetivo of objetivosProcessosSustentabilidade" [id]="'ob-' + objetivo.id"
+          style="margin: auto;">
+          <app-mapa-estrategico-card [objetivo]="objetivo"></app-mapa-estrategico-card>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div nz-row id="aprendizado-crecimento" class="perspectiva">
+    <div class="aprendizado-text"><i nz-icon nzType="book" nzTheme="outline" style="height: 30px;align-self: flex-start;"></i><p style="color:white;height: 30px;align-self: center;position: relative;top: 0.5rem;">Aprendizado</p></div>
+    <div nz-col style="height: 100%; width: 80%;" class="classificacao" id="crescimento">
+      <div nz-row style="height: 100%;" *ngIf="!!objetivosAprendizado">
+        <div *ngFor="let objetivo of objetivosAprendizado" [id]="'ob-' + objetivo.id" style="margin: auto;">
+          <app-mapa-estrategico-card [objetivo]="objetivo"></app-mapa-estrategico-card>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,73 @@
+<div>
+    <button class="mb-3" nz-button nz-button nzType="primary" nzSize="small" routerLink="cadastrar">
+      Cadastrar Departamento
+    </button>
+</div>
+
+<nz-collapse class="mt-2">
+  <nz-collapse-panel nzHeader="Filtros">
+    <form nz-form [formGroup]="filtrosForm">
+      <div nz-row nzGutter="24">
+        <div nz-col nzXs="24" nzSm="8">
+          <nz-form-item nz-col nzSm="24">
+            <nz-form-label>Sigla do Departamento</nz-form-label>
+            <nz-form-control>
+              <input nz-input formControlName="sigla" placeholder="Ex.: SUREH"/>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzSm="8">
+          <nz-form-item nz-col nzSm="24">
+            <nz-form-label>Nome do Departamento</nz-form-label>
+            <nz-form-control>
+              <input nz-input formControlName="nome" placeholder="Ex.: SUPERINTENDENCIA DE RECURSOS HOSPITALARES"/>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzSm="8">
+          <nz-form-item nz-col nzSm="24">
+            <nz-form-label>Nome do Gestor</nz-form-label>
+            <nz-form-control>
+              <input nz-input formControlName="nomeGestor" placeholder="Ex.: Maria Silva"/>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+
+      <div nz-row>
+        <div nz-col nzSpan="24">
+          <button (click)="filtrar()" nz-button nzType="primary" type="button">
+            Pesquisar
+          </button>
+          <button (click)="resetForm()" nz-button class="ml-2" type="button">
+            Limpar
+          </button>
+        </div>
+      </div>
+
+    </form>
+  </nz-collapse-panel>
+</nz-collapse>
+
+<nz-table #dptTable [nzData]="departamentos" [nzFrontPagination]="true"
+  [nzLoading]="carregandoDepartamentos" [nzTotal]="departamentos.length" [(nzPageIndex)]="pageIndex"
+  [(nzPageSize)]="pageSize" (nzQueryParams)="onQueryParamsChange($event)" class="mt-1" [nzScroll]="{ x: '700px'}">
+  <thead>
+    <tr>
+      <th nzWidth="80px">Sigla</th>
+      <th nzWidth="170px">Nome</th>
+      <th nzWidth="120px" nzEllipsis>Nome do Gestor</th>
+      <th nzWidth="80px" nzEllipsis>Situação</th>
+      <th nzWidth="120px" nzEllipsis>Departamento Superior</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let dpt of dptTable.data" class="cursor-pointer linha-clicavel" [routerLink]="['editar', dpt.id]">
+      <td>{{dpt.sigla}}</td>
+      <td nzEllipsis>{{dpt.nome}}</td>
+      <td nzEllipsis>{{dpt.nomeGestor}} </td>
+      <td>{{dpt.situacaoDescricao}}</td>
+      <td nzEllipsis>{{dpt.departamentoSuperiorVm?.nome}}</td>
+    </tr>
+  </tbody>
+</nz-table>

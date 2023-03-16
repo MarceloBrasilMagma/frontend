@@ -1,0 +1,68 @@
+<div nz-row>
+  <div nz-col nzFlex="1" class="mr-1">
+    <form nz-form [formGroup]="form" nzLayout="vertical">
+      <div nz-row>
+        <div nz-col nzSpan="12">
+          <nz-form-item class="mb-0">
+            <nz-form-label nzRequired> Data do Status </nz-form-label>
+            <nz-form-control>
+              <input
+                type="date"
+                nz-input
+                formControlName="dataStatus"
+                max="2999-12-31"
+              />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <div nz-col nzSpan="24">
+          <nz-form-item>
+            <nz-form-label nzRequired> Revisado </nz-form-label>
+            <nz-form-control>
+              <input
+                nz-input
+                type="number"
+                formControlName="revisado"
+                placeholder="Revisado"
+              />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <div nz-col nzSpan="24">
+          <nz-form-item>
+            <nz-form-label nzRequired> Realizado </nz-form-label>
+            <nz-form-control>
+              <input
+                nz-input
+                type="number"
+                formControlName="realizado"
+                placeholder="Realizado"
+              />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div *nzModalFooter>
+  <nz-row nzGutter="24">
+    <nz-col nzSpan="24">
+      <button nz-button (click)="destroyModal()" [disabled]="saving">
+        Cancelar
+      </button>
+      <button
+        nz-button
+        nzType="primary"
+        (click)="salvar()"
+        [disabled]="form.invalid"
+        [nzLoading]="saving"
+      >
+        Salvar
+      </button>
+    </nz-col>
+  </nz-row>
+</div>

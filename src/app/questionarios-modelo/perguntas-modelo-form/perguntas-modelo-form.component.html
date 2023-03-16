@@ -1,0 +1,194 @@
+<nz-card>
+    <h4 class="pl-6">{{grupo.titulo}}</h4>
+</nz-card>
+<div cdkDropList (cdkDropListDropped)="dropPergunta($event, grupo.perguntas)" >
+        <nz-card *ngFor="let pergunta of grupo.perguntas" cdkDrag #pergunta
+           [nzExtra]="extraMove" class="relative">
+                <form nz-form nzLayout="vertical">
+                    <div nz-row nzGutter="24" class="px-6 absolute top-3 w-full">
+                        <div nz-col nzSpan="17" class="">
+                            <nz-form-item>
+                                <nz-form-label [nzRequired]="pergunta.obrigatoria">
+                                    Título da Pergunta
+                                </nz-form-label>
+                                <nz-form-control>
+                                    <input nz-input type="text" [(ngModel)]="pergunta.titulo"
+                                        [ngModelOptions]="{standalone: true}"
+                                        class="resize-none w-full"
+                                        (change)="alterarPergunta(pergunta)"/>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col nzSpan="6">
+                            <nz-form-item>
+                                <nz-form-label>Tipo</nz-form-label>
+                                <nz-form-control>
+                                    <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Tipo da Resposta"
+                                        [(ngModel)]="pergunta.tipoResposta" [ngModelOptions]="{standalone: true}"
+                                        (ngModelChange)="alterarPergunta(pergunta)">
+                                        <nz-option *ngFor="let p of tiposRespostas" [nzValue]="p.id" [nzLabel]="p.text">
+                                        </nz-option>
+                                    </nz-select>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                    </div>
+                    <div 
+                        *ngIf="pergunta.tipoResposta == QuestionarioTipoRespostaEnum.SimNao || pergunta.tipoResposta == QuestionarioTipoRespostaEnum.UnicaEscolha || pergunta.tipoResposta == QuestionarioTipoRespostaEnum.MultiplaEscolha"
+                        cdkDropList (cdkDropListDropped)="dropOpcao($event, pergunta.opcoes)" class="px-6 relative mx-[12px]">
+                        <div class="border flex items-center justify-between py-3 pl-2 mb-5" *ngFor="let opcao of pergunta.opcoes; let i = index" 
+                        nz-row nzGutter="24" cdkDrag>
+                           <div nz-col nzSpan="17" class="m-0">
+                                <nz-form-item>
+                                    <nz-form-label class="pl-3">{{ 'Opção ' + (i + 1) }}</nz-form-label>
+                                    <nz-form-control>
+                                        <input nz-input type="text" [(ngModel)]="opcao.titulo"
+                                        [ngModelOptions]="{standalone: true}"
+                                        (change)="alterarOpcao(opcao)"/>
+                                        
+                                    </nz-form-control>
+                                </nz-form-item>
+                           </div>
+                           <div nz-col nzSpan="7" class="m-0">
+                                <nz-form-item>
+                                    <nz-form-label>Ações</nz-form-label>
+                                    <nz-form-control>
+                                        <div>
+                                            <button type="button" nz-button nzType="default"
+                                            (click)="opcao.exibirSelecaoPerguntas = !opcao.exibirSelecaoPerguntas" nz-tooltip
+                                            nzTooltipTitle="Vincular a uma pergunta"><i nz-icon nzType="partition"
+                                            nzTheme="outline"></i></button>
+                                            <button type="button" nz-button nzType="default"
+                                            (click)="excluirOpcao(opcao.id, i, pergunta.opcoes)"><i nz-icon
+                                            nzType="delete"  nz-tooltip nzTooltipTitle="Deletar opção"></i></button>
+                                            <i nz-icon nzType="drag" nzTheme="outline" class="drag-handle ml-2 absolute right-1 top-3"
+                                            cdkDragHandle nz-tooltip nzTooltipTitle="Reordenar opções"></i>
+                                        </div>
+                                    </nz-form-control>
+                                </nz-form-item>    
+                           </div>                    
+                            <div nz-col nzSpan="17" *ngIf="opcao.exibirSelecaoPerguntas" class="mt-3">
+                                <nz-form-item>
+                                    <nz-form-label>Pergunta Associada</nz-form-label>
+                                    <nz-form-control>
+                                        <nz-select nzShowSearch nzAllowClear
+                                            nzPlaceHolder="Selecione qual pergunta será exibida quando a opção for marcada"
+                                            [(ngModel)]="opcao.questionarioPerguntaGatilhoId"
+                                            [ngModelOptions]="{standalone: true}" (ngModelChange)="alterarOpcao(opcao)">
+                                            <nz-option *ngFor="let p of grupo.perguntas" [nzValue]="p.id"
+                                                [nzLabel]="p.titulo">
+                                            </nz-option>
+                                        </nz-select>
+                                    </nz-form-control>
+                                </nz-form-item>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="px-6">
+                        <div class="">
+                            <div class="my-0 flex items-center px-6 py-3 border gap-5"
+                            *ngIf="pergunta.tipoResposta == QuestionarioTipoRespostaEnum.MultiplaEscolha 
+                            || pergunta.tipoResposta == QuestionarioTipoRespostaEnum.UnicaEscolha">
+                            <nz-form-label class="p-0">Exibir opção "outros" </nz-form-label>
+                            <nz-form-item nz-tooltip class="my-0 py-0"
+                            nzTooltipTitle="Caso esteja marcada, inclua uma opção no final da pergunta para com uma caixa de texto para inserção do usuário">
+                                    <nz-form-control>
+                                        <nz-switch [(ngModel)]="pergunta.exibirOpcaoEditavel"
+                                            [ngModelOptions]="{standalone: true}"
+                                            (ngModelChange)="alterarPergunta(pergunta)">
+                                        </nz-switch>
+                                    </nz-form-control>
+                                </nz-form-item>
+                                <div
+                                    *ngIf="pergunta.exibirOpcaoEditavel && (pergunta.tipoResposta == QuestionarioTipoRespostaEnum.UnicaEscolha || pergunta.tipoResposta == QuestionarioTipoRespostaEnum.MultiplaEscolha)">
+                                    <nz-form-item class="my-0"
+                                    nz-tooltip nzTooltipTitle="Informe o título da opção adicional. Caso não informe, será exibido 'Outros'">
+                                        <nz-form-control>
+                                            <input nz-input type="text" [(ngModel)]="pergunta.labelOpcaoEditavel"
+                                                [ngModelOptions]="{standalone: true}" placeholder="Outros"
+                                                (ngModelChange)="alterarPergunta(pergunta)"
+                                                class="ml-3">
+                                        </nz-form-control>
+                                    </nz-form-item>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf="pergunta.tipoResposta == QuestionarioTipoRespostaEnum.UnicaEscolha || pergunta.tipoResposta == QuestionarioTipoRespostaEnum.MultiplaEscolha"
+                        nz-row nzGutter="24" class="my-0 px-6 py-3 mb-5">
+                        <div nz-col nzSpan="17" class="">
+                            <nz-form-item class="my-0">
+                                <nz-form-label class="p-0">Nova opção </nz-form-label>
+                                <nz-form-control>
+                                    <div class="flex gap-2">
+                                        <input nz-input type="text" (change)="novaOpcao($event, pergunta)"
+                                        placeholder="Informe uma nova opção" 
+                                        class="my-0"/>
+                                        <button nz-button>Criar opção</button>
+                                    </div>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                    </div>
+
+                    <div *ngIf="pergunta.tipoResposta == QuestionarioTipoRespostaEnum.NPS" class="p-6 flex flex-col">
+                        <nz-form-label>
+                            Nota
+                        </nz-form-label>
+                        <nz-radio-group nzButtonStyle="solid"nzDisabled>
+                            <label nz-radio-button nzValue="0" class="">0</label>
+                            <label nz-radio-button nzValue="1" class="">1</label>
+                            <label nz-radio-button nzValue="2" class="">2</label>
+                            <label nz-radio-button nzValue="3" class="">3</label>
+                            <label nz-radio-button nzValue="4" class="">4</label>
+                            <label nz-radio-button nzValue="5" class="">5</label>
+                            <label nz-radio-button nzValue="6" class="">6</label>
+                            <label nz-radio-button nzValue="7" class="">7</label>
+                            <label nz-radio-button nzValue="8" class="">8</label>
+                            <label nz-radio-button nzValue="9" class="">9</label>
+                            <label nz-radio-button nzValue="10" class="">10</label>
+                        </nz-radio-group>
+                    </div>
+                    <div class="flex items-center justify-between border-t px-6 pt-3">
+                        <button nz-button [nzDanger]="true" class="mr-4 text-lg cursor-pointer hover:bg-red-600 hover:text-white" (click)="excluirPergunta(pergunta)">Deletar Pergunta</button>
+                        <nz-form-item class="m-0">
+                            <nz-form-control>
+                                <nz-switch [(ngModel)]="pergunta.obrigatoria" [ngModelOptions]="{standalone: true}"
+                                    (ngModelChange)="alterarPergunta(pergunta)">
+                                </nz-switch> Obrigatória
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                </form>
+        </nz-card>
+</div>
+<nz-card class="px-6">
+    <form nz-form nzLayout="vertical">
+        <div>
+            <div nz-col nzSpan="21">
+                <nz-form-item>
+                    <nz-form-label nzRequired>
+                        Título da Pergunta (Nova Pergunta)
+                    </nz-form-label>
+                    <nz-form-control>
+                        <div class="flex gap-1">
+                            <input nz-input type="text" [(ngModel)]="novaPerguntaTitulo"
+                            placeholder="Informe o título para cadastrar uma nova pergunta"
+                            [ngModelOptions]="{standalone: true}">                           
+                            <button nz-col nzSpan="4" nz-button>Criar Pergunta</button>
+                        </div>   
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+    </form>
+</nz-card>
+
+<ng-template #extraMove>
+    <div cdkDragHandle class="drag-handle" nz-tooltip nzTooltipTitle="reordenar perguntas" nz-col
+        nzSpan="1">
+        <i nz-icon nzType="drag" nzTheme="outline"></i>
+    </div>
+</ng-template>
+
+

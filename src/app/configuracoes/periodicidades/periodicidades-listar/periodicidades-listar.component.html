@@ -1,0 +1,36 @@
+<div>
+    <button class="mb-3" nz-button nzType="primary" nzSize="small" (click)="exibirModalEditar()">
+      <span>Registrar nova Periodicidade</span>
+    </button>
+</div>
+
+<nz-table #periodicidadeTable [nzData]="periodicidade" [nzFrontPagination]="true"
+  [nzLoading]="carregando"
+  (nzQueryParams)="onQueryParamsChange($event)" [nzTotal]="periodicidade?.length" class="mt-1" [nzScroll]="{ x: '500px'}">
+  <thead>
+    <tr>
+      <th nzWidth="60px">Id</th>
+      <th nzWidth="300px">Nome</th>
+      <th nzWidth="100px">Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let periodicidade of periodicidadeTable.data">
+      <td class="cursor-pointer linha-clicavel" (click)="exibirModalEditar(periodicidade)">{{periodicidade.id}}</td>
+      <td class="cursor-pointer linha-clicavel" (click)="exibirModalEditar(periodicidade)">{{periodicidade.nome}}</td>
+      <td>
+        <nz-space>
+            <button *nzSpaceItem nz-button nzShape="circle" (click)="exibirModalEditar(periodicidade)" [nzTooltipTitle]="'Editar'"
+              nz-tooltip>
+              <i nz-icon nzType="edit"></i>
+            </button>
+            <button *nzSpaceItem nz-button nzShape="circle" nzTooltipTitle="Excluir" nz-tooltip nz-popconfirm
+              nzPopconfirmTitle="Tem certeza que deseja excluir?" nzOkText="Sim"
+              (nzOnConfirm)="excluirPeriodicidade(periodicidade)">
+              <i nz-icon nzType="delete"></i>
+            </button>
+        </nz-space>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>

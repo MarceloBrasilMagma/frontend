@@ -1,0 +1,151 @@
+<div nz-row>
+  <div nz-col nzFlex="1" class="mr-1">
+    <form nz-form [formGroup]="form" nzLayout="vertical">
+
+      <div nz-row>
+
+        <div nz-col nzSpan="24">
+          <nz-form-item>
+            <nz-form-label nzRequired>
+              Tipo de Registro
+            </nz-form-label>
+            <nz-form-control>
+              <nz-select formControlName="tipo" nzPlaceHolder="Tipo de Registro" nzTooltipTitle="Tipo de Registro"
+                nz-tooltip nzAllowClear>
+                <nz-option [nzValue]="tipoDiario.Acao" nzLabel="Ação">
+                </nz-option>
+                <nz-option [nzValue]="tipoDiario.ReuniaoStatus" nzLabel="Reunião de Status">
+                </nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <div nz-col nzSpan="12">
+          <nz-form-item>
+            <nz-form-label nzRequired>
+              Gerente do Projeto
+            </nz-form-label>
+            <nz-form-control>
+              <nz-select formControlName="gerenteProjeto" nzPlaceHolder="Gerente do Projeto" nzAllowClear nzShowSearch
+                nzServerSearch (nzOnSearch)="searchGerenteProjeto($event)">
+                <ng-container *ngFor="let g of gerentesProjetoAd">
+                  <nz-option *ngIf="!buscandoGerenteProjetoAd" [nzValue]="g" [nzLabel]="g.nome">
+                  </nz-option>
+                </ng-container>
+                <nz-option *ngIf="buscandoGerenteProjetoAd" nzDisabled nzCustomContent>
+                  <i nz-icon nzType="loading" class="loading-icon mr-2"></i> Buscando ...
+                </nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <div nz-col nzSpan="6">
+          <nz-form-item class="mb-0">
+            <nz-form-label nzRequired>
+              Data do Registro
+            </nz-form-label>
+            <nz-form-control>
+              <input type="date" nz-input formControlName="dataRegistro" max="2999-12-31" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <div nz-col nzSpan="6">
+          <nz-form-item class="mb-0">
+            <nz-form-label nzRequired>
+              Ano de Referência
+            </nz-form-label>
+            <nz-form-control>
+              <nz-select nzAllowClear nzPlaceHolder="Ano Referência" formControlName="anoReferencia">
+                <ng-container *ngFor="let plurianualidade of projeto.anosPlurianualidade">
+                  <nz-option [nzLabel]="plurianualidade.ano" [nzValue]="plurianualidade.ano"></nz-option>
+                </ng-container>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <div nz-col nzSpan="24">
+          <nz-form-item>
+            <nz-form-label nzRequired>
+              Descrição
+            </nz-form-label>
+            <nz-form-control>
+              <textarea nz-input formControlName="descricao" placeholder="Descrição"
+                [nzAutosize]="{ minRows: 3, maxRows: 6 }"></textarea>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <!-- <div nz-col nzSpan="12" *ngIf="exibirCamposReuniaoStatus">
+          <nz-form-item>
+            <nz-form-label nzRequired>
+              Planejado
+            </nz-form-label>
+            <nz-form-control>
+              <nz-input-group nzAddOnAfter="%">
+                <input nz-input type="number" formControlName="planejado" placeholder="Planejado" />
+              </nz-input-group>
+
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <div nz-col nzSpan="12" *ngIf="exibirCamposReuniaoStatus">
+          <nz-form-item>
+            <nz-form-label nzRequired>
+              Real
+            </nz-form-label>
+            <nz-form-control>
+              <nz-input-group nzAddOnAfter="%">
+                <input nz-input type="number" formControlName="real" placeholder="Real" />
+              </nz-input-group>
+
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <div nz-col nzSpan="24" *ngIf="exibirCamposReuniaoStatus && exibirCamposAtraso">
+          <nz-form-item>
+            <nz-form-label nzRequired>Área Responsável Pelo Atraso</nz-form-label>
+            <nz-form-control>
+              <nz-select formControlName="areaResponsavelAtrasoId" nzPlaceHolder="Área Responsável Pelo Atraso"
+                nzShowSearch nzAllowClear>
+                <nz-option *ngFor="let d of departamentos" [nzLabel]="d.nome" [nzValue]="d.id"> </nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <div nz-col nzSpan="24" *ngIf="exibirCamposReuniaoStatus && exibirCamposAtraso">
+          <nz-form-item>
+            <nz-form-label nzRequired>
+              Motivo do Atraso
+            </nz-form-label>
+            <nz-form-control>
+              <textarea nz-input formControlName="motivoAtraso" placeholder="Motivo do Atraso"
+                [nzAutosize]="{ minRows: 3, maxRows: 6 }"></textarea>
+            </nz-form-control>
+          </nz-form-item>
+        </div> -->
+
+      </div>
+    </form>
+  </div>
+</div>
+
+<div *nzModalFooter>
+  <nz-row nzGutter="24">
+    <nz-col nzSpan="24">
+      <button nz-button (click)="destroyModal()" [disabled]="saving">
+        Cancelar
+      </button>
+      <button nz-button nzType="primary" (click)="salvar()" [disabled]="form.invalid" [nzLoading]="saving">
+        Salvar
+      </button>
+    </nz-col>
+  </nz-row>
+
+</div>

@@ -1,0 +1,30 @@
+<div>
+  <p class="mb-2">
+    <button nz-button nz-button nzType="primary" nzSize="small" routerLink="cadastrar">
+      Cadastrar cesta 
+    </button>
+  </p>
+</div>
+
+<nz-table #cestasTable 
+  [nzData]="cestas.items" 
+  [nzFrontPagination]="false"
+  [(nzPageIndex)]="pageIndex" 
+  [(nzPageSize)]="pageSize" 
+  [nzLoading]="carregando"
+  (nzQueryParams)="onQueryParamsChange($event)"
+  [nzTotal]="total" class="mt-1"
+  [nzLoading]="carregando"
+  [nzScroll]="{ x: '500px'}"
+>
+  <thead>
+    <tr>
+      <th>Descrição</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let cesta of cestasTable.data" [routerLink]="['editar', cesta.id]">
+      <td nzEllipsis class="cursor-pointer linha-clicavel" >{{ cesta.descricao }}</td>
+    </tr>
+  </tbody>
+  </nz-table>

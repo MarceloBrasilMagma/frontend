@@ -1,0 +1,21 @@
+<h2>Lista de projetos</h2>
+<div class="grid grid-cols-2 gap-3">
+  <nz-card *ngFor="let preProjetos of portifolio.preProjetos">
+    <div class="flex flex-row justify-between items-center">
+      <div class="flex flex-row gap-2">
+        <p>#{{preProjetos.projetoId}}</p>
+        <p class="font-bold text-base"> {{preProjetos.nome}} </p>
+      </div>
+      <span class="w-3 h-3 rounded-full" [ngClass]="verificarCorTipoProjeto(preProjetos.tipo)"></span>
+    </div>
+  </nz-card>
+  <nz-card *ngFor="let projetoPlurianual of portifolio.projetosPlurianuais">
+    <div class="flex flex-row justify-between items-center">
+      <div class="flex flex-row gap-2">
+        <p>#{{projetoPlurianual.id}}</p>
+        <p class="font-bold text-base">{{projetoPlurianual.nome}}</p>
+      </div>
+      <span class="w-3 h-3 rounded-full" [ngClass]="verificarCorTipoProjeto(projetoPlurianual.tipo)" ></span>
+    </div>
+  </nz-card>
+</div>

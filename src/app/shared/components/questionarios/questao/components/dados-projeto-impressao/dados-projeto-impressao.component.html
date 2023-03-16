@@ -1,0 +1,60 @@
+<div>
+  <nz-card [nzBorderless]="true">
+    <div nz-row class="flex items-center">
+      <div nz-col class="w-1/4">
+        <img
+          class="logo-fold"
+          src="assets/images/logo/logo-pmosoft.svg"
+          width="100"
+          height="50"
+          alt="Logo"
+        />
+      </div>
+      <div nz-col class="w-3/4">
+        <h1 class="mb-0 ml-4">{{ projeto?.nome }}</h1>
+      </div>
+    </div>
+  </nz-card>
+  <nz-card nzTitle="Dados do Projeto">
+    <div nz-row class="d-flex align-items-center">
+      <div nz-col class="col col-md-6 col-xs-12">
+        <div class="text-left text-sm-left m-v-15">
+          <p>
+            <strong>Número: </strong>
+            {{ projeto?.id }}
+          </p>
+          <p>
+            <strong>Gerente do Projeto: </strong>
+            {{
+              projeto?.nomeGerenteProjeto
+
+                ? projeto?.nomeGerenteProjeto
+
+                : "Não Preenchido"
+            }}
+          </p>
+          <p>
+            <strong>Sponsor: </strong>
+            {{
+              projeto?.nomeSponsor
+                ? projeto?.nomeSponsor
+                : "Não Preenchido"
+            }}
+          </p>
+          <p>
+            <strong>Data de Criação: </strong>
+            {{ projeto?.dataCriacao | date: "dd/MM/yyyy" }}
+          </p>
+          <p>
+            <strong>Situação: </strong>
+            {{
+              projeto?.situacaoDescricao
+                ? projeto?.situacaoDescricao
+                : "Não Preenchido"
+            }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </nz-card>
+</div>

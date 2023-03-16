@@ -1,0 +1,107 @@
+<nz-card [nzTitle]="departamentoId ? 'Editar Departamento' : 'Cadastrar Departamento'">
+  <form nz-form [formGroup]="form" nzLayout="vertical" (ngSubmit)="salvar()">
+    <div nz-row nzGutter="24">
+
+      <div nz-col nzXs="24" nzSm="12">
+        <nz-form-item>
+          <nz-form-label nzRequired>
+            Sigla
+          </nz-form-label>
+          <nz-form-control>
+            <input nz-input formControlName="sigla" placeholder="Sigla" />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <div nz-col nzXs="24" nzSm="12">
+        <nz-form-item>
+          <nz-form-label nzRequired>
+            Nome
+          </nz-form-label>
+          <nz-form-control>
+            <input nz-input formControlName="nome" placeholder="Nome" />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <div nz-col nzXs="24" nzSm="12">
+        <nz-form-item>
+          <nz-form-label nzRequired>
+            Gestor
+          </nz-form-label>
+          <nz-form-control>
+            <nz-select formControlName="gestorUsuario" nzPlaceHolder="Gestor" nzShowSearch nzServerSearch
+              (nzOnSearch)="searchUsuario($event)" (ngModelChange)="onChangeUsuario($event)">
+              <ng-container *ngFor="let u of usuariosAd">
+                <nz-option *ngIf="!buscandoUsuarioAd" [nzValue]="u" [nzLabel]="u.nome">
+                </nz-option>
+              </ng-container>
+              <nz-option *ngIf="buscandoUsuarioAd" nzDisabled nzCustomContent>
+                <i nz-icon nzType="loading" class="loading-icon mr-2"></i> Buscando ...
+              </nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <div nz-col nzXs="24" nzSm="12">
+        <nz-form-item>
+          <nz-form-label nzRequired>
+            Situação
+          </nz-form-label>
+          <nz-form-control>
+            <nz-select formControlName="situacao" nzPlaceHolder="Situação">
+              <nz-option [nzValue]="SituacaoDepartamento.Ativo" nzLabel="Ativo">
+              </nz-option>
+              <nz-option [nzValue]="SituacaoDepartamento.Inativo" nzLabel="Inativo">
+              </nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <div nz-col nzXs="24" nzSm="12">
+        <nz-form-item>
+          <nz-form-label>
+            Departamento Superior
+          </nz-form-label>
+          <nz-form-control>
+            <nz-select formControlName="departamentoSuperiorId" nzPlaceHolder="Departamento Superior" nzShowSearch
+              nzAllowClear>
+              <nz-option *ngFor="let d of departamentos" [nzValue]="d.id" [nzLabel]="d.nome">
+              </nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <div nz-col nzXs="24" nzSm="12">
+        <nz-form-item>
+          <nz-form-label nzRequired>
+            Tipo de Departamento
+          </nz-form-label>
+          <nz-form-control>
+            <nz-select formControlName="tipo" nzPlaceHolder="Tipo de Departamento" nzAllowClear>
+              <nz-option [nzValue]="tipoDepartamento.Coordenacao" nzLabel="Coordenação"></nz-option>
+              <nz-option [nzValue]="tipoDepartamento.Gerencia" nzLabel="Gerência"></nz-option>
+              <nz-option [nzValue]="tipoDepartamento.Diretoria" nzLabel="Diretoria"></nz-option>
+              <nz-option [nzValue]="tipoDepartamento.Superintendencia" nzLabel="Superintendência"></nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
+
+    <nz-divider class="mt-0 mb-2"></nz-divider>
+    <div nz-row nzGutter="24">
+      <div nz-col nzSpan="24">
+        <div class="text-right">
+          <button type="submit" nz-button nzType="primary" [nzLoading]="salvandoDepartamento">
+            <i nz-icon nzType="save" nzTheme="outline"></i>
+            {{ departamentoId ? 'Salvar' : 'Cadastrar' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+</nz-card>

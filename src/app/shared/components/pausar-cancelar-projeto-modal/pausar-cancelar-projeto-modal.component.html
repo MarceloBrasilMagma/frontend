@@ -1,0 +1,26 @@
+<div>
+    <form nz-form [formGroup]="form">
+        <nz-form-item>
+            <nz-form-label nzRequired>
+                Motivo
+            </nz-form-label>
+            <nz-form-control>
+                <textarea nz-input formControlName="motivo" placeholder="Motivo da pausa ou cancelamento"></textarea>
+            </nz-form-control>
+        </nz-form-item>
+
+        <ng-container *ngIf="!modoExibicao">
+          <div *nzModalFooter nz-row nzGutter="24">
+            <div nz-col nzSpan="24">
+              <div class="text-right">
+                <button nz-button nzType="primary" (click)="pausarCancelarProjeto()">
+                  <i nz-icon nzType="save" nzTheme="outline"></i>
+                  {{ status === StatusProjeto.Pausado ? 'Pausar' : 'Cancelar' }} Projeto
+                </button>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+
+    </form>
+</div>

@@ -1,0 +1,314 @@
+<nz-back-top></nz-back-top>
+<nz-skeleton *ngIf="carregando" [nzActive]="carregando"></nz-skeleton>
+<nz-card *ngIf="!carregando">
+  <app-dados-projeto-impressao
+    class="hidden print:block"
+  ></app-dados-projeto-impressao>
+  <h4 class="hidden print:block text-center">{{ questionario.titulo }}</h4>
+  <form nz-form [formGroup]="form" nzLayout="vertical">
+    <nz-form-item *ngFor="let pergunta of grupo.perguntas">
+      <ng-container
+        *ngIf="
+          !pergunta.opcaoGatilhoId ||
+          pergunta.opcaoGatilhoId ==
+            respostas[pergunta.perguntaGatilhoId]?.opcaoIdSelecionada ||
+            respostas[pergunta.perguntaGatilhoId]?.opcoesSelecionadas?.includes(
+              pergunta.opcaoGatilhoId
+            )
+        "
+      >
+        <nz-form-label [nzRequired]="pergunta.obrigatoria">{{
+          pergunta.titulo
+        }}</nz-form-label>
+        <nz-form-control [ngSwitch]="pergunta.tipoResposta">
+          <nz-radio-group
+            *ngSwitchCase="tipoRespostaEnum.SimNao"
+            [formControlName]="'pergunta_' + pergunta.id"
+            (ngModelChange)="alterouOpcao($event, pergunta.id, null)"
+          >
+            <label
+              nz-radio
+              *ngFor="let opcao of pergunta.opcoes"
+              [nzValue]="opcao.id"
+              >{{ opcao.titulo }}</label
+            >
+          </nz-radio-group>
+
+          <nz-radio-group
+            *ngSwitchCase="tipoRespostaEnum.UnicaEscolha"
+            [formControlName]="'pergunta_' + pergunta.id"
+            (ngModelChange)="alterouOpcao($event, pergunta.id, null)"
+          >
+            <label
+              nz-radio
+              *ngFor="let opcao of pergunta.opcoes"
+              [nzValue]="opcao.id"
+              >{{ opcao.titulo }}</label
+            >
+            <label *ngIf="pergunta.exibirOpcaoEditavel" nz-radio [nzValue]="-1">
+              {{
+                pergunta.labelOpcaoEditavel
+                  ? pergunta.labelOpcaoEditavel
+                  : "Outros"
+              }}</label
+            >
+            <input
+              *ngIf="respostas[pergunta.id]?.opcaoIdSelecionada == -1"
+              nz-input
+              type="text"
+              [value]="respostas[pergunta.id]?.respostaTexto"
+              placeholder="Informe"
+              (change)="
+                alterouOpcao(-1, pergunta.id, $any($event.target).value)
+              "
+            />
+          </nz-radio-group>
+
+          <ng-container *ngSwitchCase="tipoRespostaEnum.MultiplaEscolha">
+            <nz-checkbox-wrapper
+              style="width: 100%"
+              (nzOnChange)="alterouOpcaoCheckbox($event, pergunta.id)"
+            >
+              <div nz-row *ngFor="let opcao of pergunta.opcoes">
+                <div nz-col nzSpan="24">
+                  <label
+                    nz-checkbox
+                    [formControlName]="
+                      'pergunta_' + pergunta.id + '_' + opcao.id
+                    "
+                    [nzValue]="opcao.id"
+                    >{{ opcao.titulo }}</label
+                  >
+                </div>
+              </div>
+            </nz-checkbox-wrapper>
+            <input
+              *ngIf="
+                pergunta.exibirOpcaoEditavel &&
+                respostas[pergunta.id]?.opcoesSelecionadas?.includes(-1)
+              "
+              nz-input
+              type="text"
+              [value]="respostas[pergunta.id]?.respostaTexto"
+              placeholder="Informe"
+              (change)="
+                alterouTextoAdicionalCheckbox(
+                  pergunta.id,
+                  $any($event.target).value
+                )
+              "
+            />
+          </ng-container>
+
+          <textarea
+            rows="4"
+            nz-input
+            *ngSwitchCase="tipoRespostaEnum.Texto"
+            nzAutosize
+            [formControlName]="'pergunta_' + pergunta.id"
+            (change)="alterouOpcaoTexto($event, pergunta.id)"
+          ></textarea>
+
+          <nz-radio-group
+            nzButtonStyle="solid"
+            [formControlName]="'pergunta_' + pergunta.id"
+            *ngSwitchCase="tipoRespostaEnum.NPS"
+            (ngModelChange)="alterouOpcaoNps($event, pergunta.id)"
+          >
+            <label
+              nz-radio-button
+              nzValue="0"
+              [ngClass]="{
+                nps0:
+                  !formDesabilitado ||
+                  (formDesabilitado &&
+                    form.controls['pergunta_' + pergunta.id].value === '0')
+              }"
+              >0</label
+            >
+            <label
+              nz-radio-button
+              nzValue="1"
+              [ngClass]="{
+                nps1:
+                  !formDesabilitado ||
+                  (formDesabilitado &&
+                    form.controls['pergunta_' + pergunta.id].value === '1')
+              }"
+              >1</label
+            >
+            <label
+              nz-radio-button
+              nzValue="2"
+              [ngClass]="{
+                nps2:
+                  !formDesabilitado ||
+                  (formDesabilitado &&
+                    form.controls['pergunta_' + pergunta.id].value === '2')
+              }"
+              >2</label
+            >
+            <label
+              nz-radio-button
+              nzValue="3"
+              [ngClass]="{
+                nps3:
+                  !formDesabilitado ||
+                  (formDesabilitado &&
+                    form.controls['pergunta_' + pergunta.id].value === '3')
+              }"
+              >3</label
+            >
+            <label
+              nz-radio-button
+              nzValue="4"
+              [ngClass]="{
+                nps4:
+                  !formDesabilitado ||
+                  (formDesabilitado &&
+                    form.controls['pergunta_' + pergunta.id].value === '4')
+              }"
+              >4</label
+            >
+            <label
+              nz-radio-button
+              nzValue="5"
+              [ngClass]="{
+                nps5:
+                  !formDesabilitado ||
+                  (formDesabilitado &&
+                    form.controls['pergunta_' + pergunta.id].value === '5')
+              }"
+              >5</label
+            >
+            <label
+              nz-radio-button
+              nzValue="6"
+              [ngClass]="{
+                nps6:
+                  !formDesabilitado ||
+                  (formDesabilitado &&
+                    form.controls['pergunta_' + pergunta.id].value === '6')
+              }"
+              >6</label
+            >
+            <label
+              nz-radio-button
+              nzValue="7"
+              [ngClass]="{
+                nps7:
+                  !formDesabilitado ||
+                  (formDesabilitado &&
+                    form.controls['pergunta_' + pergunta.id].value === '7')
+              }"
+              >7</label
+            >
+            <label
+              nz-radio-button
+              nzValue="8"
+              [ngClass]="{
+                nps8:
+                  !formDesabilitado ||
+                  (formDesabilitado &&
+                    form.controls['pergunta_' + pergunta.id].value === '8')
+              }"
+              >8</label
+            >
+            <label
+              nz-radio-button
+              nzValue="9"
+              [ngClass]="{
+                nps9:
+                  !formDesabilitado ||
+                  (formDesabilitado &&
+                    form.controls['pergunta_' + pergunta.id].value === '9')
+              }"
+              >9</label
+            >
+            <label
+              nz-radio-button
+              nzValue="10"
+              [ngClass]="{
+                nps10:
+                  !formDesabilitado ||
+                  (formDesabilitado &&
+                    form.controls['pergunta_' + pergunta.id].value === '10')
+              }"
+              >10</label
+            >
+          </nz-radio-group>
+        </nz-form-control>
+      </ng-container>
+    </nz-form-item>
+    <!-- </div> -->
+  </form>
+  <nz-divider class="mt-0 mb-3 print:hidden"></nz-divider>
+  <div nz-row nzGutter="24" class="print:hidden">
+    <div nz-col nzSpan="12">
+      <div class="text-left">
+        <ng-container *ngIf="indiceGrupoAtual > 0">
+          <button
+            type="button"
+            nz-button
+            nzType="primary"
+            nzSize="small"
+            (click)="retornarGrupo()"
+          >
+            <i nz-icon nzType="left" nzTheme="outline"></i>
+            Voltar
+          </button>
+        </ng-container>
+      </div>
+    </div>
+    <div nz-col nzSpan="12">
+      <div class="text-right">
+        <nz-space>
+          <ng-container *ngIf="formDesabilitado">
+            <button
+              *nzSpaceItem
+              type="button"
+              nz-button
+              nzType="primary"
+              nzSize="small"
+              (click)="imprimirSalvarPdf()"
+            >
+              Imprimir/Salvar PDF
+              <i nz-icon nzType="printer" nzTheme="outline"></i>
+            </button>
+          </ng-container>
+          <ng-container
+            *ngIf="indiceGrupoAtual < questionario.gruposPerguntas.length - 1"
+          >
+            <button
+              *nzSpaceItem
+              type="button"
+              nz-button
+              nzType="primary"
+              nzSize="small"
+              (click)="avancarGrupo()"
+            >
+              Avançar
+              <i nz-icon nzType="right" nzTheme="outline"></i>
+            </button>
+          </ng-container>
+          <ng-container *ngIf="!formDesabilitado">
+            <button
+              *nzSpaceItem
+              type="button"
+              nz-button
+              nzType="primary"
+              nzSize="small"
+              nz-popconfirm
+              nzPopconfirmTitle="Deseja realmente finalizar o preenchimento?"
+              nzPopconfirmPlacement="bottom"
+              (nzOnConfirm)="finalizar()"
+            >
+              <i nz-icon nzType="save" nzTheme="outline"></i>
+              Finalizar
+            </button>
+          </ng-container>
+        </nz-space>
+      </div>
+    </div>
+  </div>
+</nz-card>

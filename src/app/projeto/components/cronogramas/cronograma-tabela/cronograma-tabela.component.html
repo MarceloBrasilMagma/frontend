@@ -1,0 +1,297 @@
+<nz-card [nzBodyStyle]="{ 'padding-bottom': '0px' }">
+  <div nz-row class="items-center">
+    <div nz-col nzFlex="1" class="text-lg">
+      <nz-avatar
+        [nzSize]="40"
+        nzIcon="snippets"
+        class="mr-2"
+        style="color: #c4b5fd"
+      ></nz-avatar>
+      <span class="text-lg font-semibold"> Cronograma </span>
+    </div>
+
+    <div nz-col nzFlex="4">
+      <nz-space class="d-flex justify-content-end">
+        <nz-upload
+          *nzSpaceItem
+          [nzMultiple]="false"
+          [nzCustomRequest]="handleUpload"
+          [nzFileList]="fileList"
+          [nzBeforeUpload]="beforeUpload"
+          [nzShowUploadList]="{
+            showRemoveIcon: false,
+            showDownloadIcon: false
+          }"
+        >
+          <button
+            nz-button
+            nzType="default"
+            (click)="novaBaseline = true"
+            [disabled]="!possuiPermissaoEditar || desabilitaBotoes"
+          >
+            <i nz-icon nzType="upload"></i>
+            Nova Baseline
+          </button>
+        </nz-upload>
+        <button *nzSpaceItem nz-button nzType="primary">
+          <a [href]="urlModeloProject">
+            <i nz-icon nzType="download" nzTheme="outline" class="pr-1"></i>
+            Baixar Modelo Project
+          </a>
+        </button>
+        <nz-upload
+          *nzSpaceItem
+          [nzMultiple]="false"
+          [nzCustomRequest]="handleUpload"
+          [nzFileList]="fileList"
+          [nzBeforeUpload]="beforeUpload"
+          [nzShowUploadList]="{
+            showRemoveIcon: false,
+            showDownloadIcon: false
+          }"
+        >
+          <button
+            nz-button
+            nzType="primary"
+            (click)="novaBaseline = false"
+            [disabled]="!possuiPermissaoEditar || desabilitaBotoes"
+          >
+            <i nz-icon nzType="upload"></i>
+            Importar Nova Versão Project
+          </button>
+        </nz-upload>
+      </nz-space>
+    </div>
+  </div>
+  <div nz-row class="text-lg p-0 mt-6">
+    <div nz-col>
+      <div
+        class="selecao-pagina mr-2"
+        [ngClass]="{ selecionada: abaSelecionada == 0 }"
+        (click)="abaSelecionada = 0"
+      >
+        Evolução
+      </div>
+    </div>
+    <div nz-col>
+      <div
+        class="selecao-pagina"
+        [ngClass]="{ selecionada: abaSelecionada == 1 }"
+        (click)="abaSelecionada = 1"
+      >
+        Detalhado
+      </div>
+    </div>
+  </div>
+</nz-card>
+
+<ng-container *ngIf="abaSelecionada == 0">
+  <nz-card [nzExtra]="criarExtra">
+    <nz-table
+      #cronogramasTable
+      [nzData]="cronogramas?.items"
+      [nzFrontPagination]="false"
+      [(nzPageIndex)]="pageIndex"
+      [(nzPageSize)]="pageSize"
+      [nzLoading]="carregando"
+      (nzQueryParams)="onQueryParamsChange($event)"
+      [nzTotal]="cronogramas?.totalCount"
+    >
+      <thead>
+        <tr>
+          <th>Data do Status</th>
+          <th>Data de Criação</th>
+          <th>Previsto</th>
+          <th>Realizado</th>
+          <th>Status</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let cronograma of cronogramasTable.data">
+          <td>
+            {{ dataStatusCronograma(cronograma.dataStatus) }}
+          </td>
+          <td>
+            {{ cronograma.data.toLocaleDateString() }}
+          </td>
+          <td>{{ cronograma.revisado | number : "1.0-0" }}%</td>
+          <td>{{ cronograma.realizado | number : "1.0-0" }}%</td>
+          <td>
+            <nz-avatar
+              [nzSize]="40"
+              [nzIcon]="carinha"
+              class="mr-2"
+              [style]="getCorIndicador(cronograma)"
+            ></nz-avatar>
+          </td>
+          <td>
+            <nz-space>
+              <ng-container *ngIf="!cronograma.importado">
+                <button
+                  *nzSpaceItem
+                  nz-button
+                  nzShape="circle"
+                  (click)="exibirModalEditar(cronograma)"
+                  [disabled]="desabilitaBotoes"
+                  [nzTooltipTitle]="'Editar'"
+                  nz-tooltip
+                >
+                  <i nz-icon nzType="edit"></i>
+                </button>
+              </ng-container>
+              <button
+                *nzSpaceItem
+                nz-button
+                nzShape="circle"
+                nzTooltipTitle="Excluir"
+                nz-tooltip
+                nz-popconfirm
+                nzPopconfirmTitle="Tem certeza que deseja excluir?"
+                nzOkText="Sim"
+                [disabled]="desabilitaBotoes"
+                (nzOnConfirm)="excluirCronograma(cronograma)"
+                class="justify-center"
+              >
+                <i nz-icon nzType="delete"></i>
+              </button>
+            </nz-space>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </nz-card>
+</ng-container>
+<ng-container *ngIf="abaSelecionada == 1">
+  <nz-card>
+    <ng-container *ngIf="cronogramaAtual">
+      <h2>{{ !!cronogramaImportacao ? "Medição Anterior" : "Atual" }}</h2>
+      <nz-table
+        #cronogramasTable
+        [nzData]="[cronogramaAtual]"
+        [nzShowPagination]="false"
+        class="mt-3"
+      >
+        <thead>
+          <tr>
+            <th>Data do Status</th>
+            <th>Data de Criação</th>
+            <th>Previsto</th>
+            <th>Realizado</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody *ngFor="let cronograma of cronogramasTable.data">
+          <tr>
+            <td>
+              {{ dataStatusCronograma(cronograma.dataStatus) }}
+            </td>
+            <td>
+              {{ cronograma.data.toLocaleDateString() }}
+            </td>
+            <td>{{ cronograma.revisado | number : "1.0-0" }}%</td>
+            <td>{{ cronograma.realizado | number : "1.0-0" }}%</td>
+            <td>
+              <nz-avatar
+                [nzSize]="40"
+                [nzIcon]="carinha"
+                class="mr-2"
+                [style]="getCorIndicador(cronograma)"
+              >
+              </nz-avatar>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </ng-container>
+    <ng-container *ngIf="cronogramaImportacao">
+      <h2 class="mt-3">Nova Medição</h2>
+      <nz-table
+        #cronogramasTable
+        [nzData]="[cronogramaImportacao]"
+        [nzShowPagination]="false"
+        class="mt-3"
+      >
+        <thead>
+          <tr>
+            <th>Data do Status</th>
+            <th>Data de Criação</th>
+            <th>Previsto</th>
+            <th>Realizado</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody *ngFor="let cronograma of cronogramasTable.data">
+          <tr>
+            <td>
+              {{ dataStatusCronograma(cronograma.dataStatus) }}
+            </td>
+            <td>
+              {{ cronograma.data.toLocaleDateString() }}
+            </td>
+            <td>{{ cronograma.revisado | number : "1.0-0" }}%</td>
+            <td>{{ cronograma.realizado | number : "1.0-0" }}%</td>
+            <td>
+              <nz-avatar
+                [nzSize]="40"
+                [nzIcon]="carinha"
+                class="mr-2"
+                [style]="getCorIndicador(cronograma)"
+              >
+              </nz-avatar>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+
+      <nz-space class="d-flex justify-content-end mt-3 mb-3">
+        <button
+          *nzSpaceItem
+          nz-button
+          nzType="primary"
+          (click)="confirmarImportacao()"
+          [nzLoading]="carregando"
+        >
+          Confirmar Importação
+        </button>
+        <button
+          *nzSpaceItem
+          nz-button
+          nzType="default"
+          (click)="cancelarImportacao()"
+          [nzLoading]="carregando"
+        >
+          Cancelar Importação
+        </button>
+      </nz-space>
+
+      <div class="mt-3">
+        <app-cronograma-import
+          [tarefasInput]="cronogramaImportacao?.tarefas"
+        ></app-cronograma-import>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="!cronogramaImportacao">
+      <div class="mt-3">
+        <app-cronograma-import
+          [projetoId]="projetoId"
+          [tarefasInput]="cronogramaImportacao?.tarefas"
+        >
+        </app-cronograma-import>
+      </div>
+    </ng-container>
+  </nz-card>
+</ng-container>
+
+<ng-template #criarExtra>
+  <button
+    nz-button
+    nzType="link"
+    nzSize="small"
+    (click)="exibirModalEditar()"
+    [disabled]="!possuiPermissaoEditar || desabilitaBotoes"
+  >
+    <span>Adicionar Medição</span>
+  </button>
+</ng-template>

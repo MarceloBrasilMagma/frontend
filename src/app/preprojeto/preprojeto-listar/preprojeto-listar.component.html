@@ -1,0 +1,297 @@
+<div *ngIf="possuiPermissaoEditar(['Administrador'])">
+  <button
+    class="mb-3"
+    nz-button
+    nz-button
+    nzType="primary"
+    nzSize="small"
+    routerLink="cadastrar"
+  >
+    Cadastrar projeto
+  </button>
+</div>
+
+<!-- Filtros Começo -->
+<nz-collapse class="mt-2">
+  <nz-collapse-panel nzHeader="Filtros">
+    <form nz-form [formGroup]="filtrosForm">
+      <div nz-row nzGutter="24">
+        <div nz-col nzXs="24" nzSm="8">
+          <nz-form-item nz-col nzSm="24">
+            <nz-form-label>Número do Projeto</nz-form-label>
+            <nz-form-control>
+              <input
+                nz-input
+                formControlName="id"
+                placeholder="Ex.: 230"
+                type="number"
+              />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzSm="8">
+          <nz-form-item nz-col nzSm="24">
+            <nz-form-label>Nome do Projeto</nz-form-label>
+            <nz-form-control>
+              <input
+                nz-input
+                formControlName="projetoNome"
+                placeholder="Ex.: Projeto de Teste"
+              />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzSm="8">
+          <nz-form-item nz-col nzSm="24">
+            <nz-form-label>Data Inícial</nz-form-label>
+            <nz-form-control>
+              <nz-date-picker
+                nzMode="date"
+                formControlName="dataInicio"
+                nzFormat="dd/MM/yyyy"
+                nzPlaceHolder="Ex.: 12/12/2022"
+                nzTooltipTitle="Data Inicial"
+                nz-tooltip
+                class="w-100"
+              >
+              </nz-date-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzSm="8">
+          <nz-form-item nz-col nzSm="24">
+            <nz-form-label>Data Final</nz-form-label>
+            <nz-form-control>
+              <nz-date-picker
+                nzMode="date"
+                formControlName="dataFim"
+                nzFormat="dd/MM/yyyy"
+                nzPlaceHolder="Ex.: 12/01/2023"
+                class="w-100"
+              >
+              </nz-date-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzSm="8">
+          <nz-form-item nz-col nzSm="24">
+            <nz-form-label>Área</nz-form-label>
+            <nz-form-control>
+              <nz-select
+                formControlName="departamentoId"
+                nzPlaceHolder="Ex.: SUREH"
+                nzShowSearch
+                nzAllowClear
+                (ngModelChange)="carregarProjetos(0, pageSize)"
+              >
+                <nz-option
+                  *ngFor="let d of departamentos"
+                  [nzLabel]="d.nome"
+                  [nzValue]="d.id"
+                >
+                </nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzSm="8">
+          <nz-form-item nz-col nzSm="24">
+            <nz-form-label>Gerente do Projeto</nz-form-label>
+            <nz-form-control>
+              <nz-select
+                formControlName="loginGerenteProjeto"
+                nzPlaceHolder="Ex.: Maria Silva"
+                nzAllowClear
+                nzShowSearch
+                nzServerSearch
+                (nzOnSearch)="searchGerenteProjeto($event)"
+                (ngModelChange)="carregarProjetos(0, pageSize)"
+              >
+                <ng-container *ngFor="let g of gerentesProjetoAd">
+                  <nz-option
+                    *ngIf="!buscandoGerenteProjetoAd"
+                    [nzValue]="g.login"
+                    [nzLabel]="g.nome"
+                  >
+                  </nz-option>
+                </ng-container>
+                <nz-option
+                  *ngIf="buscandoGerenteProjetoAd"
+                  nzDisabled
+                  nzCustomContent
+                >
+                  <i nz-icon nzType="loading" class="loading-icon mr-2"></i>
+                  Buscando ...
+                </nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzSm="8">
+          <nz-form-item nz-col nzSm="24">
+            <nz-form-label>Gerente do Negócio</nz-form-label>
+            <nz-form-control>
+              <nz-select
+                formControlName="loginGerenteNegocio"
+                nzPlaceHolder="Ex.: João Oliveira"
+                nzAllowClear
+                nzShowSearch
+                nzServerSearch
+                (nzOnSearch)="searchGerenteNegocio($event)"
+                (ngModelChange)="carregarProjetos(0, pageSize)"
+              >
+                <ng-container *ngFor="let g of gerentesNegocioAd">
+                  <nz-option
+                    *ngIf="!buscandoGerenteNegocioAd"
+                    [nzValue]="g.login"
+                    [nzLabel]="g.nome"
+                  >
+                  </nz-option>
+                </ng-container>
+                <nz-option
+                  *ngIf="buscandoGerenteNegocioAd"
+                  nzDisabled
+                  nzCustomContent
+                >
+                  <i nz-icon nzType="loading" class="loading-icon mr-2"></i>
+                  Buscando ...
+                </nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzSm="8">
+          <nz-form-item nz-col nzSm="24">
+            <nz-form-label>Sponsor do Projeto</nz-form-label>
+            <nz-form-control>
+              <nz-select
+                formControlName="loginSponsor"
+                nzPlaceHolder="Ex.: Ana Silva"
+                nzAllowClear
+                nzShowSearch
+                nzServerSearch
+                (nzOnSearch)="searchSponsorProjeto($event)"
+                (ngModelChange)="carregarProjetos(0, pageSize)"
+              >
+                <ng-container *ngFor="let s of sponsorsProjetoAd">
+                  <nz-option
+                    *ngIf="!buscandoSponsorProjetoAd"
+                    [nzValue]="s.login"
+                    [nzLabel]="s.nome"
+                  >
+                  </nz-option>
+                </ng-container>
+                <nz-option
+                  *ngIf="buscandoSponsorProjetoAd"
+                  nzDisabled
+                  nzCustomContent
+                >
+                  <i nz-icon nzType="loading" class="loading-icon mr-2"></i>
+                  Buscando ...
+                </nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzSm="8">
+          <nz-form-item nz-col nzSm="24">
+            <nz-form-label>Situação</nz-form-label>
+            <nz-form-control>
+              <nz-select
+                formControlName="situacao"
+                nzPlaceHolder="Ex.: Em Elaboração"
+                nzAllowClear
+                (ngModelChange)="carregarProjetos(0, pageSize)"
+              >
+                <nz-option
+                  [nzValue]="SituacaoPreProjeto.EmElaboracao"
+                  nzLabel="Em Elaboração"
+                >
+                </nz-option>
+                <nz-option
+                  [nzValue]="SituacaoPreProjeto.ProjetoClassificado"
+                  nzLabel="Aguardando Validação PMO"
+                >
+                </nz-option>
+                <nz-option
+                  [nzValue]="
+                    SituacaoPreProjeto.AguardandoLevantamentoDeCustoEPrazo
+                  "
+                  nzLabel="Aguardando levantamento de custo e prazo"
+                >
+                </nz-option>
+                <nz-option
+                  [nzValue]="
+                    SituacaoPreProjeto.AguardandoAnaliseViabilidadeFinanceira
+                  "
+                  nzLabel="Aguardando análise de viabilidade financeira"
+                >
+                </nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+      <div nz-row>
+        <div nz-col nzSpan="24">
+          <button
+            nz-button
+            nzType="primary"
+            (click)="carregarProjetos(0, pageSize)"
+            [nzLoading]="carregandoProjetos"
+          >
+            Pesquisar
+          </button>
+          <button
+            nz-button
+            class="ml-2"
+            (click)="resetForm()"
+            [disabled]="carregandoProjetos"
+          >
+            Limpar
+          </button>
+        </div>
+      </div>
+    </form>
+  </nz-collapse-panel>
+</nz-collapse>
+<!-- Filtros Final -->
+
+<!-- Tabela Começo -->
+<nz-card>
+  <nz-table
+    #table
+    [nzData]="projetos.items"
+    [nzLoading]="carregandoProjetos"
+    [nzTotal]="projetos.totalCount"
+    [nzFrontPagination]="false"
+    [(nzPageIndex)]="pageIndex"
+    [(nzPageSize)]="pageSize"
+    (nzQueryParams)="onQueryParamsChange($event)"
+    [nzScroll]="{ x: '1000px' }"
+  >
+    <thead>
+      <tr>
+        <th nzWidth="40px">Nº</th>
+        <th nzWidth="150px">Nome</th>
+        <th nzWidth="80px" nzEllipsis>Departamento</th>
+        <th nzWidth="80px">Tipo</th>
+        <th nzWidth="150px" nzEllipsis>Situação</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        *ngFor="let i of table.data"
+        class="cursor-pointer linha-clicavel"
+        [routerLink]="['editar', i.id]"
+      >
+        <td>{{ i.id }}</td>
+        <td nzEllipsis>{{ i.nome }}</td>
+        <td nzEllipsis>{{ i.departamentoSigla }}</td>
+        <td nzEllipsis>{{ i.tipoDescricao }}</td>
+        <td nzEllipsis>{{ i.situacaoDescricao }}</td>
+      </tr>
+    </tbody>
+  </nz-table>
+</nz-card>
+<!-- Tabela Final -->

@@ -1,0 +1,154 @@
+<!-- <div style="border-bottom: 1px solid rgb(233, 233, 233);">
+  <p class="mb-2">
+    <button nz-button nz-button nzType="primary" nzSize="small" routerLink="cadastrar">
+      Cadastrar Projeto
+    </button>
+  </p>
+</div> -->
+
+<nz-collapse class="mt-2">
+  <nz-collapse-panel nzHeader="Filtros">
+    <form nz-form [formGroup]="filtrosForm">
+      <div nz-row nzGutter="24">
+        <div nz-col nzXs="24" nzSm="8">
+          <nz-form-item nz-col nzSm="24">
+            <nz-form-label>Nome do Projeto</nz-form-label>
+            <nz-form-control>
+              <input nz-input formControlName="nome" placeholder="Ex.: Projeto de Teste"/>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzSm="8">
+          <nz-form-item nz-col nzSm="24">
+            <nz-form-label>Data Inícial</nz-form-label>
+            <nz-form-control>
+              <nz-date-picker nzMode="date" formControlName="dataInicio" nzFormat="dd/MM/yyyy"
+                nzPlaceHolder="Ex.: 12/12/2022" class="w-100">
+              </nz-date-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzSm="8">
+          <nz-form-item nz-col nzSm="24">
+            <nz-form-label>Data Inícial Final</nz-form-label>
+            <nz-form-control>
+              <nz-date-picker nzMode="date" formControlName="dataFim" nzFormat="dd/MM/yyyy" nzPlaceHolder="Ex.: 12/01/2023" class="w-100">
+              </nz-date-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzSm="8">
+          <nz-form-item nz-col nzSm="24">
+            <nz-form-label>Área</nz-form-label>
+            <nz-form-control>
+              <nz-select formControlName="departamentoId" nzPlaceHolder="Ex.: SUREH"
+                nzShowSearch nzAllowClear (ngModelChange)="carregarProjetos()">
+                <nz-option *ngFor="let d of departamentos" [nzLabel]="d.nome" [nzValue]="d.id"> </nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzSm="8">
+          <nz-form-item nz-col nzSm="24">
+            <nz-form-label>Responsável</nz-form-label>
+            <nz-form-control>
+              <nz-select formControlName="loginResponsavel" nzPlaceHolder="Ex.: Maria Silva" nzAllowClear nzShowSearch nzServerSearch
+                (nzOnSearch)="searchResponsavel($event)" (ngModelChange)="carregarProjetos()">
+                <ng-container *ngFor="let g of responsavelAd">
+                  <nz-option *ngIf="!buscandoResponsavelAd" [nzValue]="g.login" [nzLabel]="g.nome">
+                  </nz-option>
+                </ng-container>
+                <nz-option *ngIf="buscandoResponsavelAd" nzDisabled nzCustomContent>
+                  <i nz-icon nzType="loading" class="loading-icon mr-2"></i> Buscando ...
+                </nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzSm="8">
+          <nz-form-item nz-col nzSm="24">
+            <nz-form-label>Selecionar Sponsor</nz-form-label>
+            <nz-form-control>
+              <nz-select formControlName="loginSponsor" nzPlaceHolder="Ex.: João Oliveira" nzAllowClear nzShowSearch nzServerSearch
+                (nzOnSearch)="searchSponsorProjeto($event)" (ngModelChange)="carregarProjetos()">
+                <ng-container *ngFor="let s of sponsorsProjetoAd">
+                  <nz-option *ngIf="!buscandoSponsorProjetoAd" [nzValue]="s.login" [nzLabel]="s.nome">
+                  </nz-option>
+                </ng-container>
+                <nz-option *ngIf="buscandoSponsorProjetoAd" nzDisabled nzCustomContent>
+                  <i nz-icon nzType="loading" class="loading-icon mr-2"></i> Buscando ...
+                </nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzSm="8">
+          <nz-form-item nz-col nzSm="24">
+            <nz-form-label>Situação</nz-form-label>
+            <nz-form-control>
+              <nz-select formControlName="situacao" nzPlaceHolder="Ex.: Em Elaboração"
+                nzAllowClear (ngModelChange)="carregarProjetos()">
+                <nz-option [nzValue]="SituacaoProjetoPlurianual.EmElaboracao" nzLabel="Em Elaboração">
+                </nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+      <div nz-row>
+        <div nz-col nzSpan="24">
+          <button nz-button nzType="primary" (click)="carregarProjetos()" [nzLoading]="carregandoProjetos">
+            Pesquisar
+          </button>
+          <button nz-button class="ml-2" (click)="resetForm()" [disabled]="carregandoProjetos">
+            Limpar
+          </button>
+        </div>
+      </div>
+    </form>
+  </nz-collapse-panel>
+</nz-collapse>
+
+
+<nz-table #table [nzData]="projetos.items" nzBordered [nzFrontPagination]="false" [nzLoading]="carregandoProjetos"
+  [nzTotal]="projetos.totalCount" [(nzPageIndex)]="pageIndex" [(nzPageSize)]="pageSize"
+  (nzQueryParams)="onQueryParamsChange($event)" class="mt-1">
+  <thead>
+    <tr>
+      <th>Nº</th>
+      <th>Nome</th>
+      <th>Departamento</th>
+      <th>Situação</th>
+      <th>Responsável</th>
+      <th>Sponsor</th>
+      <th colspan="2">Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let i of table.data">
+      <td [routerLink]="['editar', i.id]" class="cursor-pointer linha-clicavel">{{ i.id }}</td>
+      <td [routerLink]="['editar', i.id]" class="cursor-pointer linha-clicavel">
+        {{ i.nome }}
+      </td>
+      <td [routerLink]="['editar', i.id]" class="cursor-pointer linha-clicavel">{{ i.departamentoNome }}</td>
+      <td [routerLink]="['editar', i.id]" class="cursor-pointer linha-clicavel">{{ i.situacaoDescricao }}</td>
+      <td [routerLink]="['editar', i.id]" class="cursor-pointer linha-clicavel">{{ i.nomeResponsavel }}</td>
+      <td [routerLink]="['editar', i.id]" class="cursor-pointer linha-clicavel">{{ i.nomeSponsor }}</td>
+      <td>
+        <nz-space >
+          <button *nzSpaceItem nz-button nzShape="circle" [routerLink]="['editar', i.id]" [nzTooltipTitle]="exibirVisualizarProjeto(i) ? 'Visualizar' : 'Editar'" nz-tooltip>
+            <i *ngIf="!exibirVisualizarProjeto(i)" nz-icon nzType="edit"></i>
+            <i *ngIf="exibirVisualizarProjeto(i)"nz-icon nzType="eye" nzTheme="outline"></i>
+          </button>
+        </nz-space>
+      </td>
+      <td *ngIf="possuiPermissaoExcluir">
+        <nz-space>
+          <button *nzSpaceItem nz-button nzShape="circle" (click)="excluirProjeto(i.id)" nzTooltipTitle="Excluir" nz-tooltip>
+            <i nz-icon nzType="delete"></i>
+          </button>
+        </nz-space>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>

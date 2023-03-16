@@ -1,0 +1,137 @@
+<div *ngIf="possuiPermissaoEditar(['Administrador'])">
+  <div class="mb-2">
+    <div nz-row>
+      <div nz-col nzSpan="12" >
+        <button class="mb-2" nz-button nz-button nzType="primary" nzSize="small" routerLink="cadastrar">
+          Cadastrar Declaração de Trabalho
+        </button>
+      </div>
+      <div nz-col nzSpan="12" style="align-items: flex-end; text-align: right;">
+        <button class="mb-3" nz-button nzType="primary" nzSize="small" nz-popconfirm nzPopconfirmTitle="Deseja exportar as DTs?"
+          nzOkText="Sim" nzCancelText="Não" (nzOnConfirm)="exportar()">
+          Exportar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<nz-collapse class="mt-2">
+  <nz-collapse-panel nzHeader="Filtros">
+    <form nz-form [formGroup]="filtrosForm">
+      <div nz-row nzGutter="24">
+        <div nz-col nzXs="24" nzSm="8">
+          <nz-form-item nz-col nzSm="24">
+            <nz-form-label>Número da DT</nz-form-label>
+            <nz-form-control>
+              <input nz-input formControlName="id" placeholder="Ex.: 1043" type="number"/>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzSm="8">
+          <nz-form-item nz-col nzSm="24">
+            <nz-form-label>Projeto</nz-form-label>
+            <nz-form-control>
+                <input nz-input formControlName="projetoNome" placeholder="Ex.: PDTI"/>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzSm="8">
+          <nz-form-item nz-col nzSm="24">
+            <nz-form-label>Situação</nz-form-label>
+            <nz-form-control>
+              <nz-select formControlName="situacao" nzPlaceHolder="Ex.: Em Elaboração"
+                nzAllowClear (ngModelChange)="carregarDTs()">
+                <nz-option [nzValue]="DeclaracaoTrabalhoSituacao.Elaboracao" nzLabel="Em Elaboração">
+                </nz-option>
+                <nz-option [nzValue]="DeclaracaoTrabalhoSituacao.AguardandoFornecedor" nzLabel="Aguardando Fornecedor">
+                </nz-option>
+                <nz-option [nzValue]="DeclaracaoTrabalhoSituacao.Respondida" nzLabel="Respondida">
+                </nz-option>
+                <nz-option [nzValue]="DeclaracaoTrabalhoSituacao.AguardandoClassificacao" nzLabel="Aguardando Classificação Contábil">
+                </nz-option>
+                <nz-option [nzValue]="DeclaracaoTrabalhoSituacao.ClassificacaoRealizada" nzLabel="Classificação Contábil Realizada">
+                </nz-option>
+                <nz-option [nzValue]="DeclaracaoTrabalhoSituacao.Finalizada" nzLabel="Finalizada">
+                </nz-option>
+                <nz-option [nzValue]="DeclaracaoTrabalhoSituacao.Cancelada" nzLabel="Cancelada">
+                </nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzSm="8">
+          <nz-form-item nz-col nzSm="24">
+            <nz-form-label>Área</nz-form-label>
+            <nz-form-control>
+              <nz-select formControlName="departamentoId" nzPlaceHolder="Ex.: SUREH"
+                nzShowSearch nzAllowClear (ngModelChange)="carregarDTs()">
+                <nz-option *ngFor="let d of departamentos" [nzLabel]="d.nome" [nzValue]="d.id"> </nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzSm="8">
+          <nz-form-item nz-col nzSm="24">
+            <nz-form-label>Nome do Responsável</nz-form-label>
+            <nz-form-control>
+              <input nz-input formControlName="nomeResponsavel" placeholder="Ex.: José Silva"/>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzSm="8">
+          <nz-form-item nz-col nzSm="24">
+            <nz-form-label>Login do Responsável</nz-form-label>
+            <nz-form-control>
+              <input nz-input formControlName="loginResponsavel" placeholder="Ex.: josesilva"/>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+      <div nz-row>
+        <div nz-col nzSpan="24">
+          <button (click)="carregarDTs()" nz-button nzType="primary" [nzLoading]="carregandoDts">
+            Pesquisar
+          </button>
+          <button (click)="resetForm()" nz-button class="ml-2" [disabled]="carregandoDts">
+            Limpar
+          </button>
+        </div>
+      </div>
+    </form>
+  </nz-collapse-panel>
+</nz-collapse>
+<nz-card>
+  <nz-table #dtsTable [nzData]="declaracoesTrabalho.items" [nzFrontPagination]="false"
+    [nzLoading]="carregandoDts" [nzTotal]="declaracoesTrabalho.totalCount" [(nzPageIndex)]="pageIndex"
+    [(nzPageSize)]="pageSize" (nzQueryParams)="onQueryParamsChange($event)" [nzScroll]="{ x: '1000px'}">
+    <thead>
+      <tr>
+        <th nzWidth="60px" nzEllipsis>Nº</th>
+        <th nzWidth="100px" nzEllipsis>Responsável</th>
+        <th nzWidth="100px" nzEllipsis>Fornecedor Interno</th>
+        <th nzWidth="150px" nzEllipsis>Projeto</th>
+        <th nzWidth="170px" nzEllipsis>Situação</th>
+        <th nzWidth="80px" nzEllipsis>Data de Criaçao</th>
+        <th nzWidth="80px" nzEllipsis>Prazo</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let dt of dtsTable.data" class="cursor-pointer linha-clicavel" [routerLink]="['editar', dt.id]">
+        <td [queryParams]="{ projetoId: dt.projetoId }">{{ dt.id
+          }}</td>
+        <td nzEllipsis>{{ dt.nomeResponsavel }}</td>
+        <td nzEllipsis>{{ dt.departamentoNome }}</td>
+        <td nzEllipsis>
+          {{ dt.preProjetoNome || dt.projetoPlurianualNome }}</td>
+        <td nzEllipsis>
+          <nz-tag [nzColor]="corTagSituacao(dt)">
+            {{ dt.situacaoDescricao }}
+          </nz-tag>
+        </td>
+        <td nzEllipsis>{{ dt.dataCriacao | date: "dd/MM/yyyy" }}</td>
+        <td nzEllipsis>{{getDataEntregaFornecedor(dt)}}</td>
+      </tr>
+    </tbody>
+  </nz-table>
+</nz-card>

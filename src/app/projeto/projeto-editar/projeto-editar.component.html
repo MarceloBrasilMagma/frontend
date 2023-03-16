@@ -1,0 +1,44 @@
+<nz-skeleton nzActive [nzLoading]="carregandoProjeto"></nz-skeleton>
+
+<ng-container *ngIf="!carregandoProjeto">
+  <div style="position: fixed; z-index: 2; left: 100%; padding-top: 100px;">
+    <div class="row" style="position: relative; left: -60px;">
+      <button nz-button (click)="abrirMenuLateral(abas.menu)"
+        class="btn-menu-lateral-pe">
+        <i nz-icon nzType="left" nzTheme="outline"></i>
+      </button>
+    </div>
+  </div>
+
+  <nz-drawer [nzWidth]="400" [nzClosable]="true" [nzVisible]="exibirMenuLateral" nzPlacement="right"
+    (nzOnClose)="fecharMenuLateral()" [nzBodyStyle]="{padding :'0px'}">
+    <ng-container *nzDrawerContent>
+      <app-menu-lateral [projeto]="projeto" [abaSelecionada]="abaSelecionada" (componente)="alterarComponente($event)"
+        (recarregarProjeto)="carregarProjeto()" (verificarTap)="verificarTap()">
+      </app-menu-lateral>
+    </ng-container>
+  </nz-drawer>
+
+  <app-cabecalho [projeto]="projeto" (verificarTap)="verificarTap()" (atualizaProjetoStatusEvent)="atualizaProjetoStatus($event)" [possuiPermissaoEditar]="possuiPermissaoEditar(['Administrador'])"></app-cabecalho>
+
+  <ng-container>
+    <app-capa *ngIf="exibirCapa" [projeto]="projeto" (componente)="alterarComponente($event)"></app-capa>
+    <app-diario-bordo *ngIf="exibirDiarioBordo" (recarregarEvent)="carregarProjeto()" [projeto]="projeto"
+      [projetoId]="projetoId" [possuiPermissaoEditar]="possuiPermissaoEditar(['Administrador'])"></app-diario-bordo>
+    <app-tap *ngIf="exibirDadosProjeto" [projeto]="projeto" [possuiPermissaoEditar]="possuiPermissaoEditar(['Administrador'])"
+      (sairDadosProjetoEvent)="alterarComponente(componentes.Capa)" (recarregarProjetoEvent)="carregarProjeto()">
+    </app-tap>
+    <app-plano-acao *ngIf="exibirPlanoAcao" [projetoId]="projetoId" [statusProjeto]="projeto?.status" [possuiPermissaoEditar]="possuiPermissaoEditar(['Administrador'])"></app-plano-acao>
+    <app-centro-custo-form *ngIf="exibirCentroCusto" [centroCusto]="projeto?.centroCusto"
+      [salvarEvent]="salvarCentroCustoSubject" [projetoId]="projetoId" [situacaoProjeto]="projeto.situacao" [statusProjeto]="projeto?.status"
+      [possuiPermissaoEditar]="possuiPermissaoEditar(['Administrador'])"
+      [alterarSituacaoEvent]="alterarSituacaoCentroCustoEvent" (centroChanged)="atualizarCentro($event)">
+    </app-centro-custo-form>
+    <app-orcamento-tabela *ngIf="exibirOrcamentos" [acompanhamentoOrcamentario]="projeto.acompanhamentoOrcamentario">
+    </app-orcamento-tabela>
+    <app-cronograma-tabela *ngIf="exibirCronograma" [projetoId]="projetoId" [statusProjeto]="projeto?.status" [possuiPermissaoEditar]="possuiPermissaoEditar(['Administrador'])"></app-cronograma-tabela>
+    <app-cronograma-import *ngIf="exibirCronogramaProject" [projetoId]="projetoId"></app-cronograma-import>
+    <app-licao-aprendida [possuiPermissaoEditar]="possuiPermissaoEditar(['Administrador'])" *ngIf="exibirLicoesAprendidas" [projetoId]="projetoId" [statusProjeto]="projeto?.status"></app-licao-aprendida>
+  </ng-container>
+
+</ng-container>

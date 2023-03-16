@@ -1,0 +1,78 @@
+nz-page-header {
+  ::ng-deep {
+    .ant-page-header-heading-sub-title {
+      color: black;
+    }
+  }
+}
+
+nz-collapse-panel {
+  background: #f7f7f7;
+  border-radius: 4px;
+  margin-bottom: 24px;
+  border: 0px;
+}
+
+#form-card {
+  ::ng-deep {
+    .ant-card-body {
+      padding: 0.5rem 1rem 1rem 1rem !important;
+    }
+  }
+}
+
+.salvar-floating-button {
+  position: fixed;
+  width: 52px;
+  height: 52px;
+  bottom: 40px;
+  right: 40px;
+  box-shadow: 2px 2px 3px #999;
+}
+
+.toggle-expandir-wrapper {
+  border-bottom: 1px solid rgb(233, 233, 233);
+  background-color: #fff;
+}
+
+.affix-toggle-expandir {
+  ::ng-deep {
+    .ant-affix {
+      z-index: 999;
+      .toggle-expandir-wrapper {
+        padding-top: 10px;
+      }
+    }
+  }
+}
+
+nz-select {
+  &.ant-select-multiple {
+    &.ant-select-open {
+      ::ng-deep {
+        nz-select-search {
+          width: 95% !important;
+        }
+      }
+    }
+    ::ng-deep {
+      nz-select-top-control {
+        height: 100% !important;
+      }
+    }
+  }
+}
+
+nz-upload {
+  ::ng-deep {
+    .ant-upload-drag {
+      padding: 0;
+    }
+  }
+}
+
+button {
+  display: flex;
+  align-items: center;
+}
+

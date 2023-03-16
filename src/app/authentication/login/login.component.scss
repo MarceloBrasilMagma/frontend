@@ -1,0 +1,90 @@
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-text-fill-color: #979797;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+.bg-img {
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-image: url("/assets/images/others/dot-waves-login-bg.webp");
+  mix-blend-mode: color-dodge;
+  opacity: 0.75;
+}
+
+.bg-overlay {
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(90deg, #4b2c65 0%, #210948 100%);
+}
+
+.txt-informe-credenciais {
+  font-size: 12px;
+  line-height: 21px;
+  color: #979797;
+}
+
+.login-card {
+  border-radius: 10.6px;
+  ::ng-deep {
+    @media (min-width: 768px) {
+      .ant-card-body {
+        padding: 3.5rem 3.5rem;
+      }
+    }
+  }
+}
+
+.custom-form-item {
+  nz-form-label {
+    padding-bottom: 0 !important;
+    ::ng-deep {
+      label {
+        color: #4b2c65;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 14px;
+        line-height: 27px;
+      }
+    }
+  }
+
+  nz-input-group {
+    ::ng-deep {
+      input {
+        color: #979797 !important;
+        padding-left: 0;
+        box-shadow: none !important;
+        border-top-width: 0px !important;
+        border-left-width: 0px !important;
+        border-right-width: 0px !important;
+      }
+      input:focus {
+        border-right-width: 0px !important;
+      }
+    }
+    input[type="password"] {
+      &:not(:placeholder-shown) {
+        letter-spacing: 4px;
+      }
+    }
+  }
+}
+
+.btn-acessar {
+  background-color: #bacf36;
+  border-color: #bacf36;
+  color: #fff;
+  border-radius: 60px;
+  width: 130px;
+}

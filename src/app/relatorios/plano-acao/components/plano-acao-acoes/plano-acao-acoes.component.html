@@ -1,0 +1,264 @@
+<!-- Barra Superior -->
+<div class="flex flex-col md:flex-row items-center justify-between mb-2">
+  <h2>Ações</h2>
+  <div class="flex flex-row items-center gap-2">
+    <div class="pr-1 pl-2">
+      <nz-badge nzColor="#4899D3"></nz-badge>
+      <span class="text-base">Em andamento</span>
+    </div>
+    <div class="pl-2">
+      <nz-badge nzColor="#A2B42A"></nz-badge>
+      <span class="text-base">Realizado</span>
+    </div>
+    <div class="pl-2">
+      <nz-badge nzColor="#CC4123"></nz-badge>
+      <span class="text-base">Atrasado</span>
+    </div>
+    <div class="pl-2">
+      <nz-badge nzColor="#737373"></nz-badge>
+      <span class="text-base">Cancelado</span>
+    </div>
+  </div>
+  <h2 class="text-slate-400">Total: {{ totalPlanoAcoes }}</h2>
+</div>
+<div class="w-full flex flex-row mb-2">
+  <div
+    [style]="{ width: (planosAcaoEmAndamento / totalPlanoAcoes) * 100 + '%' }"
+    *ngIf="planosAcaoEmAndamento > 0">
+    <div class="bg-[#4899D3] h-2"></div>
+    <div class="flex flex-row gap-2 mt-2">
+      <h4>{{ planosAcaoEmAndamento }}</h4>
+      <nz-tag nzColor="#DFDFDF" class="text-dark">
+        {{ planosAcaoEmAndamento / totalPlanoAcoes | percent: "1.2-2" }}
+      </nz-tag>
+    </div>
+  </div>
+  <div
+    [style]="{ width: (planosAcaoRealizados / totalPlanoAcoes) * 100 + '%' }"
+    *ngIf="planosAcaoRealizados > 0">
+    <div class="bg-[#A2B42A] h-2"></div>
+    <div class="flex flex-row gap-2 mt-2">
+      <h4>{{ planosAcaoRealizados }}</h4>
+      <nz-tag nzColor="#DFDFDF" class="text-dark">
+        {{ planosAcaoRealizados / totalPlanoAcoes | percent: "1.2-2" }}
+      </nz-tag>
+    </div>
+  </div>
+  <div [style]="{ width: (planosAcaoAtrasados / totalPlanoAcoes) * 100 + '%' }" *ngIf="planosAcaoAtrasados > 0">
+    <div class="bg-[#CC4123] h-2"></div>
+    <div class="flex flex-row gap-2 mt-2">
+      <h4>{{ planosAcaoAtrasados }}</h4>
+      <nz-tag nzColor="#DFDFDF" class="text-dark">
+        {{ planosAcaoAtrasados / totalPlanoAcoes | percent: "1.2-2" }}
+      </nz-tag>
+    </div>
+  </div>
+  <div
+    [style]="{ width: (planosAcaoCancelados / totalPlanoAcoes) * 100 + '%' }" *ngIf="planosAcaoCancelados > 0"
+  >
+    <div class="bg-[#737373] h-2"></div>
+    <div class="flex flex-row gap-2 mt-2">
+      <h4>{{ planosAcaoCancelados }}</h4>
+      <nz-tag nzColor="#DFDFDF" class="text-dark">
+        {{ planosAcaoCancelados / totalPlanoAcoes | percent: "1.2-2" }}
+      </nz-tag>
+    </div>
+  </div>
+</div>
+
+<!-- Barras dos projetos -->
+<ng-container *ngFor="let preProjeto of portifolio.preProjetos">
+  <div class="flex flex-row items-center justify-between mb-2 gap-3 border-t">
+    <div class="flex flex-row gap-2 truncate">
+      <p>#{{ preProjeto.projetoId }}</p>
+      <h5 class="truncate">{{ preProjeto.nome }}</h5>
+    </div>
+    <h5 class="text-slate-400 min-w-fit">Total: {{ preProjeto.planosAcoes.length }}</h5>
+  </div>
+  <div class="w-full flex flex-row mb-2" *ngIf="preProjeto.planosAcoes.length > 0">
+    <div
+      *ngIf="obterPorcentagemPlanoAcaoPorFollowUp(FollowUp.EmAndamento, preProjeto) > 0"
+      [style]="{
+        width:
+          obterPorcentagemPlanoAcaoPorFollowUp(FollowUp.EmAndamento, preProjeto) * 100 +
+          '%'
+      }"
+    >
+      <div class="bg-[#4899D3] h-2 w-full"></div>
+      <div class="flex flex-row gap-2 mt-2">
+        <h4>{{ obterQtdPlanoAcaoPorFollowUp(FollowUp.EmAndamento, preProjeto) }}</h4>
+        <nz-tag nzColor="#DFDFDF" class="text-dark">
+          {{
+            obterPorcentagemPlanoAcaoPorFollowUp(FollowUp.EmAndamento, preProjeto)
+              | percent: "1.2-2"
+          }}
+        </nz-tag>
+      </div>
+    </div>
+    <div
+      *ngIf="obterPorcentagemPlanoAcaoPorFollowUp(FollowUp.Realizado, preProjeto) > 0"
+      [style]="{
+        width:
+          obterPorcentagemPlanoAcaoPorFollowUp(FollowUp.Realizado, preProjeto) * 100 +
+          '%'
+      }"
+    >
+      <div class="bg-[#A2B42A] h-2 w-full"></div>
+      <div class="flex flex-row gap-2 mt-2">
+        <h4>{{ obterQtdPlanoAcaoPorFollowUp(FollowUp.Realizado, preProjeto) }}</h4>
+        <nz-tag nzColor="#DFDFDF" class="text-dark">
+          {{
+            obterPorcentagemPlanoAcaoPorFollowUp(FollowUp.Realizado, preProjeto)
+              | percent: "1.2-2"
+          }}
+        </nz-tag>
+      </div>
+    </div>
+    <div
+      *ngIf="obterPorcentagemPlanoAcaoPorFollowUp(FollowUp.Atrasado, preProjeto) > 0"
+      [style]="{
+        width:
+          obterPorcentagemPlanoAcaoPorFollowUp(FollowUp.Atrasado, preProjeto) * 100 + '%'
+      }"
+    >
+      <div class="bg-[#CC4123] h-2 w-full"></div>
+      <div class="flex flex-row gap-2 mt-2">
+        <h4>{{ obterQtdPlanoAcaoPorFollowUp(FollowUp.Atrasado, preProjeto) }}</h4>
+        <nz-tag nzColor="#DFDFDF" class="text-dark">
+          {{
+            obterPorcentagemPlanoAcaoPorFollowUp(FollowUp.Atrasado, preProjeto)
+              | percent: "1.2-2"
+          }}
+        </nz-tag>
+      </div>
+    </div>
+    <div
+      *ngIf="obterPorcentagemPlanoAcaoPorFollowUp(FollowUp.Cancelado, preProjeto) > 0"
+      [style]="{
+        width:
+          obterPorcentagemPlanoAcaoPorFollowUp(FollowUp.Cancelado, preProjeto) * 100 +
+          '%'
+      }"
+    >
+      <div class="bg-[#737373] h-2 w-full"></div>
+      <div class="flex flex-row gap-2 mt-2">
+        <h4>{{ obterQtdPlanoAcaoPorFollowUp(FollowUp.Cancelado, preProjeto) }}</h4>
+        <nz-tag nzColor="#DFDFDF" class="text-dark">
+          {{
+            obterPorcentagemPlanoAcaoPorFollowUp(FollowUp.Cancelado, preProjeto)
+              | percent: "1.2-2"
+          }}
+        </nz-tag>
+      </div>
+    </div>
+  </div>
+  <div class="w-full flex flex-row mb-2" *ngIf="preProjeto.planosAcoes.length == 0">
+    <div class="w-full" >
+      <div class="bg-[#999797] h-2 w-full"></div>
+      <div class="flex flex-row gap-2 mt-2">
+        <h4>0</h4>
+        <nz-tag nzColor="#DFDFDF" class="text-dark">
+          Nenhum plano de ação encontrado
+        </nz-tag>
+      </div>
+    </div>
+  </div>
+</ng-container>
+<ng-container *ngFor="let projetoPlurianual of portifolio.projetosPlurianuais">
+  <div class="flex flex-row items-center justify-between mb-2 gap-3 border-t">
+    <div class="flex flex-row gap-2 truncate">
+      <p>#{{ projetoPlurianual.id }}</p>
+      <h5 class="truncate">{{ projetoPlurianual.nome }}</h5>
+    </div>
+    <h5 class="text-slate-400 min-w-fit">Total: {{ projetoPlurianual.planosAcoes.length }}</h5>
+  </div>
+
+  <div class="w-full flex flex-row mb-2" *ngIf="projetoPlurianual.planosAcoes.length > 0">
+    <div
+      *ngIf="obterPorcentagemPlanoAcaoPorFollowUp(FollowUp.EmAndamento, projetoPlurianual) > 0"
+      [style]="{
+        width:
+          obterPorcentagemPlanoAcaoPorFollowUp(FollowUp.EmAndamento, projetoPlurianual) * 100 +
+          '%'
+      }"
+    >
+      <div class="bg-[#4899D3] h-2 w-full"></div>
+      <div class="flex flex-row gap-2 mt-2">
+        <h4>{{ obterQtdPlanoAcaoPorFollowUp(FollowUp.EmAndamento, projetoPlurianual) }}</h4>
+        <nz-tag nzColor="#DFDFDF" class="text-dark">
+          {{
+            obterPorcentagemPlanoAcaoPorFollowUp(FollowUp.EmAndamento, projetoPlurianual)
+              | percent: "1.2-2"
+          }}
+        </nz-tag>
+      </div>
+    </div>
+    <div
+      *ngIf="obterPorcentagemPlanoAcaoPorFollowUp(FollowUp.Realizado, projetoPlurianual) > 0"
+      [style]="{
+        width:
+          obterPorcentagemPlanoAcaoPorFollowUp(FollowUp.Realizado, projetoPlurianual) * 100 +
+          '%'
+      }"
+    >
+      <div class="bg-[#A2B42A] h-2 w-full"></div>
+      <div class="flex flex-row gap-2 mt-2">
+        <h4>{{ obterQtdPlanoAcaoPorFollowUp(FollowUp.Realizado, projetoPlurianual) }}</h4>
+        <nz-tag nzColor="#DFDFDF" class="text-dark">
+          {{
+            obterPorcentagemPlanoAcaoPorFollowUp(FollowUp.Realizado, projetoPlurianual)
+              | percent: "1.2-2"
+          }}
+        </nz-tag>
+      </div>
+    </div>
+    <div
+      *ngIf="obterPorcentagemPlanoAcaoPorFollowUp(FollowUp.Atrasado, projetoPlurianual) > 0"
+      [style]="{
+        width:
+          obterPorcentagemPlanoAcaoPorFollowUp(FollowUp.Atrasado, projetoPlurianual) * 100 + '%'
+      }"
+    >
+      <div class="bg-[#CC4123] h-2 w-full"></div>
+      <div class="flex flex-row gap-2 mt-2">
+        <h4>{{ obterQtdPlanoAcaoPorFollowUp(FollowUp.Atrasado, projetoPlurianual) }}</h4>
+        <nz-tag nzColor="#DFDFDF" class="text-dark">
+          {{
+            obterPorcentagemPlanoAcaoPorFollowUp(FollowUp.Atrasado, projetoPlurianual)
+              | percent: "1.2-2"
+          }}
+        </nz-tag>
+      </div>
+    </div>
+    <div
+      *ngIf="obterPorcentagemPlanoAcaoPorFollowUp(FollowUp.Cancelado, projetoPlurianual) > 0"
+      [style]="{
+        width:
+          obterPorcentagemPlanoAcaoPorFollowUp(FollowUp.Cancelado, projetoPlurianual) * 100 +
+          '%'
+      }"
+    >
+      <div class="bg-[#737373] h-2 w-full"></div>
+      <div class="flex flex-row gap-2 mt-2">
+        <h4>{{ obterQtdPlanoAcaoPorFollowUp(FollowUp.Cancelado, projetoPlurianual) }}</h4>
+        <nz-tag nzColor="#DFDFDF" class="text-dark">
+          {{
+            obterPorcentagemPlanoAcaoPorFollowUp(FollowUp.Cancelado, projetoPlurianual)
+              | percent: "1.2-2"
+          }}
+        </nz-tag>
+      </div>
+    </div>
+  </div>
+  <div class="w-full flex flex-row mb-2" *ngIf="projetoPlurianual.planosAcoes.length == 0">
+    <div class="w-full" >
+      <div class="bg-[#999797] h-2 w-full"></div>
+      <div class="flex flex-row gap-2 mt-2">
+        <h4>0</h4>
+        <nz-tag nzColor="#DFDFDF" class="text-dark">
+          Nenhum plano de ação encontrado
+        </nz-tag>
+      </div>
+    </div>
+  </div>
+</ng-container>

@@ -1,0 +1,16 @@
+.dropdown-questionario {
+  padding-bottom: 0;
+  padding-top: 0;
+}
+
+.dropdown-questionario > li > i {
+  margin-right: 8px;
+}
+
+.dropdown-questionario > li {
+  border-bottom: 1px solid #dfdfdf;
+}
+
+.dropdown-questionario li:last-child {
+  border-bottom: none;
+}

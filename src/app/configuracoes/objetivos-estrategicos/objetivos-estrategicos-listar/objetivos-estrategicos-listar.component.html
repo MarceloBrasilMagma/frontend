@@ -1,0 +1,44 @@
+<div>
+      <button class="mb-3" nz-button nzType="primary" nzSize="small" (click)="exibirModalEditar()">
+        <span>Registrar novo objetivo</span>
+      </button>
+  </div>
+  <nz-table #objetivosTable [nzData]="objetivos" [nzFrontPagination]="true" [nzTotal]="objetivos?.length" class="mt-1" [nzScroll]="{ x: '900px'}">
+    <thead>
+      <tr>
+        <th nzWidth="40px" nzEllipsis>Id</th>
+        <th nzWidth="150px" nzEllipsis>Descrição</th>
+        <th nzWidth="60px" nzEllipsis>Porcentagem</th>
+        <th nzWidth="80px" nzEllipsis>Classificação</th>
+        <th nzWidth="120px" nzEllipsis>Perspectiva</th>
+        <th nzWidth="120px" nzEllipsis>Objetivo Pai</th>
+        <th nzWidth="80px" nzEllipsis>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let objetivo of objetivosTable.data">
+        <td>{{objetivo.id}}</td>
+        <td nzEllipsis>{{objetivo.descricao}}</td>
+        <td>{{objetivo.porcentagem}}%</td>
+        <td nzEllipsis>{{objetivo.objetivoEstrategicoClassificacaoDescricao}}</td>
+        <td nzEllipsis>{{objetivo.objetivoEstrategicoPerspectivaDescricao}}</td>
+        <td nzEllipsis>{{getObjetivoPai(objetivo.objetivoEstrategicoPaiId)}}</td>
+        <td>
+          <nz-space>
+              <button *nzSpaceItem nz-button nzShape="circle" (click)="exibirModalEditar(objetivo)" [nzTooltipTitle]="'Editar'"
+                nz-tooltip>
+                <i nz-icon nzType="edit"></i>
+              </button>
+              <button *nzSpaceItem nz-button nzShape="circle" nzTooltipTitle="Excluir" nz-tooltip nz-popconfirm
+                nzPopconfirmTitle="Tem certeza que deseja excluir?" nzOkText="Sim"
+                (nzOnConfirm)="excluirObjetivoProjeto(objetivo)">
+                <i nz-icon nzType="delete"></i>
+              </button>
+          </nz-space>
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+
+
+

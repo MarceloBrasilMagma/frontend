@@ -1,0 +1,114 @@
+<div class="mb-5">
+  <div nz-row>
+    <div nz-col nzFlex="1">
+      <form nz-form [formGroup]="form" nzLayout="vertical">
+        <div nz-row>
+          <div nz-col nzFlex="1" style="margin: 0px 10px 0px 10px;">
+            <nz-form-item>
+              <nz-form-label nzFor="observacao" nzRequired>
+                Observações Gerais
+              </nz-form-label>
+              <nz-form-control>
+                <textarea nz-input formControlName="observacao" placeholder="Observação" [nzAutosize]="{ minRows: 3, maxRows: 6 }"></textarea>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<nz-spin nzTip="Aguarde..." [nzSpinning]="isLoading">
+  <div style="margin-top: 20px; padding-bottom: 20px; border-bottom: 1px solid rgb(233, 233, 233);">
+    <nz-radio-group [(ngModel)]="opcao" (ngModelChange)="carregarOrcamentos()">
+      <label nz-radio [nzValue]="0">Todos os Custos</label>
+      <label nz-radio [nzValue]="2">Custos Declarações de Trabalho</label>
+      <label nz-radio [nzValue]="1">Custos Extra Declarações de Trabalho</label>
+    </nz-radio-group>
+  </div>
+
+  <nz-table #orcamentosTable [nzData]="orcamentos" [nzFrontPagination]="false" nzSize="small">
+    <thead>
+      <tr>
+        <th>Nº DT</th>
+        <th>Responsável</th>
+        <th>Fornecedor Interno</th>
+        <th>Situação</th>
+        <th>Descrição</th>
+        <th>Despesa Administrativa</th>
+        <th>Custo Assistencial</th>
+        <th>Investimento</th>
+        <th>Total</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let o of orcamentosTable.data">
+        <td>
+          <a *ngIf="!!o.declaracaoTrabalhoId" nz-tooltip nzTooltipTitle="Visualizar DT" nzTooltipPlacement="top"
+            [routerLink]="['/declaracoes-trabalho', 'editar', dt?.id]"
+            [queryParams]="{projetoId: projeto?.id}">{{o.declaracaoTrabalhoId}}</a>
+        </td>
+        <td>{{ getResponsavelDeclaracao(o) }}</td>
+        <td>{{ getFornecedorDeclaracao(o) }}</td>
+        <td>
+          <nz-tag [nzColor]="corTagSitacao(o)">
+            {{getSituacao(o)}}
+          </nz-tag>
+        </td>
+        <td>{{ o.descricao }}</td>
+        <td>{{ (getExibirRessalva(o) ? o.valorDespesaAdministrativaRessalva : !o.valorDespesaAdministrativaObservacao ?
+          o.valorDespesaAdministrativa : o.valorDespesaAdministrativaObservacao) | currency: 'BRL' }}</td>
+        <td>{{ (getExibirRessalva(o) ? o.valorCustoAssistencialRessalva : !o.valorCustoAssistencialObservacao ?
+          o.valorCustoAssistencial : o.valorCustoAssistencialObservacao) | currency: 'BRL' }}</td>
+        <td>{{ (getExibirRessalva(o) ? o.valorInvestimentoRessalva : !o.valorInvestimentoObservacao ?
+          o.valorInvestimento : o.valorInvestimentoObservacao) | currency: 'BRL' }}</td>
+        <td>{{ (getExibirRessalva(o) ? o.totalRessalva : o.total) | currency: 'BRL' }}</td>
+        <td>
+          <nz-space *ngIf="possuiPermissaoEditarOrcamentos">
+            <button *nzSpaceItem (click)="editarOrcamento(o)" nz-button nzShape="circle" nzTooltipTitle="Editar Orçamento" nz-tooltip >
+              <i nz-icon nzType="edit" style="font-size: 18px;"></i>
+            </button>
+          </nz-space>
+          <nz-space *ngIf="possuiPermissaoEditarOrcamentos">
+            <button *nzSpaceItem (click)="cancelarOrcamento(o)" nz-button nzShape="circle" nzTooltipTitle="Zerar todos os valores" nz-tooltip >
+              <i nz-icon nzType="delete" style="font-size: 18px;"></i>
+            </button>
+          </nz-space>
+        </td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td class="font-weight-bold">
+          {{ orcamentoSomaValoresDespesaAdministrativa | currency: 'BRL' }}
+        </td>
+        <td class="font-weight-bold">
+          {{ orcamentoSomaValoresCustoAssistencial | currency: 'BRL' }}
+        </td>
+        <td class="font-weight-bold">
+          {{ orcamentoSomaValoresInvestimento | currency: 'BRL' }}
+        </td>
+        <td class="font-weight-bold">
+          {{ orcamentoSomaTotal | currency: 'BRL' }}
+        </td>
+        <td></td>
+      </tr>
+    </tfoot>
+  </nz-table>
+</nz-spin>
+
+<div *nzModalFooter>
+  <button nz-button (click)="cancelar()">
+    <span>Cancelar</span>
+  </button>
+  <button nz-button nzType="primary" (click)="aprovar()">
+    <span>Aprovar Com Ressalvas</span>
+  </button>
+</div>

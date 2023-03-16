@@ -1,0 +1,123 @@
+<app-header-pagina-inicial></app-header-pagina-inicial>
+
+<div class="w-screen h-screen md:grid md:grid-cols-1 md:content-center mx-auto">
+  <!-- Background -->
+  <div
+    class="absolute bg-cover w-screen h-full z-0 hidden md:inline"
+    style="background-image: url('../../assets/images/others/Fundo.png')"
+  ></div>
+  <!-- Content -->
+  <div class="relative flex justify-end mr-8 xl:mr-44 xl:-top-[95px]">
+    <img
+      src="../../assets/images/others/voce-sabia.png"
+      alt="Você sabia?"
+      (click)="exibirModal()"
+      class="cursor-pointer rounded-xl shadow-sm ring-1 ring-gray-500 hover:shadow-md hover:ring-[#9457c6] duration-500 w-56 xl:w-auto"
+    />
+  </div>
+  <div class="relative grid grid-cols-1 gap-4 z-10 mt-28 md:mt-4 mx-auto px-8">
+    <h1 class="">Página Inicial</h1>
+    <div
+      class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 content-center group"
+    >
+      <div
+        class="shadow-lg p-6 grid grid-cols-1 content-between rounded-xl gap-2 bg-white/95 h-[290px] md:min-h-min hover:border-2 border-[#9457c6] group-hover:blur-sm hover:!blur-none group-hover:scale-[0.9] hover:!scale-100 duration-500 mix-blend-luminosity cursor-pointer"
+        [routerLink]="['/pre-projetos']"
+      >
+        <span
+          nz-icon
+          nzType="bulb"
+          class="text-[#6b3f90] text-3xl mb-6 flex"
+        ></span>
+        <h3>Cadastro de Projetos</h3>
+        <p class="my-2 line-clamp-3">
+          O cadastro de um projeto é a forma de avaliar uma ideia para seguir o
+          fluxo do PMO.
+        </p>
+        <a href="/pre-projetos" class="text-[#9457c6]"
+          >Ir para lista<span nz-icon nzType="arrow-right" class="ml-2"></span
+        ></a>
+      </div>
+      <div
+        *ngIf="possuiPermissaoEditar(['Administrador'])"
+        class="shadow-lg bg-white/95 hover:border-2 border-[#9457c6] p-6 grid grid-cols-1 content-between group-hover:blur-sm hover:!blur-none group-hover:scale-[0.9] hover:!scale-100 duration-500 rounded-xl gap-2 h-[290px] md:h-full cursor-pointer"
+        [routerLink]="['/portifolios']"
+      >
+        <i class="fas fa-briefcase text-[#6b3f90] text-3xl mb-6"></i>
+        <h3>Portfólios</h3>
+        <p class="my-2 line-clamp-3">
+          São os agrupamentos de projetos para facilitar um controle geral.
+          Normalmente utilizado para os anos do projeto.
+        </p>
+        <a href="/portifolios" class="text-[#9457c6]"
+          >Ir para lista<span nz-icon nzType="arrow-right" class="ml-2"></span
+        ></a>
+      </div>
+      <div
+        class="shadow-lg bg-white/95 hover:border-2 border-[#9457c6] p-6 grid grid-cols-1 group-hover:blur-sm hover:!blur-none group-hover:scale-[0.9] hover:!scale-100 duration-500 content-between rounded-xl gap-2 h-[290px] md:h-full cursor-pointer"
+        [routerLink]="['/projetos']"
+      >
+        <span
+          nz-icon
+          nzType="build"
+          class="text-[#6b3f90] text-3xl mb-6 flex"
+        ></span>
+        <h3>Projetos</h3>
+        <p class="my-2 line-clamp-3">
+          A lista completa dos projetos cadastrados na plataforma e sua situação
+          atual.
+        </p>
+        <a href="/projetos" class="text-[#9457c6]"
+          >Ir para lista<span nz-icon nzType="arrow-right" class="ml-2"></span
+        ></a>
+      </div>
+      <div
+        class="shadow-lg bg-white/95 hover:border-2 border-[#9457c6] p-6 grid grid-cols-1 group-hover:blur-sm hover:!blur-none group-hover:scale-[0.9] hover:!scale-100 duration-500 content-between rounded-xl gap-2 h-[290px] md:h-full cursor-pointer"
+        [routerLink]="['/declaracoes-trabalho']"
+      >
+        <span
+          nz-icon
+          nzType="file-text"
+          class="text-[#6b3f90] text-3xl mb-6 flex"
+        ></span>
+        <h3 class="truncate">Declarações de trabalho</h3>
+        <p class="my-2 line-clamp-3">
+          A lista completa das declarações de trabalho cadastradas na plataforma
+          e sua situação atual.
+        </p>
+        <a href="/declaracoes-trabalho" class="text-[#9457c6]"
+          >Ir para lista<span nz-icon nzType="arrow-right" class="ml-2"></span
+        ></a>
+      </div>
+    </div>
+    <div
+      class="flex justify-end"
+      *ngIf="possuiPermissaoEditar(['Administrador'])"
+    >
+      <button
+        nz-button
+        [routerLink]="['/configuracoes']"
+        nzType="default"
+        class="flex items-center"
+      >
+        <span nz-icon nzType="setting" class="text-[#9457c6]"></span>
+        Configurações do sistema
+      </button>
+    </div>
+  </div>
+</div>
+
+<nz-modal
+  [(nzVisible)]="modalVisivel"
+  [nzFooter]="null"
+  (nzOnCancel)="exibirModal()"
+  nzTitle="Sabe a diferença entre Processos e Projetos?"
+  nzCentered
+>
+  <ng-container *nzModalContent>
+    <img
+      src="../../assets/images/others/processos-versus-projetos.PNG"
+      alt="Processos x Projetos"
+    />
+  </ng-container>
+</nz-modal>

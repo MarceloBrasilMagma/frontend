@@ -1,0 +1,12 @@
+<div class="flex flex-col md:flex-row items-center justify-between">
+  <h4 class="lg:w-2/5 w-full">Situação geral do orçamento</h4>
+  <div class="md:w-3/5 w-full flex flex-row justify-start items-center gap-2">
+    <p class="pr-1 font-medium truncate">Dentro do Orçamento</p>
+    <span class="text-[#BACF36]">{{porcentagemDentroOrcamento}}%</span>
+    <div class="w-2/5 bg-[#CC4123] rounded-full h-2.5">
+        <div class="bg-[#BACF36] h-2.5 rounded-full" [style]="{'width': '{{porcentagemDentroOrcamento}}' + '%'}"></div>
+    </div>
+    <span class="text-[#CC4123]">{{porcentagemForaOrcamento}}%</span>
+    <p class="pl-1 font-medium truncate">Fora do Orçamento</p>
+  </div>
+</div>
